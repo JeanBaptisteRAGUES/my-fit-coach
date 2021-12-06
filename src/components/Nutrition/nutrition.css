@@ -1,0 +1,94 @@
+.N_pageContainer{
+    display: grid;
+    position: relative;
+    min-width: 100vh;
+    min-height: 100vh;
+    grid-gap: 10px;
+    grid-template-columns: 1fr 2fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+    background-color: lightcoral;
+}
+
+.N_menu{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    width: 600px;
+    grid-column: 2;
+    grid-row: 1;
+    border: black solid 2px;
+}
+
+.navBtns{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    width: 300px;
+    height: 50px;
+}
+
+.N_product{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid black;
+    width: 500px;
+    margin: 10px;
+}
+
+.N_productName{
+    text-decoration: underline;
+}
+
+.N_productImg{
+    height: 300;
+    width: 300;
+}
+
+.N_nutrimentsArray{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+}
+
+.N_dimmed{
+    opacity: 70%;
+}
+
+.N_mealDisplay{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: start;
+    height: 300px;
+    width: 300px;
+    background-color:white;
+    border: 2px solid black;
+    position: sticky;
+    top: 20px;
+    left: 20px;
+    grid-column: 1;
+    grid-row: 1;
+}
+
+.N_quantiy{
+    position: sticky;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100px;
+    width: 200px;
+    background-color: white;
+    border: 2px solid black;
+    top: 200px;
+    left: 600px;
+    z-index: auto;
+    grid-column: 2;
+    grid-row: 1;
+}
