@@ -54,6 +54,44 @@
     flex-direction: column;
     align-items: flex-start;
     justify-content: center;
+    width: 250px;
+    margin: 20px;
+    border: 2px solid black;
+}
+
+.N_energy{
+    width: 250px;
+    background-color: limegreen;
+}
+
+.N_fat{
+    width: 250px;
+    background-color: yellow;
+}
+
+.N_carbohydrates{
+    width: 250px;
+    background-color: orange;
+}
+
+.N_sugars{
+    width: 250px;
+    background-color: orange;
+}
+
+.N_fiber{
+    width: 250px;
+    background-color: whitesmoke;
+}
+
+.N_proteins{
+    width: 250px;
+    background-color: red;
+}
+
+.N_salt{
+    width: 250px;
+    background-color: lightskyblue;
 }
 
 .N_dimmed{
@@ -65,7 +103,8 @@
     flex-direction: column;
     align-items: center;
     justify-content: start;
-    height: 300px;
+    min-height: 300px;
+    height: fit-content;
     width: 300px;
     background-color:white;
     border: 2px solid black;
@@ -91,4 +130,24 @@
     z-index: auto;
     grid-column: 2;
     grid-row: 1;
+}
+
+.N_foodDisplay{
+    display: flex;
+    flex-direction: row;
+}
+
+.N_foodDeleteBtn{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    height: 15px;
+    width: 15px;
+    color: white;
+    background-color: red;
+    border: 1px solid black;
+    border-radius: 5px;
+    margin-left: 5px;
 }

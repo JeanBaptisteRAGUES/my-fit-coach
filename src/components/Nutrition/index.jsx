@@ -1,7 +1,8 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import './nutrition.css';
 import axios from 'axios';
 import {FirebaseContext} from '../Firebase';
+import { Fragment } from 'react/cjs/react.production.min';
 
 const Nutrition = () => {
     const firebase = useContext(FirebaseContext);
@@ -14,6 +15,74 @@ const Nutrition = () => {
     const [mealTitle, setMealTitle] = useState('');
     const [foodstuffs, setFoodstuffs] = useState([]);
     const [newFood, setNewFood] = useState(['', '', '']);
+    const [VN, setVN] = useState({
+        energy: 0,
+        fat: 0,
+        carbohydrates: 0,
+        sugars: 0,
+        fiber: 0,
+        proteins: 0,
+        salt: 0
+    })
+
+    useEffect(async () => {
+        let newVN = {
+            energy: 0,
+            fat: 0,
+            carbohydrates: 0,
+            sugars: 0,
+            fiber: 0,
+            proteins: 0,
+            salt: 0
+        };
+        for(let food of foodstuffs){
+            const request = `https://world.openfoodfacts.org/api/v0/product/${food[0]}`;
+            let foodRes = await axios.get(request);
+            console.log(foodRes);
+            let foodNutriments = foodRes["data"]["product"]["nutriments"];
+            if(foodNutriments["energy"] != undefined) newVN["energy"] += Math.round(foodNutriments["energy"] / 4.1868) * (food[2]/100);
+            if(foodNutriments["fat"] != undefined) newVN["fat"] += foodNutriments["fat"] * (food[2]/100);
+            if(foodNutriments["carbohydrates"] != undefined) newVN["carbohydrates"] += foodNutriments["carbohydrates"] * (food[2]/100);
+            if(foodNutriments["sugars"] != undefined) newVN["sugars"] += foodNutriments["sugars"] * (food[2]/100);
+            if(foodNutriments["fiber"] != undefined) newVN["fiber"] += foodNutriments["fiber"] * (food[2]/100);
+            if(foodNutriments["proteins"] != undefined) newVN["proteins"] += foodNutriments["proteins"] * (food[2]/100);
+            if(foodNutriments["salt"] != undefined) newVN["salt"] += foodNutriments["salt"] * (food[2]/100);
+        }
+
+        newVN["energy"] = Math.round(newVN["energy"]);
+        newVN["fat"] = Math.round(newVN["fat"]);
+        newVN["carbohydrates"] = Math.round(newVN["carbohydrates"]);
+        newVN["sugars"] = Math.round(newVN["sugars"]);
+        newVN["fiber"] = Math.round(newVN["fiber"]);
+        newVN["proteins"] = Math.round(newVN["proteins"]);
+        newVN["salt"] = newVN["salt"].toFixed(2);
+
+        //console.log(newVN);
+
+        setVN(newVN);
+
+        /*
+        <span>Valeurs nutritionnelles (pour 100g) :</span> 
+        <span className="N_energy">Energie (kcal) : {VN["energy"]}</span>
+        <span className="N_fat">Matières grasses (g) : {VN["fat"]}</span>
+        <span className="N_carbohydrates">Glucides (g) : {VN["carbohydrates"]}</span>
+        <span className="N_sugars">Dont sucres (g) : {VN["sugars"]}</span>
+        <span className="N_fiber">Fibres (g) : {VN["fiber"]}</span>
+        <span className="N_proteins">Protéines (g) : {VN["proteins"]}</span>
+        <span className="N_salt">Sel (g) : {VN["salt"]}</span>
+        */
+
+        /*
+        foodstuffs.forEach(food => {
+            const request = `https://world.openfoodfacts.org/api/v0/product/${food[0]}`;
+            axios.get(request)
+                .then(res => {
+                    console.log(res["data"]["product"]);
+                })
+                .catch(err => console.log(err));
+            })
+        */
+    }, [foodstuffs])
 
     const getNutrimentValue = (product, nutriment) => {
         if(product["nutriments"][nutriment] !== '' && product["nutriments"][nutriment] !== undefined){
@@ -28,12 +97,14 @@ const Nutrition = () => {
     }
 
     const addFood = () => {
+
         if(!foodstuffs.some(food => food[0] === newFood[0])){
             console.log(`Add : [${newFood[0]}, ${newFood[1]}, ${newFood[2]}]`);
             setFoodstuffs([...foodstuffs, [newFood[0], newFood[1], newFood[2]]]);
             setNewFood(['', '', '']);
         }else{
             console.log("Le produit a déjà été ajouté !");
+            setNewFood(['', '', '']);
         }
     }
 
@@ -76,21 +147,51 @@ const Nutrition = () => {
             title: meal[0],
             foodstuffs: JSON.stringify(foodstuffs)
         })
+        .then(() => {
+            setMeal(["", ""]);
+            setMealTitle('');
+            setFoodstuffs([]);
+            setVN({energy: 0, fat: 0, carbohydrates: 0, sugars: 0, fiber: 0, proteins: 0, salt: 0});
+        })
     }
+
+    const mealVN = (
+        <div className="N_nutrimentsArray">
+            <span>Valeurs nutritionnelles (pour 100g) :</span> 
+            <span className="N_energy">Energie (kcal) : {VN["energy"]}</span>
+            <span className="N_fat">Matières grasses (g) : {VN["fat"]}</span>
+            <span className="N_carbohydrates">Glucides (g) : {VN["carbohydrates"]}</span>
+            <span className="N_sugars">Dont sucres (g) : {VN["sugars"]}</span>
+            <span className="N_fiber">Fibres (g) : {VN["fiber"]}</span>
+            <span className="N_proteins">Protéines (g) : {VN["proteins"]}</span>
+            <span className="N_salt">Sel (g) : {VN["salt"]}</span>
+        </div>
+    )
 
     const mealRegisterBtn = foodstuffs.length === 0 ?
             <button disabled>Enregister</button> 
         : 
             <button onClick={() => mealRegister()}>Enregistrer</button>
 
+    const deleteFood = (id) => {
+        const newFoodstuffs = foodstuffs.filter(food => food[0] !== id);
+        setFoodstuffs(newFoodstuffs);
+    }
+
     const mealDisplay = meal[0] !== '' && (
         <div className="N_mealDisplay">
             <h1>{mealTitle}</h1>
             {
                 foodstuffs.map(food => {
-                    return <span key={food[0]} className="N_mealFood">-{food[1]} ({food[2]}g)</span>
+                    return  (
+                                <div key={food[0]} className="N_foodDisplay">
+                                    <div className="N_mealFood">-{food[1]} ({food[2]}g)</div>
+                                    <div onClick={() => deleteFood(food[0])}  className="N_foodDeleteBtn">X</div>
+                                </div>
+                            )
                 })
             }
+            {mealVN}
             {mealRegisterBtn}
         </div>
     )
@@ -102,13 +203,13 @@ const Nutrition = () => {
                         <img className="N_productImg" src={product["image_url"]} />
                         <p className="N_nutrimentsArray">
                             <span>Valeurs nutritionnelles (pour 100g) :</span> 
-                            <span>Energie (kcal) : {Math.round(getNutrimentValue(product, "energy") / 4.1868)}</span>
-                            <span>Matières grasses (g) : {getNutrimentValue(product, "fat")}</span>
-                            <span>Glucides (g) : {getNutrimentValue(product, "carbohydrates")}</span>
-                            <span>Dont sucres (g) : {getNutrimentValue(product, "sugars")}</span>
-                            <span>Fibres (g) : {getNutrimentValue(product, "fiber")}</span>
-                            <span>Protéines (g) : {getNutrimentValue(product, "proteins")}</span>
-                            <span>Sel (g) : {getNutrimentValue(product, "salt")}</span>
+                            <span className="N_energy">Energie (kcal) : {Math.round(getNutrimentValue(product, "energy") / 4.1868)}</span>
+                            <span className="N_fat">Matières grasses (g) : {getNutrimentValue(product, "fat")}</span>
+                            <span className="N_carbohydrates">Glucides (g) : {getNutrimentValue(product, "carbohydrates")}</span>
+                            <span className="N_sugars">Dont sucres (g) : {getNutrimentValue(product, "sugars")}</span>
+                            <span className="N_fiber">Fibres (g) : {getNutrimentValue(product, "fiber")}</span>
+                            <span className="N_proteins">Protéines (g) : {getNutrimentValue(product, "proteins")}</span>
+                            <span className="N_salt">Sel (g) : {getNutrimentValue(product, "salt")}</span>
                         </p>
                         {
                         meal[0] === '' ? 
