@@ -61,27 +61,6 @@ const Nutrition = () => {
 
         setVN(newVN);
 
-        /*
-        <span>Valeurs nutritionnelles (pour 100g) :</span> 
-        <span className="N_energy">Energie (kcal) : {VN["energy"]}</span>
-        <span className="N_fat">Matières grasses (g) : {VN["fat"]}</span>
-        <span className="N_carbohydrates">Glucides (g) : {VN["carbohydrates"]}</span>
-        <span className="N_sugars">Dont sucres (g) : {VN["sugars"]}</span>
-        <span className="N_fiber">Fibres (g) : {VN["fiber"]}</span>
-        <span className="N_proteins">Protéines (g) : {VN["proteins"]}</span>
-        <span className="N_salt">Sel (g) : {VN["salt"]}</span>
-        */
-
-        /*
-        foodstuffs.forEach(food => {
-            const request = `https://world.openfoodfacts.org/api/v0/product/${food[0]}`;
-            axios.get(request)
-                .then(res => {
-                    console.log(res["data"]["product"]);
-                })
-                .catch(err => console.log(err));
-            })
-        */
     }, [foodstuffs])
 
     const getNutrimentValue = (product, nutriment) => {
@@ -145,7 +124,20 @@ const Nutrition = () => {
     const mealRegister = () => {
         firebase.db.collection('meals').add({
             title: meal[0],
-            foodstuffs: JSON.stringify(foodstuffs)
+            foodstuffs: JSON.stringify(foodstuffs),
+            nutriments: JSON.stringify(VN)
+        })
+        .then(async (res) => {
+            const resID = res.id;
+            const currentUser = await firebase.user(firebase.auth.currentUser.uid).get();
+            console.log(currentUser.data());
+            let newMealsIDs = [...JSON.parse(currentUser.data()["mealsIDs"]), [resID, meal[0]]];
+            console.log(newMealsIDs);
+            firebase.db.collection('users').doc(firebase.auth.currentUser.uid).update(
+                {
+                    mealsIDs: JSON.stringify(newMealsIDs)
+                }
+            );
         })
         .then(() => {
             setMeal(["", ""]);
