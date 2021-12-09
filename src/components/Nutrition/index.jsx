@@ -188,10 +188,23 @@ const Nutrition = () => {
         </div>
     )
 
+    const displayProductJSON = (product) => {
+        console.log(JSON.stringify(product["_id"]));
+    }
+
+    const getProductName = (product) => {
+        let productName = product["product_name_fr"];
+        if(productName == undefined || productName == "") productName = product["product_name"];
+        if(productName == undefined || productName == "") productName = product["generic_name_fr"];
+        if(productName == undefined || productName == "") productName = product["generic_name"];
+        if(productName == undefined || productName == "") productName = currentFoodName;
+        return productName;
+    }
+
     const foodInfoDisplay = foodInfo.length > 0 &&
         foodInfo.map(product => {
-            return <div key={product["id"]} className="N_product">
-                        <p className="N_productName">{product["product_name"]}</p>
+            return <div key={product["_id"]} className="N_product">
+                        <p className="N_productName">{getProductName(product)}</p>
                         <img className="N_productImg" src={product["image_url"]} />
                         <p className="N_nutrimentsArray">
                             <span>Valeurs nutritionnelles (pour 100g) :</span> 
@@ -207,7 +220,7 @@ const Nutrition = () => {
                         meal[0] === '' ? 
                                 <button disabled>Ajouter</button> 
                             : 
-                                <button onClick={() => setNewFood([product["id"], product["product_name"], 100])}>Ajouter</button>
+                                <button onClick={() => setNewFood([product["_id"], getProductName(product), 100])}>Ajouter</button>
                         }
                    </div>
         })
