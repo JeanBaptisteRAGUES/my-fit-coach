@@ -1,5 +1,6 @@
 import React, { useContext, useEffect } from 'react';
 import { useState } from 'react/cjs/react.development';
+import { Fragment } from 'react/cjs/react.production.min';
 import {FirebaseContext} from '../Firebase';
 import './schedule.css';
 
@@ -18,6 +19,11 @@ const Schedule = () => {
     const scheduleEnd = 22;
     const [eventsArray, setEventsArray] = useState([]);
     const [schedule, setSchedule] = useState([]);
+    const [userMeals, setUserMeals] = useState([]);
+    const [userSessions, setUserSessions] = useState([]);
+    const [selectedMeal, setSelectedMeal] = useState([]);
+    const [selectedSession, setSelectedSession] = useState([]);
+    const [selectedEventMeal, setSelectedEventMeal] = useState([]);
 
     useEffect(() => {
         firebase.auth.onAuthStateChanged((user) => {
@@ -52,12 +58,9 @@ const Schedule = () => {
         .then(async user => {
             console.log(user.data());
             const eventsIDs = JSON.parse(user.data()["eventsIDs"]);
+            const meals = JSON.parse(user.data()["mealsIDs"]);
+            const sessions = JSON.parse(user.data()["sessionsIDs"]);
             console.log("Events IDs : " + eventsIDs);
-            /*
-            console.log("Base : " + eventsIDs2);
-            const testParseArray = JSON.parse(eventsIDs2);
-            console.log("Parse : " + testParseArray);
-            */
             const events = [];
 
             for(let evtID of eventsIDs){
@@ -66,8 +69,11 @@ const Schedule = () => {
             }
             
             console.log("Events : " + JSON.stringify(events));
+            console.log("Meals : " + JSON.stringify(meals));
+            console.log("Sessions : " + sessions);
             setEventsArray(events);
-            
+            setUserMeals(meals)
+            setUserSessions(sessions);
         })
     }
 
@@ -90,9 +96,54 @@ const Schedule = () => {
         }
     }
 
+    const additionNutriments = (nut1, nut2) => {
+        let nutSum = {
+            energy: 0,
+            fat: 0,
+            carbohydrates: 0,
+            sugars: 0,
+            fiber: 0,
+            proteins: 0,
+            salt: 0
+        };
+        nutSum["energy"] = nut1["energy"] + nut2["energy"];
+        nutSum["fat"] = nut1["fat"] + nut2["fat"];
+        nutSum["carbohydrates"] = nut1["carbohydrates"] + nut2["carbohydrates"];
+        nutSum["sugars"] = nut1["sugars"] + nut2["sugars"];
+        nutSum["fiber"] = nut1["fiber"] + nut2["fiber"];
+        nutSum["proteins"] = nut1["proteins"] + nut2["proteins"];
+        nutSum["salt"] = nut1["salt"] + nut2["salt"];
+        return nutSum;
+    }
+
+    const getDailyNutriments = async (day) => {
+        const dayEvents = eventsArray.filter(myEvent => { return myEvent["day"] === day});
+        console.log(dayEvents);
+        let dailyNutriments = {
+            energy: 0,
+            fat: 0,
+            carbohydrates: 0,
+            sugars: 0,
+            fiber: 0,
+            proteins: 0,
+            salt: 0
+        }
+
+        for(let dayEvent of dayEvents){
+            let dayMeal = await firebase.meal(dayEvent["refID"]).get();
+            let dayMealData = dayMeal.data();
+            console.log(dayMealData);
+            dailyNutriments = additionNutriments(dailyNutriments, JSON.parse(dayMealData["nutriments"]));
+        }
+
+        console.log(dailyNutriments);
+    }
+
     const addEvent = (e) => {
         e.preventDefault();
+        const newEventRefID = newEventType === 0 ? selectedMeal[0] : selectedSession[0];
         firebase.db.collection('events').add({
+            refID: newEventRefID,
             day: newEventDay,
             start: newEventStart,
             end: newEventEnd,
@@ -114,7 +165,7 @@ const Schedule = () => {
             );
         })
         .then(() => {
-            setEventsArray([...eventsArray, {day: newEventDay, start: newEventStart, end: newEventEnd, title: newEventTitle, type: newEventType}]);
+            setEventsArray([...eventsArray, {refID: newEventRefID, day: newEventDay, start: newEventStart, end: newEventEnd, title: newEventTitle, type: newEventType}]);
         })
     }
 
@@ -122,6 +173,84 @@ const Schedule = () => {
             <button disabled className="signupBtn">Ajouter</button> 
         : 
             <button className="signupBtn">Ajouter</button>
+
+    const mealsOptions = (
+        <optgroup label="Nutrition">
+            {
+                userMeals.map(meal => {
+                    return <option key={meal[0]} value={JSON.stringify([...meal, 0])}>{meal[1]}</option>
+                })
+            }
+        </optgroup>
+    )
+
+    const sessionsOptions = (
+        <optgroup label="Sport">
+            {
+                userSessions.map(session => {
+                    return <option key={session[0]} value={[...session, 1]}>{session[1]}</option>
+                })
+            }
+        </optgroup>
+    )
+
+    const onChangeEventSelection = e => {
+        const eventSelected = JSON.parse(e.currentTarget.value);
+        if(eventSelected[2] === 0){
+            setSelectedMeal(eventSelected);
+            setNewEventType(0);
+        }else{
+            setSelectedSession(eventSelected);
+            setNewEventType(1);
+        }
+        setNewEventTitle(eventSelected[1]);
+    }
+
+    const shortTitle = (title, length) => {
+        if(title.length > length){
+            return (title.slice(0, length)).trim() + "..";
+        }else{
+            return title;
+        }
+    }
+
+    const displayEvent = async (event) => {
+        console.log(event);
+        if(event["type"] === 0){
+            let meal = await firebase.meal(event["refID"]).get();
+            meal = meal.data();
+            console.log(meal);
+            setSelectedEventMeal([event, meal]);
+        }
+    }
+
+    const displayEventMeal = selectedEventMeal.length > 0 && (
+        <div className="S_displayEventMeal">
+            <div className="S_titleBig">{selectedEventMeal[1].title}</div>
+            <div className="S_titleMedium">{selectedEventMeal[0].day + " (" + selectedEventMeal[0].start + 'h - ' + selectedEventMeal[0].end + 'h)'}</div>
+            {
+                JSON.parse(selectedEventMeal[1]["foodstuffs"]).map(food => {
+                    return  (
+                                <div key={food[0]} className="N_foodDisplay">
+                                    <div className="N_mealFood">-{food[1]} ({food[2]}g)</div>
+                                </div>
+                            )
+                })
+            }
+            <div className="N_nutrimentsArray">
+                <span>Valeurs nutritionnelles totales :</span> 
+                <span className="N_energy">Energie (kcal) : {JSON.parse(selectedEventMeal[1]["nutriments"])["energy"]}</span>
+                <span className="N_fat">Matières grasses (g) : {JSON.parse(selectedEventMeal[1]["nutriments"])["fat"]}</span>
+                <span className="N_carbohydrates">Glucides (g) : {JSON.parse(selectedEventMeal[1]["nutriments"])["carbohydrates"]}</span>
+                <span className="N_sugars">Dont sucres (g) : {JSON.parse(selectedEventMeal[1]["nutriments"])["sugars"]}</span>
+                <span className="N_fiber">Fibres (g) : {JSON.parse(selectedEventMeal[1]["nutriments"])["fiber"]}</span>
+                <span className="N_proteins">Protéines (g) : {JSON.parse(selectedEventMeal[1]["nutriments"])["proteins"]}</span>
+                <span className="N_salt">Sel (g) : {JSON.parse(selectedEventMeal[1]["nutriments"])["salt"]}</span>
+            </div>
+            <button onClick={() => alert("Lien avec l'id du repas qui dirige vers la page nutrition (à faire)")}>Modifier</button>
+            <button onClick={() => setSelectedEventMeal([])}>Fermer</button>
+        </div>
+    )
 
     const scheduleDisplay = daysArray.length > 0 && (
         <div className="S_scheduleContainer">
@@ -143,8 +272,9 @@ const Schedule = () => {
                                     key={dayName+eJour.title} 
                                     className={getEventClassname(eJour)} 
                                     style={{top: getEventTop(eJour), height: getEventHeight(eJour)}}
+                                    onClick={() => displayEvent(eJour)}
                                     >
-                                        {eJour.title}
+                                        {shortTitle(eJour.title, 7)}
                                     </span>
                             })
                         }
@@ -156,8 +286,14 @@ const Schedule = () => {
                 <form onSubmit={addEvent} className="loginForm">
                     <div className="inputBox">
                         <label htmlFor="title">Titre :</label><br/>
-                        <input onChange={(e) => setNewEventTitle(e.target.value)} value={newEventTitle} type="text" id="title" autoComplete="off" required placeholder="Repas 1"/>
+                        <input onChange={(e) => setNewEventTitle(e.target.value)} value={newEventTitle} type="text" id="title" autoComplete="off" required placeholder="Repas 1" maxLength="7"/>
                     </div>
+                    <label htmlFor="eventSelect">Choisissez un évènement :</label><br/>
+                    <select name="events" id="eventSelect" onChange={(e) => onChangeEventSelection(e)}>
+                        <option value="">--Sélectionnez un évènement--</option>
+                        {mealsOptions}
+                        {sessionsOptions}
+                    </select>
                     <div className="inputBox">
                         <label htmlFor="day">Jour :</label><br/>
                         <input onChange={(e) => setNewEventDay(e.target.value)} value={newEventDay} type="text" id="day" autoComplete="off" required placeholder="Jeudi"/>
@@ -170,12 +306,9 @@ const Schedule = () => {
                         <label htmlFor="end">Heure fin :</label><br/>
                         <input onChange={(e) => setNewEventEnd(e.target.value)} value={newEventEnd} type="text" id="end" autoComplete="off" required placeholder="11"/>
                     </div>
-                    <div className="inputBox">
-                        <label htmlFor="type">Type d'évènement :</label><br/>
-                        <input onChange={(e) => setNewEventType(e.target.value)} value={newEventType} type="text" id="type" autoComplete="off" required placeholder="0"/>
-                    </div>
                     {formAddEventBtn}
                 </form>
+                <button onClick={() => getDailyNutriments(newEventDay)}>Test VN {newEventDay}</button>
             </div>
         </div>
     )
@@ -208,9 +341,10 @@ const Schedule = () => {
     */
 
     return (
-        <div>
+        <div className="S_mainContainer">
             Emploi du temps :
             {scheduleDisplay}
+            {displayEventMeal}
         </div>
     )
 }

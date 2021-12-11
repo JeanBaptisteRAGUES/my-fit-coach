@@ -42,6 +42,10 @@ class Firebase {
 
     event = (eid) => this.db.doc(`events/${eid}`);
 
+    meal = (mid) => this.db.doc(`meals/${mid}`);
+
+    session = (sid) => this.db.doc(`sessions/${sid}`);
+
     usersCollection = () => this.db.collection('users');
 }
 

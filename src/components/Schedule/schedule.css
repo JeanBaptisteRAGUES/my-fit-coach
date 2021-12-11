@@ -1,3 +1,8 @@
+.S_mainContainer{
+    display: flex;
+    flex-direction: column;
+}
+
 .S_scheduleContainer{
     display: flex;
     flex-direction: row;
@@ -84,6 +89,7 @@
     border: 1px solid black;
     z-index: auto;
     background-color: cornflowerblue;
+    cursor: pointer;
 }
 
 .S_mealEvent{
@@ -95,7 +101,35 @@
     width: 88px;
     border: 1px solid black;
     z-index: auto;
-    background-color: lightgreen
+    background-color: coral;
+    cursor: pointer;
+}
+
+.S_displayEventMeal{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    position: absolute;
+    z-index: auto;
+    width: 400px;
+    height: 600px;
+    background-color: white;
+    border: 2px solid black;
+    left: 400px;
+    top: 50px;
+}
+
+.S_titleBig{
+    font-size: 32px;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.S_titleMedium{
+    font-size: 16px;
+    margin-bottom: 10px;
+    font-weight: bold;
 }
 
 .S_formContainer{

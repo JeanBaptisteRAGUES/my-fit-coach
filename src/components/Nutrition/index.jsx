@@ -55,9 +55,9 @@ const Nutrition = () => {
         newVN["sugars"] = Math.round(newVN["sugars"]);
         newVN["fiber"] = Math.round(newVN["fiber"]);
         newVN["proteins"] = Math.round(newVN["proteins"]);
-        newVN["salt"] = newVN["salt"].toFixed(2);
+        newVN["salt"] = Math.round(newVN["salt"] * 1e2) / 1e2;
 
-        //console.log(newVN);
+        console.log(JSON.stringify(newVN));
 
         setVN(newVN);
 
@@ -149,7 +149,7 @@ const Nutrition = () => {
 
     const mealVN = (
         <div className="N_nutrimentsArray">
-            <span>Valeurs nutritionnelles (pour 100g) :</span> 
+            <span>Valeurs nutritionnelles totales :</span> 
             <span className="N_energy">Energie (kcal) : {VN["energy"]}</span>
             <span className="N_fat">Matières grasses (g) : {VN["fat"]}</span>
             <span className="N_carbohydrates">Glucides (g) : {VN["carbohydrates"]}</span>
