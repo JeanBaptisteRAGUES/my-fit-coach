@@ -1,4 +1,5 @@
 import React, { useContext, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { useState } from 'react/cjs/react.development';
 import { Fragment } from 'react/cjs/react.production.min';
 import {FirebaseContext} from '../Firebase';
@@ -247,7 +248,7 @@ const Schedule = () => {
                 <span className="N_proteins">Protéines (g) : {JSON.parse(selectedEventMeal[1]["nutriments"])["proteins"]}</span>
                 <span className="N_salt">Sel (g) : {JSON.parse(selectedEventMeal[1]["nutriments"])["salt"]}</span>
             </div>
-            <button onClick={() => alert("Lien avec l'id du repas qui dirige vers la page nutrition (à faire)")}>Modifier</button>
+            <Link to={"/nutrition/" + selectedEventMeal[0].refID}>Modifier</Link>
             <button onClick={() => setSelectedEventMeal([])}>Fermer</button>
         </div>
     )
@@ -312,33 +313,6 @@ const Schedule = () => {
             </div>
         </div>
     )
-
-    /*
-    const scheduleDisplay = schedule.length > 0 && (
-        <div className="S_scheduleContainer">
-            {
-            schedule.map((daySchedule, d) => {
-                return (
-                    <div key={d} className="S_daySchedule">
-                        <span key={daysArray[d]} className="S_hourSchedule">{daysArray[d]}</span>
-                        {daySchedule.map((hour, h) => {
-                            return (
-                                <span 
-                                    key={(d+1)*(h+1)} 
-                                    className="S_hourSchedule"
-                                    style={{height: "30px"}}
-                                >
-                                    {hour}
-                                </span>
-                                )
-                        })}
-                    </div>
-                )
-            })
-            }
-        </div>
-    )
-    */
 
     return (
         <div className="S_mainContainer">

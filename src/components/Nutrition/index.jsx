@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
+import { useParams } from 'react-router';
 import './nutrition.css';
 import axios from 'axios';
 import {FirebaseContext} from '../Firebase';
@@ -24,6 +25,24 @@ const Nutrition = () => {
         proteins: 0,
         salt: 0
     })
+
+    let mealID = useParams()["mealID"];
+
+    const getMealData = async (mealID) => {
+        const myMeal = await firebase.meal(mealID).get();
+        const myMealData = myMeal.data();
+        const myMealTitle = myMealData["title"];
+        const myMealFoodstuffs = JSON.parse(myMealData["foodstuffs"]);
+
+        setMealTitle(myMealTitle);
+        setMeal([myMealTitle, mealID]);
+        setFoodstuffs(myMealFoodstuffs);
+    }
+    
+    if(mealID !== "new" && meal[1] === ""){
+        console.log("Meal ID : " + mealID);
+        getMealData(mealID);
+    }
 
     useEffect(async () => {
         let newVN = {
@@ -147,6 +166,22 @@ const Nutrition = () => {
         })
     }
 
+    const mealModify = () => {
+        firebase.meal(meal[1]).update(
+            {
+                title: meal[0],
+                foodstuffs: JSON.stringify(foodstuffs),
+                nutriments: JSON.stringify(VN)
+            }
+        )
+        .then(() => {
+            setMeal(["", ""]);
+            setMealTitle('');
+            setFoodstuffs([]);
+            setVN({energy: 0, fat: 0, carbohydrates: 0, sugars: 0, fiber: 0, proteins: 0, salt: 0});
+        })
+    }
+
     const mealVN = (
         <div className="N_nutrimentsArray">
             <span>Valeurs nutritionnelles totales :</span> 
@@ -164,6 +199,11 @@ const Nutrition = () => {
             <button disabled>Enregister</button> 
         : 
             <button onClick={() => mealRegister()}>Enregistrer</button>
+
+    const mealModifyBtn = foodstuffs.length === 0 ?
+            <button disabled>Enregister</button> 
+        : 
+            <button onClick={() => mealModify()}>Enregistrer</button>
 
     const deleteFood = (id) => {
         const newFoodstuffs = foodstuffs.filter(food => food[0] !== id);
@@ -184,7 +224,7 @@ const Nutrition = () => {
                 })
             }
             {mealVN}
-            {mealRegisterBtn}
+            {mealID[1] === "" ? mealRegisterBtn : mealModifyBtn }
         </div>
     )
 

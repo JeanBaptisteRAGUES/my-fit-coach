@@ -45,7 +45,7 @@ const Landing = () => {
             <span>Bonjour {username}</span><br/>
             <Link to='/schedule'>Emploi du temps</Link><br/>
             <Link to='/workout'>Sport</Link><br/>
-            <Link to='/nutrition'>Nutrition</Link><br/>
+            <Link to='/nutrition/new'>Nutrition</Link><br/>
             <span onClick={() => disconnect()}>Se déconnecter</span>
         </div>
     )
