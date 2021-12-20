@@ -1,0 +1,27 @@
+.EF_paramsList{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.EF_newExerciceContainer{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    margin: 20px;
+    width: 400px;
+    height: 300px;
+    border: 2px solid black;
+}
+
+#exerciceTitle{
+    font-size: 20px;
+    text-align: center;
+    font-weight: bold;
+    background-color: lightskyblue;
+    border: none;
+    align-self: center;
+    margin: 10px;
+}

@@ -46,6 +46,10 @@ class Firebase {
 
     session = (sid) => this.db.doc(`sessions/${sid}`);
 
+    exercice = (exid) => this.db.doc(`exercices/${exid}`);
+
+    training = (tid) => this.db.doc(`trainings/${tid}`);
+
     usersCollection = () => this.db.collection('users');
 }
 
