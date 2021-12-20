@@ -4,16 +4,30 @@ import {FirebaseContext} from '../Firebase';
 import './workout.css';
 import Exercice from './Exercice';
 import ExerciceForm from './ExerciceForm';
-import Training from './TrainingForm';
+import TrainingForm from './TrainingForm';
+import { Fragment } from 'react/cjs/react.production.min';
 
 const Workout = () => {
     const firebase = useContext(FirebaseContext);
+    const [displayTrainingForm, setDisplayTrainingForm] = useState(false);
+    const [displayExercice, setDisplayExercice] = useState(true);
 
     return (
         <div className="W_workoutContainer">
             <h1>Workout</h1>
             <ExerciceForm/>
-            <Training exerciceID="IulA60jCEk84WMVnwzNq" />
+            {
+                displayTrainingForm ?
+                    <TrainingForm exerciceID="IulA60jCEk84WMVnwzNq" callback={setDisplayTrainingForm} />
+                :
+                    null
+            }
+            {
+                displayExercice ?
+                    <Exercice exerciceID="IulA60jCEk84WMVnwzNq" callback={setDisplayExercice} />
+                :
+                    null
+            }
         </div>
     )
 }

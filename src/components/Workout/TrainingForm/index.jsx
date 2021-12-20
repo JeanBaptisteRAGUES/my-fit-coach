@@ -5,14 +5,13 @@ import { FirebaseContext } from '../../Firebase';
 
 //callback function en props pour indiquer quand le formulaire doit se fermer
 
-const Training = (props) => {
+const Training = ({exerciceID, callback}) => {
     const firebase = useContext(FirebaseContext);
     const [title, setTitle] = useState("");
     const [parameters, setParameters] = useState([]);
 
     const setFormParameters = async (exid) => {
-        console.log("Props : " + JSON.stringify(props));
-        console.log("Exercice ID : " + props.exerciceID);
+        console.log("Exercice ID : " + exerciceID);
         let exercice = await firebase.exercice(exid).get();
         let exerciceData = exercice.data();
         let exerciceParams = exerciceData.parameters;
@@ -36,7 +35,7 @@ const Training = (props) => {
         const formatedDate = moment(Date.now()).format('DD MMM hh:mm a');
 
         let trainingParams = {
-            exerciceID: props.exerciceID,
+            exerciceID: exerciceID,
             date:  formatedDate
         }
 
@@ -48,6 +47,7 @@ const Training = (props) => {
         .then(async (res) => {
             const resID = res.id;
             console.log(`Entrainement (id: ${resID}) enregistré avec succès !`);
+            callback(false);
         });
     }
 
@@ -73,7 +73,7 @@ const Training = (props) => {
         </form>
     )
 
-    if(parameters.length === 0) setFormParameters(props.exerciceID);
+    if(parameters.length === 0) setFormParameters(exerciceID);
 
     return (
         <div className='T_container'>

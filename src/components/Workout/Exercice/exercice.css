@@ -3,4 +3,30 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    position: relative;
+}
+
+.E_trainingsHistory{
+    position: absolute;
+    z-index: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    width: 500px;
+    background-color: white;
+    border: 2px solid black;
+    top: -500px;
+}
+
+.E_training{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    width: 400px;
+    margin-top: 10px;
+    border: 2px solid black;
+    border-radius: 5px;
+    background-color: lightskyblue;
 }
