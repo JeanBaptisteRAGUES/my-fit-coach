@@ -47,7 +47,7 @@ const Training = ({exerciceID, callback}) => {
         .then(async (res) => {
             const resID = res.id;
             console.log(`Entrainement (id: ${resID}) enregistré avec succès !`);
-            callback(false);
+            callback(0); //Surement à modifier
         });
     }
 

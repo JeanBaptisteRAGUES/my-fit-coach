@@ -100,8 +100,8 @@ const Exercice = ({exerciceID, callback}) => {
         </div>
     )
 
-    const exerciceDisplay = exerciceData !== null && lastTraining !== null && (
-        <Fragment>
+    const exerciceDisplay = exerciceData !== null && lastTraining !== null && !showHistory && (
+        <div className='E_exerciceDisplay'>
             <h1>{exerciceData.title}</h1>
             Description :<br/>
             {exerciceData.description}
@@ -109,8 +109,8 @@ const Exercice = ({exerciceID, callback}) => {
             Dernier entrainement ({lastTraining.date}) :<br/>
             {lastTrainingDisplay}
             <button onClick={() => setShowHistory(true)} >Historique</button>
-            <button onClick={() => callback(false)} >Fermer</button>
-        </Fragment> 
+            <button onClick={() => callback(2)} >Fermer</button>
+        </div> 
     )
 
     return (

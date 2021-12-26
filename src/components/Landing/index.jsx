@@ -24,7 +24,7 @@ const Landing = () => {
     useEffect(() => {
         firebase.auth.onAuthStateChanged((user) => {
             if(user){
-                console.log("Username : " + JSON.stringify(user));
+                console.log("Username : " + JSON.stringify(user.displayName));
                 setUserName(user.displayName); //Can't perform a react state update on an unmounted component -> useAsync Hook + async/await ?
             }else{
                 console.log("Deconnexion");

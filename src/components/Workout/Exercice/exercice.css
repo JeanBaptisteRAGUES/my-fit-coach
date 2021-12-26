@@ -30,3 +30,15 @@
     border-radius: 5px;
     background-color: lightskyblue;
 }
+
+.E_exerciceDisplay{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    width: 400px;
+    margin-top: 10px;
+    border: 2px solid black;
+    border-radius: 5px;
+    background-color: lightskyblue;
+}
