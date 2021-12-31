@@ -2,12 +2,12 @@ import React, { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import {FirebaseContext} from '../Firebase';
 import './workout.css';
-import Exercice from './Exercice';
-import ExerciceForm from './ExerciceForm';
-import TrainingForm from './TrainingForm';
-import SessionMenu from './SessionMenu';
-import SessionForm from './SessionForm';
-import { Fragment } from 'react/cjs/react.production.min';
+import Exercice from '../Exercice';
+import ExerciceForm from '../ExerciceForm';
+import TrainingForm from '../TrainingForm';
+import SessionMenu from '../SessionMenu';
+import SessionForm from '../SessionForm';
+import { Link } from 'react-router-dom';
 
 const Workout = () => {
     const firebase = useContext(FirebaseContext);
@@ -48,7 +48,7 @@ const Workout = () => {
 
     const choices = displayMode === "" && (
         <div className='W_choicesBtns'>
-            <button onClick={() => setDisplayMode("exerciceForm")} >Exercices</button>
+            <button onClick={() => setDisplayMode("exercice")} >Exercices</button>
             <button onClick={() => setDisplayMode("sessionMenu")} >Sessions</button>
         </div>
     )
@@ -56,12 +56,8 @@ const Workout = () => {
     return (
         <div className="W_workoutContainer">
             <h1>Workout</h1>
-            {exerciceForm}
-            {trainingForm}
-            {exercice}
-            {sessionMenu}
-            {sessionForm}
-            {choices}
+            <Link to="/session-menu" state={{userID: user.uid}}>Sessions</Link>
+            <Link to="/exercice-menu" state={{userID: user.uid}}>Exercices</Link>
         </div>
     )
 }

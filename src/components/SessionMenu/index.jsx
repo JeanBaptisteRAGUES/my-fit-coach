@@ -1,8 +1,12 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { FirebaseContext } from '../../Firebase';
+import { Link, useLocation } from 'react-router-dom';
+import { FirebaseContext } from '../Firebase';
+import './session-menu.css';
 
-const SessionMenu = ({user, selectSession, callback}) => {
+const SessionMenu = () => {
     const firebase = useContext(FirebaseContext);
+    const location = useLocation();
+    const {userID} = location.state;
     const [sessions, setSessions] = useState([]);
     const [selectedSession, setSelectedSession] = useState('');
 
@@ -11,14 +15,16 @@ const SessionMenu = ({user, selectSession, callback}) => {
 
         let newSessions = [];
 
-        firebase.db.collection('sessions').where("userID", "==", user.uid).get()
+        firebase.db.collection('sessions').where("userID", "==", userID).get()
         .then((results) => {
             if(results.size === 0) {
                 console.log("Aucune session n'a encore été enregistrée")
                 return null;
             }
             results.forEach(result => {
-                newSessions.push(result.data());
+                let newSession = result.data();
+                newSession.id = result.id;
+                newSessions.push(newSession);
             })
         })
         .then(async () => {
@@ -27,10 +33,18 @@ const SessionMenu = ({user, selectSession, callback}) => {
 
     }, [])
 
-    const loadSession = () => {
-        selectSession(selectedSession);
-        callback("sessionDisplay");
-    }
+    useEffect(() => {
+        console.log("Selected Session : " + selectedSession);
+    }, [selectedSession])
+
+    const loadSessionBtn = (
+        selectedSession !== "" ?
+            <Link to="/session" state={{userID: userID, sessionID: selectedSession}} >
+                Charger
+            </Link>
+        :
+            <span>Sélectionnez une session à charger</span>
+    )
 
     const sessionsSelect = sessions.length > 0 ?
             <div className='SM_sessionSelect'>
@@ -42,12 +56,7 @@ const SessionMenu = ({user, selectSession, callback}) => {
                         })
                     }
                 </select>
-                {
-                    selectedSession !== "" ?
-                        <button onClick={() => loadSession()} >Charger</button>
-                    :
-                        <button disabled>Charger</button>
-                }
+                {loadSessionBtn}
             </div>
 
         :
@@ -56,18 +65,26 @@ const SessionMenu = ({user, selectSession, callback}) => {
                 Vous n'avez encore enregistré aucune session !
             </div>
 
-    const loadSessionForm = () => {
-        selectSession("");
-        callback("sessionForm");
-    }
+    const loadSessionFormBtn = (
+        <Link to="/session-form" state={{userID: userID}}>
+            Nouvelle Session
+        </Link>
+    )
+
+    const menuBtn = (
+        <Link to="/workout" state={{userID: userID}}>
+            Retour
+        </Link>
+    )
 
     
 
     return (
         <div className='SM_container'>
-            {user.displayName} ({user.uid})
+            Bonjour utilisateur ({userID}) :<br/>
             {sessionsSelect}
-            <button onClick={() => loadSessionForm()} >Nouvelle Session</button>
+            {loadSessionFormBtn}
+            {menuBtn}
         </div>
     )
 }

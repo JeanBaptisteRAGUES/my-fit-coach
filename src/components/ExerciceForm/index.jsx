@@ -1,9 +1,13 @@
 import React, { useContext, useEffect, useState } from 'react';
-import {FirebaseContext} from '../../Firebase';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import {FirebaseContext} from '../Firebase';
 import './exercice-form.css';
 
 const ExerciceForm = () => {
     const firebase = useContext(FirebaseContext);
+    const location = useLocation();
+    const {userID} = location.state;
+    const navigate = useNavigate();
     const [newParam, setNewParam] = useState("");
     const [paramsList, setParamsList] = useState([["Commentaire", "textarea"]]); //[name, type]
     const [exerciceTitle, setExerciceTitle] = useState("Nouveau exercice");
@@ -16,34 +20,18 @@ const ExerciceForm = () => {
     }
 
     const registerExercice = () => {
-        let exerciceParams = {
+        let exerciceObject = {
             title: exerciceTitle,
-            parameters: JSON.stringify(paramsList) 
+            parameters: JSON.stringify(paramsList),
+            description: exerciceDescription,
+            userID: userID 
         }
 
-        for(let param of paramsList){
-            exerciceParams[param[0]] = 0;
-        }
-
-        firebase.db.collection('exercices').add(exerciceParams)
-        .then(async (res) => {
+        firebase.db.collection('exercices').add(exerciceObject)
+        .then((res) => {
             const resID = res.id;
-            /*
-            const currentUser = await firebase.user(firebase.auth.currentUser.uid).get();
-            console.log(currentUser.data());
-            let newMealsIDs = [...JSON.parse(currentUser.data()["mealsIDs"]), [resID, meal[0]]];
-            console.log(newMealsIDs);
-            firebase.db.collection('users').doc(firebase.auth.currentUser.uid).update(
-                {
-                    mealsIDs: JSON.stringify(newMealsIDs)
-                }
-            );
-            */
-        })
-        .then(() => {
-            setParamsList([]);
-            setExerciceTitle('Nouveau Exercice');
-            setNewParam("");
+
+            navigate('/exercice', {state: {userID: userID, exerciceID: resID}});
         })
     }
 
@@ -56,6 +44,12 @@ const ExerciceForm = () => {
         <button disabled>Ajouter</button>
     :
         <button>Ajouter</button>
+
+    const previousBtn = (
+        <Link to="/exercice-menu" state={location.state}>
+            Retour
+        </Link>
+    )
 
     return (
         <div className='EF_newExerciceContainer'>
@@ -79,6 +73,7 @@ const ExerciceForm = () => {
 
             </textarea>
             {registerExerciceBtn}
+            {previousBtn}
         </div>
     )
 }

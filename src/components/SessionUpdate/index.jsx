@@ -1,10 +1,13 @@
-import React, { useContext, useEffect } from 'react'
-import { useState } from 'react/cjs/react.development';
-import { FirebaseContext } from '../../Firebase';
-import './session-form.css';
+import React, { useContext, useEffect, useState } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { FirebaseContext } from '../Firebase';
+import './session-update.css';
 
-const SessionForm = ({user, callback}) => {
+const SessionUpdate = () => {
     const firebase = useContext(FirebaseContext);
+    const location = useLocation();
+    const navigate = useNavigate();
+    const {userID, sessionID} = location.state;
     const [exercicesList, setExercicesList] = useState([]); //Tous les exercices de l'utilisateur
     const [selectedExercice, setSelectedExercice] = useState(null);
     const [exercicesSession, setExercicesSession] = useState([]); //Seulement les exercices pour cet session en particulier
@@ -14,7 +17,7 @@ const SessionForm = ({user, callback}) => {
 
         let newExercicesList = [];
 
-        firebase.db.collection('exercices').where("userID", "==", user.uid).get()
+        firebase.db.collection('exercices').where("userID", "==", userID).get()
         .then((results) => {
             results.forEach(result => {
                 let exerciceData = result.data();
@@ -24,6 +27,13 @@ const SessionForm = ({user, callback}) => {
         })
         .then(() => {
             setExercicesList(newExercicesList);
+        })
+
+        firebase.db.collection('sessions').doc(sessionID).get()
+        .then(mySession => {
+            let mySessionData = mySession.data();
+            setSessionTitle(mySessionData.title);
+            setExercicesSession(JSON.parse(mySessionData.exercices));
         })
 
     }, [])
@@ -38,7 +48,7 @@ const SessionForm = ({user, callback}) => {
     }
 
     const exerciceSelect = exercicesList.length > 0 && (
-        <div className='SF_exerciceSelection'>
+        <div className='SU_exerciceSelection'>
             <select name="exercices" id="exerciceSelect" onChange={(e) => setSelectedExercice(e.target.value)}>
                 <option value="">--Sélectionnez un exercice--</option>
                 {
@@ -67,43 +77,47 @@ const SessionForm = ({user, callback}) => {
             return (
                 <div key={exercice[0]}>
                     {exercice[1]}
-                    <button onClick={() => deleteExercice(exercice[0])} className="SF_deleteBtn">X</button>
+                    <button onClick={() => deleteExercice(exercice[0])} className="SU_deleteBtn">X</button>
                 </div>
             )
         })
     )
 
-    const saveSession = () => {
-        firebase.db.collection('sessions').add({
-            userID: user.uid,
+    const updateSession = () => {
+        firebase.db.collection('sessions').doc(sessionID).update({
             title: sessionTitle,
             exercices: JSON.stringify(exercicesSession)
         })
-        .then((res) => {
-            const resID = res.id;
-            console.log(`Session (id: ${resID}) enregistrée avec succès !`);
-            callback("sessionMenu");
+        .then(() => {
+            navigate('/session', {state: location.state});
         });
     }
 
+    
+    const previousBtn = (
+        <Link to="/session" state={location.state}>
+            Retour
+        </Link>
+    )
+
     const saveBtn = exercicesSession.length > 0 && sessionTitle !== "" ? 
-            <button onClick={() => saveSession()}>Enregistrer</button>
+            <button onClick={() => updateSession()}>Enregistrer</button>
         :
             <button disabled>Enregistrer</button>
 
     const sessionForm = (
-        <div className="SF_sessionForm">
+        <div className="SU_sessionForm">
             <label htmlFor='titre'>Titre :</label>
             <input type="text" placeholder="titre" onChange={(e) => setSessionTitle(e.target.value)} value={sessionTitle}></input>
             {exerciceSelect}
             {exericesDisplay}
             {saveBtn}
+            {previousBtn}
         </div>
     )
 
     return (
         <div>
-            {user.displayName} ({user.uid})
             <br/>
             Formulaire nouvelle session :
             {sessionForm}
@@ -111,4 +125,4 @@ const SessionForm = ({user, callback}) => {
     )
 }
 
-export default SessionForm;
+export default SessionUpdate;

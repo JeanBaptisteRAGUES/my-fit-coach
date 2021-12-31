@@ -1,12 +1,17 @@
 import moment from 'moment';
 import React, { useContext, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { FirebaseContext } from '../Firebase';
 import './training.css';
-import { FirebaseContext } from '../../Firebase';
+
 
 //callback function en props pour indiquer quand le formulaire doit se fermer
 
-const Training = ({exerciceID, callback}) => {
+const TrainingForm = () => {
     const firebase = useContext(FirebaseContext);
+    const location = useLocation();
+    const {userID, exerciceID} = location.state;
+    const navigate = useNavigate();
     const [title, setTitle] = useState("");
     const [parameters, setParameters] = useState([]);
 
@@ -47,7 +52,7 @@ const Training = ({exerciceID, callback}) => {
         .then(async (res) => {
             const resID = res.id;
             console.log(`Entrainement (id: ${resID}) enregistré avec succès !`);
-            callback(0); //Surement à modifier
+            navigate('/exercice', {state: {userID: userID, exerciceID: exerciceID}});
         });
     }
 
@@ -83,4 +88,4 @@ const Training = ({exerciceID, callback}) => {
     )
 }
 
-export default Training;
+export default TrainingForm;

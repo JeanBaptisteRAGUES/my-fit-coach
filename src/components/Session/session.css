@@ -1,8 +1,6 @@
-.SM_container{
+.S_sessionDisplay{
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    min-width: 100vh;
-    background-color: lightskyblue;
 }
