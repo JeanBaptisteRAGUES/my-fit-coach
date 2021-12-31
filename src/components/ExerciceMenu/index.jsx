@@ -51,9 +51,9 @@ const ExerciceMenu = () => {
                 <select name="exercices" id="exerciceSelect" onChange={(e) => setSelectedExercice(e.target.value)}>
                     <option value="">--Sélectionnez un exercice--</option>
                     {
-                        exercices.map(exercice => {
-                            return <option key={exercice.id} value={exercice.id}>{exercice.title}</option>
-                        })
+                        exercices.map(exercice => (
+                            <option key={exercice.id} value={exercice.id}>{exercice.title}</option>
+                        ))
                     }
                 </select>
                 {loadExerciceBtn}

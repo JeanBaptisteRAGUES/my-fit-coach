@@ -40,6 +40,12 @@ const ExerciceUpdate = () => {
         });
     }
 
+    const deleteParameter = (paramName) => {
+        let newParamsList = paramsList.filter(param => param[0] !== paramName);
+        console.log(newParamsList);
+        setParamsList(newParamsList);
+    }
+
     const updateExerciceBtn = paramsList.length === 0 ?
         <button disabled>Enregistrer</button>
     :
@@ -61,9 +67,12 @@ const ExerciceUpdate = () => {
             <input onChange={(e) => setExerciceTitle(e.target.value)} value={exerciceTitle} type="text" id="exerciceTitle" autoComplete="off" required placeholder="Nom exercice"/>
             <div className="EU_paramsList">
                 {
-                    paramsList.map((param, i) => {
-                        return <div key={i}>-{param[0]}</div>
-                    })
+                    paramsList.map((param, i) => (
+                        <div>
+                            <div key={i}>-{param[0]}</div>
+                            <div onClick={() => deleteParameter(param[0])}> X</div>
+                        </div>
+                    ))
                 }
             </div>
             <form onSubmit={addParameter}>
