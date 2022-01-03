@@ -39,7 +39,7 @@ const SessionMenu = () => {
 
     const loadSessionBtn = (
         selectedSession !== "" ?
-            <Link to="/session" state={{userID: userID, sessionID: selectedSession}} >
+            <Link className='btn-primary' to="/session" state={{userID: userID, sessionID: selectedSession}} >
                 Charger
             </Link>
         :
@@ -47,8 +47,8 @@ const SessionMenu = () => {
     )
 
     const sessionsSelect = sessions.length > 0 ?
-            <div className='SM_sessionSelect'>
-                <select name="sessions" id="sessionSelect" onChange={(e) => setSelectedSession(e.target.value)}>
+            <div className='flex flex-col justify-center items-center'>
+                <select className='shadow border rounded w-full py-1 px-1 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline' name="sessions" id="sessionSelect" onChange={(e) => setSelectedSession(e.target.value)}>
                     <option value="">--Sélectionnez une session--</option>
                     {
                         sessions.map(session => {
@@ -66,13 +66,13 @@ const SessionMenu = () => {
             </div>
 
     const loadSessionFormBtn = (
-        <Link to="/session-form" state={{userID: userID}}>
+        <Link className='btn-primary' to="/session-form" state={{userID: userID}}>
             Nouvelle Session
         </Link>
     )
 
     const menuBtn = (
-        <Link to="/workout" state={{userID: userID}}>
+        <Link className='btn-primary' to="/workout" state={{userID: userID}}>
             Retour
         </Link>
     )
@@ -80,11 +80,14 @@ const SessionMenu = () => {
     
 
     return (
-        <div className='SM_container'>
-            Bonjour utilisateur ({userID}) :<br/>
-            {sessionsSelect}
-            {loadSessionFormBtn}
-            {menuBtn}
+        <div className='w-full h-screen flex flex-col items-center justify-center bg-blue-400'>
+            <div className='bg-gradient-to-r from-cyan-100 to-blue-100 rounded px-8 pt-6 pb-2 mb-4 shadow-md h-max'>
+                {sessionsSelect}
+                <div className='flex flex-row justify-around items-center mt-8'>
+                    {loadSessionFormBtn}
+                    {menuBtn}
+                </div>
+            </div>
         </div>
     )
 }

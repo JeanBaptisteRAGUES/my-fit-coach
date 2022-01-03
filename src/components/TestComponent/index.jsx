@@ -15,7 +15,7 @@ const TestComponent = () => {
 
     return (
         <div>
-            <h2>Bonjour {user.username}</h2>
+            <h2 className='text-red-600 font-bold underline' >Bonjour {user.username}</h2>
             <button onClick={() => loadSessionMenu()}>Sessions</button>
         </div>
     )
