@@ -313,7 +313,7 @@ const Nutrition = () => {
     }
 
     return (
-        <div className="N_pageContainer">
+        <div className='w-full h-screen flex flex-col items-center justify-center bg-nutrition'>
             {mealForm}
             {mealDisplay}
             {selectQuantity}

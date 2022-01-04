@@ -80,7 +80,7 @@ const SessionMenu = () => {
     
 
     return (
-        <div className='w-full h-screen flex flex-col items-center justify-center bg-blue-400'>
+        <div className='w-full h-screen flex flex-col items-center justify-center bg-sport'>
             <div className='bg-gradient-to-r from-cyan-100 to-blue-100 rounded px-8 pt-6 pb-2 mb-4 shadow-md h-max'>
                 {sessionsSelect}
                 <div className='flex flex-row justify-around items-center mt-8'>
