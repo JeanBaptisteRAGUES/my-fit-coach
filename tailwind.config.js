@@ -5,8 +5,8 @@ module.exports = {
   theme: {
     extend: {
       backgroundImage: {
-        'sport': "url('/src/images/sport-bg_PNG.png')",
-        'nutrition': "url('/src/images/nutrition-bg_PNG.png')"
+        'sport': "url('/src/images/bg-sport2.png')",
+        'nutrition': "url('/src/images/bg-nutrition.png')"
       },
     },
   },

@@ -1,5 +1,5 @@
-import React from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import React, { Fragment } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 const TestComponent = () => {
     const navigate = useNavigate();
@@ -14,9 +14,13 @@ const TestComponent = () => {
 
 
     return (
-        <div>
-            <h2 className='text-red-600 font-bold underline' >Bonjour {user.username}</h2>
-            <button onClick={() => loadSessionMenu()}>Sessions</button>
+        <div className='bg-green-300'>
+            <div className='flex flex-col justify-center items-center relative h-screen bg-blue-600 text-white font-bold'>
+                Bleu
+            </div>
+            <div className='flex flex-col justify-center items-center relative h-screen bg-red-600 text-white font-bold'>
+                Rouge
+            </div>
         </div>
     )
 }

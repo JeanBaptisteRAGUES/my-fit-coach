@@ -17,10 +17,14 @@ import SessionForm from '../SessionForm';
 import SessionUpdate from '../SessionUpdate';
 import TrainingForm from '../TrainingForm';
 import TestComponent from '../TestComponent';
+import Header from '../Header';
+import Profile from '../Profile';
 
 const App = () => {
     return (
         <Router>
+            <Header/>
+            <Profile/>
             <Routes>
                 <Route exact path="/" element={<Landing/>} />
                 <Route exact path="/signup" element={<Signup/>} />
