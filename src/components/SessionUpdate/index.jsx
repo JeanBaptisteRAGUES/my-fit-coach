@@ -48,8 +48,8 @@ const SessionUpdate = () => {
     }
 
     const exerciceSelect = exercicesList.length > 0 && (
-        <div className='SU_exerciceSelection'>
-            <select name="exercices" id="exerciceSelect" onChange={(e) => setSelectedExercice(e.target.value)}>
+        <div className='flex flex-col justify-center items-center'>
+            <select className='input' name="exercices" id="exerciceSelect" onChange={(e) => setSelectedExercice(e.target.value)}>
                 <option value="">--Sélectionnez un exercice--</option>
                 {
                     exercicesList.map(exercice => {
@@ -59,9 +59,9 @@ const SessionUpdate = () => {
             </select>
             {
                 selectedExercice !== null ?
-                    <button onClick={() => addExercice()} >Ajouter</button>
+                    <div className='btn-primary' onClick={() => addExercice()} >Ajouter</div>
                 :
-                    <button disabled >Ajouter</button>
+                    <div className='btn-primary opacity-50' disabled >Ajouter</div>
             }
         </div>
     )
@@ -75,9 +75,9 @@ const SessionUpdate = () => {
     const exericesDisplay = exercicesSession.length > 0 && (
         exercicesSession.map(exercice => {
             return (
-                <div key={exercice[0]}>
+                <div key={exercice[0]} className='flex flex-row items-center justify-center'>
                     {exercice[1]}
-                    <button onClick={() => deleteExercice(exercice[0])} className="SU_deleteBtn">X</button>
+                    <button onClick={() => deleteExercice(exercice[0])} className="btn-delete">X</button>
                 </div>
             )
         })
@@ -95,31 +95,35 @@ const SessionUpdate = () => {
 
     
     const previousBtn = (
-        <Link to="/session" state={location.state}>
+        <Link className='btn-primary' to="/session" state={location.state}>
             Retour
         </Link>
     )
 
     const saveBtn = exercicesSession.length > 0 && sessionTitle !== "" ? 
-            <button onClick={() => updateSession()}>Enregistrer</button>
+            <div className='btn-primary' onClick={() => updateSession()}>Enregistrer</div>
         :
-            <button disabled>Enregistrer</button>
+            <div className='btn-primary'>Enregistrer</div>
 
     const sessionForm = (
-        <div className="SU_sessionForm">
+        <div className="window-sport-start text-gray-700">
+            <span className='mb-2 underline' >Formulaire nouvelle session :</span>
             <label htmlFor='titre'>Titre :</label>
-            <input type="text" placeholder="titre" onChange={(e) => setSessionTitle(e.target.value)} value={sessionTitle}></input>
+            <input className='input' type="text" placeholder="titre" onChange={(e) => setSessionTitle(e.target.value)} value={sessionTitle}></input>
             {exerciceSelect}
-            {exericesDisplay}
-            {saveBtn}
-            {previousBtn}
+            <div className='flex flex-col justify-center items-start my-5'>
+                <span className='underline'>Exercice(s) :</span>
+                {exericesDisplay}
+            </div>
+            <div className='btn-container-row'>
+                {saveBtn}
+                {previousBtn}
+            </div>
         </div>
     )
 
     return (
-        <div>
-            <br/>
-            Formulaire nouvelle session :
+        <div className='container-sport' >
             {sessionForm}
         </div>
     )

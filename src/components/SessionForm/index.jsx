@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { FirebaseContext } from '../Firebase';
 import './session-form.css';
 
@@ -9,7 +9,7 @@ const SessionForm = () => {
     const {userID} = location.state;
     const navigate = useNavigate();
     const [exercicesList, setExercicesList] = useState([]); //Tous les exercices de l'utilisateur
-    const [selectedExercice, setSelectedExercice] = useState(null);
+    const [selectedExercice, setSelectedExercice] = useState("");
     const [exercicesSession, setExercicesSession] = useState([]); //Seulement les exercices pour cet session en particulier
     const [sessionTitle, setSessionTitle] = useState("");
 
@@ -41,8 +41,8 @@ const SessionForm = () => {
     }
 
     const exerciceSelect = exercicesList.length > 0 && (
-        <div className='SF_exerciceSelection'>
-            <select name="exercices" id="exerciceSelect" onChange={(e) => setSelectedExercice(e.target.value)}>
+        <div className='flex flex-col justify-center items-center'>
+            <select className='input' name="exercices" id="exerciceSelect" onChange={(e) => setSelectedExercice(e.target.value)}>
                 <option value="">--Sélectionnez un exercice--</option>
                 {
                     exercicesList.map(exercice => {
@@ -51,10 +51,10 @@ const SessionForm = () => {
                 }
             </select>
             {
-                selectedExercice !== null ?
-                    <button onClick={() => addExercice()} >Ajouter</button>
+                selectedExercice !== "" ?
+                    <div className='btn-primary' onClick={() => addExercice()} >Ajouter</div>
                 :
-                    <button disabled >Ajouter</button>
+                    <div className='btn-primary opacity-50' disabled >Ajouter</div>
             }
         </div>
     )
@@ -68,9 +68,9 @@ const SessionForm = () => {
     const exericesDisplay = exercicesSession.length > 0 && (
         exercicesSession.map(exercice => {
             return (
-                <div key={exercice[0]}>
+                <div key={exercice[0]} className='flex flex-row items-center justify-center'>
                     {exercice[1]}
-                    <button onClick={() => deleteExercice(exercice[0])} className="SF_deleteBtn">X</button>
+                    <div onClick={() => deleteExercice(exercice[0])} className="btn-delete">X</div>
                 </div>
             )
         })
@@ -89,24 +89,36 @@ const SessionForm = () => {
         });
     }
 
+    const previousBtn = (
+        <Link className='btn-primary' to="/session-menu" state={location.state}>
+            Annuler
+        </Link>
+    )
+
     const saveBtn = exercicesSession.length > 0 && sessionTitle !== "" ? 
-            <button onClick={() => saveSession()}>Enregistrer</button>
+            <div className='btn-primary' onClick={() => saveSession()}>Enregistrer</div>
         :
-            <button disabled>Enregistrer</button>
+            <div className='btn-primary opacity-50' disabled>Enregistrer</div>
 
     const sessionForm = (
-        <div className="SF_sessionForm">
+        <div className="window-sport-start text-gray-700">
+            <span className='mb-2 underline' >Formulaire nouvelle session :</span>
             <label htmlFor='titre'>Titre :</label>
-            <input type="text" placeholder="titre" onChange={(e) => setSessionTitle(e.target.value)} value={sessionTitle}></input>
+            <input className='input' type="text" placeholder="titre" onChange={(e) => setSessionTitle(e.target.value)} value={sessionTitle}></input>
             {exerciceSelect}
-            {exericesDisplay}
-            {saveBtn}
+            <div className='flex flex-col justify-center items-start my-5'>
+                <span className='underline'>Exercice(s) :</span>
+                {exericesDisplay}
+            </div>
+            <div className='btn-container-row'>
+                {saveBtn}
+                {previousBtn}
+            </div>
         </div>
     )
 
     return (
-        <div>
-            Formulaire nouvelle session :
+        <div className='container-sport'>
             {sessionForm}
         </div>
     )

@@ -48,7 +48,7 @@ const SessionMenu = () => {
 
     const sessionsSelect = sessions.length > 0 ?
             <div className='flex flex-col justify-center items-center'>
-                <select className='shadow border rounded w-full py-1 px-1 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline' name="sessions" id="sessionSelect" onChange={(e) => setSelectedSession(e.target.value)}>
+                <select className='input' name="sessions" id="sessionSelect" onChange={(e) => setSelectedSession(e.target.value)}>
                     <option value="">--Sélectionnez une session--</option>
                     {
                         sessions.map(session => {
@@ -80,10 +80,10 @@ const SessionMenu = () => {
     
 
     return (
-        <div className='h-screen flex flex-col items-center justify-center bg-sport overflow-x-hidden'>
-            <div className='bg-gradient-to-r from-cyan-100 to-blue-100 rounded px-8 pt-6 pb-2 mb-4 shadow-md h-max'>
+        <div className='container-sport'>
+            <div className='window-sport'>
                 {sessionsSelect}
-                <div className='flex flex-row justify-around items-center mt-8'>
+                <div className='btn-container-row'>
                     {loadSessionFormBtn}
                     {menuBtn}
                 </div>

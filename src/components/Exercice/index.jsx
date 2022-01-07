@@ -85,12 +85,12 @@ const Exercice = () => {
 
     const trainingsHistoryDisplay = showHistory && (
         trainingsHistory.length > 0 ?
-            <div className='E_trainingsHistory'>
+            <div className='window-sport text-gray-700'>
                 Historique :
                 {
                     trainingsHistory.map((training, i) => {
                         return (
-                            <div className='E_training' key={"training_" + i}>
+                            <div className='flex flex-col justify-center items-start my-2 w-72' key={"training_" + i}>
                                 Entrainement du {training.date} :<br/>
                                 {
                                     Object.entries(returnOrderedTraining(training)).map(([key, value]) => {
@@ -102,7 +102,7 @@ const Exercice = () => {
                         )
                     })
                 }
-                <button onClick={() => setShowHistory(false)}>Fermer</button>
+                <div className='btn-primary' onClick={() => setShowHistory(false)}>Fermer</div>
             </div>
         :
             <div className='E_trainingsHistory'>
@@ -113,7 +113,7 @@ const Exercice = () => {
     )
 
     const lastTrainingDisplay = lastTraining !== null && (
-        <div className='E_lastTrainingData'>
+        <div className='my-4'>
             Dernier entrainement ({lastTraining.date}) :<br/>
             {
                 Object.entries(lastTraining).map(([key, value]) => {
@@ -125,39 +125,42 @@ const Exercice = () => {
     )
 
     const addTrainingBtn = (
-        <Link to="/training-form" state={location.state}>
+        <Link className='btn-primary' to="/training-form" state={location.state}>
             Ajouter un entraînement
         </Link>
     )
 
     const updateBtn = (
-        <Link to="/exercice-update" state={location.state}>
+        <Link className='btn-primary' to="/exercice-update" state={location.state}>
             Modifier
         </Link>
     )
 
     const previousBtn = (
-        <Link to="/exercice-menu" state={location.state}>
+        <Link className='btn-primary' to="/exercice-menu" state={location.state}>
             Retour
         </Link>
     )
 
     const exerciceDisplay = exerciceData !== null && !showHistory && (
-        <div className='E_exerciceDisplay'>
-            <h1>{exerciceData.title}</h1>
-            Description :<br/>
-            {exerciceData.description}
-            <br/>
+        <div className='window-sport w-1/3 text-gray-700'>
+            <span className='font-bold text-3xl' >{exerciceData.title}</span>
+            <div className='flex flex-col justify-center items-start w-full my-8 font-bold' >
+                Description :<br/>
+                {exerciceData.description}
+            </div>
             {lastTrainingDisplay}
-            <button onClick={() => setShowHistory(true)} >Historique</button>
-            {addTrainingBtn}
-            {updateBtn}
-            {previousBtn}
+            <div className='btn-primary' onClick={() => setShowHistory(true)} >Historique</div>
+            <div className='btn-container-row'>
+                {addTrainingBtn}
+                {updateBtn}
+                {previousBtn}
+            </div>
         </div> 
     )
 
     return (
-        <div className='E_container'>
+        <div className='container-sport'>
             {exerciceDisplay}
             {trainingsHistoryDisplay}
         </div>

@@ -57,33 +57,35 @@ const TrainingForm = () => {
     }
 
     const displayTrainingForm = parameters.length > 0 && (
-        <form onSubmit={(e) => saveTraining(e)}>
+        <form className='flex flex-col justify-center items-start my-4' onSubmit={(e) => saveTraining(e)}>
             {
                 parameters.map(param => {
                     return (
                         <div key={param[0]}>
-                            <label htmlFor={param[0]}>{param[0]}</label><br/>
+                            <label htmlFor={param[0]}>{param[0]} :</label><br/>
                             {
                                 param[1] === "text" ?
-                                    <input id={param[0]} value={param[2]} onChange={(e) => modifyParameterValue(param[0], e.target.value)}></input>
+                                    <input className='input' id={param[0]} value={param[2]} onChange={(e) => modifyParameterValue(param[0], e.target.value)}></input>
                                 :
-                                    <textarea id={param[0]} value={param[2]} onChange={(e) => modifyParameterValue(param[0], e.target.value)}></textarea>
+                                    <textarea className='input' id={param[0]} value={param[2]} onChange={(e) => modifyParameterValue(param[0], e.target.value)}></textarea>
         
                             }
                         </div>
                     )
                 })
             }
-            <button>Enregistrer</button>
+            <div className='btn-primary self-center mt-2' >Enregistrer</div>
         </form>
     )
 
     if(parameters.length === 0) setFormParameters(exerciceID);
 
     return (
-        <div className='T_container'>
-            {title}
-            {displayTrainingForm}
+        <div className='container-sport'>
+            <div className='window-sport text-gray-700' >
+                <span className='font-bold text-xl' >{title}</span>
+                {displayTrainingForm}
+            </div>
         </div>
     )
 }

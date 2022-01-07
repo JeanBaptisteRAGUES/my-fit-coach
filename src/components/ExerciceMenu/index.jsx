@@ -39,7 +39,7 @@ const ExerciceMenu = () => {
 
     const loadExerciceBtn = (
         selectedExercice !== "" ?
-            <Link to="/exercice" state={{userID: userID, exerciceID: selectedExercice}} >
+            <Link className='btn-primary' to="/exercice" state={{userID: userID, exerciceID: selectedExercice}} >
                 Charger
             </Link>
         :
@@ -47,8 +47,8 @@ const ExerciceMenu = () => {
     )
 
     const exercicesSelect = exercices.length > 0 ?
-            <div className='EM_exerciceSelect'>
-                <select name="exercices" id="exerciceSelect" onChange={(e) => setSelectedExercice(e.target.value)}>
+            <div className='flex flex-col justify-center items-center mb-8 text-gray-700'>
+                <select className='input' name="exercices" id="exerciceSelect" onChange={(e) => setSelectedExercice(e.target.value)}>
                     <option value="">--Sélectionnez un exercice--</option>
                     {
                         exercices.map(exercice => (
@@ -66,13 +66,13 @@ const ExerciceMenu = () => {
             </div>
 
     const loadExerciceFormBtn = (
-        <Link to="/exercice-form" state={{userID: userID}}>
+        <Link className='btn-primary' to="/exercice-form" state={{userID: userID}}>
             Nouvel exercice
         </Link>
     )
 
     const menuBtn = (
-        <Link to="/workout" state={{userID: userID}}>
+        <Link className='btn-primary' to="/workout" state={{userID: userID}}>
             Retour
         </Link>
     )
@@ -80,11 +80,14 @@ const ExerciceMenu = () => {
     
 
     return (
-        <div className='EM_container'>
-            Bonjour utilisateur ({userID}) :<br/>
-            {exercicesSelect}
-            {loadExerciceFormBtn}
-            {menuBtn}
+        <div className='container-sport'>
+            <div className='window-sport-start'>
+                {exercicesSelect}
+                <div className='btn-container-row'>
+                    {loadExerciceFormBtn}
+                    {menuBtn}
+                </div>
+            </div>
         </div>
     )
 }

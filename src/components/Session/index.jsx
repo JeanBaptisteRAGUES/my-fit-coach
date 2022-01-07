@@ -32,28 +32,33 @@ const Session = () => {
     )
 
     const previousBtn = (
-        <Link to="/session-menu" state={location.state}>
+        <Link className='btn-primary' to="/session-menu" state={location.state}>
             Retour
         </Link>
     )
 
     const updateBtn = (
-        <Link to="/session-update" state={location.state}>
+        <Link className='btn-primary' to="/session-update" state={location.state}>
             Modifier
         </Link>
     )
 
     const sessionDisplay = (
-        <div className="S_sessionDisplay">
-            <h2>{sessionTitle}</h2>
-            {exericesDisplay}
-            {updateBtn}
-            {previousBtn}
+        <div className="window-sport">
+            <span className='font-bold mb-4 text-xl text-gray-700' >{sessionTitle}</span>
+            <div className='flex flex-col items-start justify-center text-gray-700' >
+                <span className='underline'>Exercice(s) :</span>
+                {exericesDisplay}
+            </div>
+            <div className='btn-container-row'>
+                {updateBtn}
+                {previousBtn}
+            </div>
         </div>
     )
 
     return (
-        <div>
+        <div className='container-sport'>
             {sessionDisplay}
         </div>
     )

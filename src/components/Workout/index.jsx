@@ -54,10 +54,12 @@ const Workout = () => {
     )
 
     return (
-        <div className="W_workoutContainer">
-            <h1>Workout</h1>
-            <Link to="/session-menu" state={{userID: user.uid}}>Sessions</Link>
-            <Link to="/exercice-menu" state={{userID: user.uid}}>Exercices</Link>
+        <div className="container-sport">
+            <div className='window-sport'>
+                <h1>Workout</h1>
+                <Link to="/session-menu" state={{userID: user.uid}}>Sessions</Link>
+                <Link to="/exercice-menu" state={{userID: user.uid}}>Exercices</Link>
+            </div>
         </div>
     )
 }
