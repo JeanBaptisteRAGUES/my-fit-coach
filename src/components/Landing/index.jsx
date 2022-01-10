@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react'
+import { useInView } from 'react-intersection-observer';
 import { Link } from 'react-router-dom';
 import {FirebaseContext} from '../Firebase';
 
@@ -6,20 +7,24 @@ const Landing = () => {
     const firebase = useContext(FirebaseContext);
     const [username, setUserName] = useState('');
     const [user, setUser] = useState(null);
+    
+    const [refLanding, inViewLanding] = useInView({
+        threshold:0.3,
+        initialInView:true
+    });
+
+    const [refNutrition, inViewNutrition] = useInView({
+        threshold:0.3
+    });
+
+    const [refSport, inViewSport] = useInView({
+        threshold:0.3
+    });
 
     const disconnect = () => {
         console.log("Déconnexion");
         firebase.signoutUser();
     }
-
-    /*
-    useEffect(() => {
-        if(!connected){
-            console.log("Déconnexion");
-            firebase.signoutUser();
-        }
-    }, [connected, firebase])
-    */
     
 
     useEffect(async () => {
@@ -55,11 +60,52 @@ const Landing = () => {
         </div>
     )
 
+    const landingAnimation = (
+        inViewLanding ? 
+                "motion-safe:animate-fadeIn"
+            :
+                "opacity-0"
+    )
+    
+    const nutritionAnimation = (
+        inViewNutrition ? 
+                "motion-safe:animate-fadeIn"
+            :
+                "opacity-0"
+    )  
+
+    const sportAnimation = (
+        inViewSport ? 
+                "motion-safe:animate-fadeIn"
+            :
+                "opacity-0"
+    )  
+
     return (
-        <div>
-            Page d'accueil :<br/>
-            {disconnectedDisplay}
-            {connectedDisplay}
+        <div className='flex flex-col justify-center items-center'>
+            <div className='flex flex-col justify-center items-center h-screen bg-slate-300 bg-landing-main bg-cover w-full'>
+                <div ref={refLanding} className={"flex flex-col justify-center items-center text-center h-2/3 w-2/3 bg-transparent text-slate-200 font-bold text-xl leading-loose " + landingAnimation}>
+                    <p>
+                    Bienvenue sur My Fit Coach, l'endroit où vous pourrez gérer vos entraînement ainsi que vos repas sur la semaine !
+                    Rendez vous dans l'onglet <Link to='/nutrition/new' className='text-orange-500'>Nutrition</Link> pour créer vos repas et calculer leurs
+                    valeurs nutritionnelles<br/>
+                    La page <Link to='/workout' className='text-blue-500'>Sport</Link> quant à elle vous permettra de paramétrer vos entraînements physiques et de les
+                    enregistrer pour traquer l'amélioration de vos progrès<br/>
+                    Enfin, rendez vous dans votre <Link to='/schedule' className='text-green-500'>Emploi du temps</Link> pour créer votre routine de la semaine grace à
+                    vos repas et séances sportives précédemment enregistrées
+                    </p>
+                </div>
+            </div>
+            <div className='flex flex-col justify-center items-center h-screen bg-slate-300 bg-landing-nutrition bg-cover w-full'>
+                <div ref={refNutrition} className={"flex flex-col justify-center items-center border rounded shadow-md shadow-blue-300 h-1/3 w-1/3 bg-gradient-to-r from-cyan-100 to-sky-100 " + nutritionAnimation}>
+                    Nutrition
+                </div>
+            </div>
+            <div className='flex flex-col justify-center items-center h-screen bg-slate-300 bg-landing-sport bg-cover w-full'>
+                <div ref={refSport} className={"flex flex-col justify-center items-center border rounded shadow-md shadow-blue-300 h-1/3 w-1/3 bg-gradient-to-r from-cyan-100 to-sky-100 " + sportAnimation}>
+                    Sport
+                </div>
+            </div>
         </div>
     )
 }
