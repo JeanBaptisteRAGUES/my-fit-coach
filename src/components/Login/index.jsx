@@ -46,22 +46,24 @@ const Login = (props) => {
     }
 
     return (
-        <div className="loginMain">
-            {error !== '' && <div className="errorMsgBox">{error.message}</div>}
-            <div className="loginBox">
-                <div className="title2">Connexion</div>
-                <form onSubmit={handleSubmit} className="loginForm">
-                    <div className="inputBox">
+        <div className='flex flex-col justify-center items-center h-screen bg-slate-300 bg-landing-main bg-cover w-full'>
+            <div className='window-sport-start w-1/3 text-gray-700'>
+                {error !== '' && <div className="text-red-600">{error.message}</div>}
+                <div className="text-bold self-center text-xl mb-4">Connexion</div>
+                <form onSubmit={handleSubmit} className="w-full">
+                    <div className="w-2/3">
                         <label htmlFor="email">Email :</label><br/>
-                        <input onChange={(e) => setEmail(e.target.value)} value={email} type="email" autoComplete="off" required placeholder="toto@exemple.com"/>
+                        <input className='input' onChange={(e) => setEmail(e.target.value)} value={email} type="email" autoComplete="off" required placeholder="toto@exemple.com"/>
                     </div>
-                    <div className="inputBox">
+                    <div className="w-2/3">
                         <label htmlFor="password">Mot de passe :</label><br/>
-                        <input onChange={(e) => setPassword(e.target.value)} value={password} type="password" autoComplete="off" required placeholder="Au moins 6 caractères"/>
+                        <input className='input' onChange={(e) => setPassword(e.target.value)} value={password} type="password" autoComplete="off" required placeholder="Au moins 6 caractères"/>
                     </div>
-                    {btn ? <button className="loginBtn">Connexion</button> : <button disabled className="loginBtn">Connexion</button>}
+                    <div className='flex flex-col justify-center items-center w-full my-4'>
+                        {btn ? <button className="btn-primary">Connexion</button> : <button disabled className="btn-primary opacity-50">Connexion</button>}
+                    </div>
                 </form>
-                <Link className="link" to="/signup">Vous n'avez pas de compte ? Inscrivez-vous maintenant</Link>
+                <Link className="underline" to="/signup">Vous n'avez pas de compte ? Inscrivez-vous maintenant</Link>
             </div>
         </div>
     );

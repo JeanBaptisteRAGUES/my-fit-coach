@@ -70,12 +70,13 @@ const Signup = (props) => {
     const {username, email, age, height, weight, gender, password, confirmPassword} = loginData;
 
     //gestion erreurs
-    const errorMsg = error !== '' && <span>{error.message}</span>;
+    const errorMsg = error !== '' && <div className="text-red-600">{error.message}</div>;
 
     const formPseudo = (
-        <div className="inputBox">
+        <div className="w-2/3">
             <label htmlFor="username">Pseudo :</label><br/>
             <input 
+                className='input'
                 onChange={handleChange} 
                 value={username} 
                 type="text" 
@@ -88,9 +89,10 @@ const Signup = (props) => {
     )
 
     const formEmail = (
-        <div className="inputBox">
+        <div className="w-2/3">
             <label htmlFor="email">Email :</label><br/>
             <input 
+                className='input'
                 onChange={handleChange} 
                 value={email} 
                 type="email" 
@@ -103,9 +105,10 @@ const Signup = (props) => {
     )
 
     const formAge = (
-        <div className="inputBox">
+        <div className="w-2/3">
             <label htmlFor="age">Age :</label><br/>
             <input 
+                className='input'
                 onChange={handleChange} 
                 value={age} 
                 type="text" 
@@ -118,9 +121,10 @@ const Signup = (props) => {
     )
 
     const formHeight = (
-        <div className="inputBox">
+        <div className="w-2/3">
             <label htmlFor="height">Taille (en cm) :</label><br/>
             <input 
+                className='input'
                 onChange={handleChange} 
                 value={height} 
                 type="text" 
@@ -133,9 +137,10 @@ const Signup = (props) => {
     )
 
     const formWeight = (
-        <div className="inputBox">
+        <div className="w-2/3">
             <label htmlFor="weight">Poids (en kg) :</label><br/>
             <input 
+                className='input'
                 onChange={handleChange} 
                 value={weight} 
                 type="text" 
@@ -148,9 +153,9 @@ const Signup = (props) => {
     )
 
     const formGender = (
-        <div className="inputBox">
+        <div className="w-2/3">
             <label htmlFor="gender">Sexe :</label><br/>
-            <select id="gender" name="gender" onChange={handleChange} value={gender}>
+            <select className='input' id="gender" name="gender" onChange={handleChange} value={gender}>
                 <option value="">Précisez votre sexe</option>
                 <option value="male">Homme</option>
                 <option value="female">Femme</option>
@@ -159,9 +164,10 @@ const Signup = (props) => {
     )
 
     const formPassword = (
-        <div className="inputBox">
+        <div className="w-2/3">
             <label htmlFor="password">Mot de passe :</label><br/>
             <input 
+                className='input'
                 onChange={handleChange} 
                 value={password} 
                 type="password" 
@@ -174,9 +180,10 @@ const Signup = (props) => {
     )
 
     const formPasswordConfirm = (
-        <div className="inputBox">
+        <div className="w-2/3">
             <label htmlFor="confirmPassword">Confirmez le mot de passe :</label><br/>
             <input 
+                className='input'
                 onChange={handleChange} 
                 value={confirmPassword} 
                 type="password" 
@@ -190,10 +197,10 @@ const Signup = (props) => {
 
     const formSignupBtn = username === '' || email === '' || age === '' || height === '' || weight === '' ||
      gender === '' || password === '' || password !== confirmPassword
-    ? <button disabled className="signupBtn">Inscription</button> : <button className="signupBtn">Inscription</button>
+    ? <button disabled className="btn-primary opacity-50">Inscription</button> : <button className="btn-primary">Inscription</button>
 
     const signupForm = (
-        <form onSubmit={handleSubmit} className="signupForm">
+        <form onSubmit={handleSubmit} className="w-full">
             {formPseudo}
             {formEmail}
             {formAge}
@@ -202,17 +209,19 @@ const Signup = (props) => {
             {formGender}
             {formPassword}
             {formPasswordConfirm}
-            {formSignupBtn}
+            <div className='flex flex-col justify-center items-center my-2'>
+                {formSignupBtn}
+            </div>
         </form>
     )
 
     return (
-        <div className="signupMain">
-            <div className="signupBox">
+        <div className='flex flex-col justify-center items-center h-screen bg-slate-300 bg-landing-main bg-cover w-full'>
+            <div className="window-sport-start w-1/3 text-gray-700 mt-8">
                 {errorMsg}
-                <div className="title2">Inscription</div>
+                <div className="text-bold self-center text-xl mb-4">Inscription</div>
                 {signupForm}
-                <Link className="link" to="/login">Déjà inscrit ? Connectez vous</Link>
+                <Link className="underline self-center" to="/login">Déjà inscrit ? Connectez vous</Link>
             </div>
         </div>
     );

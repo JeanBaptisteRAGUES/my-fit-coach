@@ -24,11 +24,11 @@ const App = () => {
     return (
         <Router>
             <Header/>
-            <Profile/>
             <Routes>
                 <Route exact path="/" element={<Landing/>} />
                 <Route exact path="/signup" element={<Signup/>} />
                 <Route exact path="/login" element={<Login/>} />
+                <Route exact path="/profile" element={<Profile/>} />
                 <Route exact path="/schedule" element={<Schedule/>} />
                 <Route exact path="/workout" element={<Workout/>} />
                 <Route exact path="/nutrition/:mealID" element={<Nutrition/>} />

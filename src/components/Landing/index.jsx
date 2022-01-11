@@ -21,12 +21,6 @@ const Landing = () => {
         threshold:0.3
     });
 
-    const disconnect = () => {
-        console.log("Déconnexion");
-        firebase.signoutUser();
-    }
-    
-
     useEffect(async () => {
         firebase.auth.onAuthStateChanged( async (user) => {
             if(user){
@@ -56,7 +50,6 @@ const Landing = () => {
             <Link to='/workout'>Sport</Link><br/>
             <Link to='/nutrition/new'>Nutrition</Link><br/>
             <Link to='/test' state={{user: JSON.stringify(user)}} >Test</Link><br/>
-            <span onClick={() => disconnect()}>Se déconnecter</span>
         </div>
     )
 
@@ -86,13 +79,13 @@ const Landing = () => {
             <div className='flex flex-col justify-center items-center h-screen bg-slate-300 bg-landing-main bg-cover w-full'>
                 <div ref={refLanding} className={"flex flex-col justify-center items-center text-center h-2/3 w-2/3 bg-transparent text-slate-200 font-bold text-xl leading-loose " + landingAnimation}>
                     <p>
-                    Bienvenue sur My Fit Coach, l'endroit où vous pourrez gérer vos entraînement ainsi que vos repas sur la semaine !
-                    Rendez vous dans l'onglet <Link to='/nutrition/new' className='text-orange-500'>Nutrition</Link> pour créer vos repas et calculer leurs
-                    valeurs nutritionnelles<br/>
-                    La page <Link to='/workout' className='text-blue-500'>Sport</Link> quant à elle vous permettra de paramétrer vos entraînements physiques et de les
-                    enregistrer pour traquer l'amélioration de vos progrès<br/>
-                    Enfin, rendez vous dans votre <Link to='/schedule' className='text-green-500'>Emploi du temps</Link> pour créer votre routine de la semaine grace à
-                    vos repas et séances sportives précédemment enregistrées
+                        Bienvenue sur My Fit Coach, l'endroit où vous pourrez gérer vos entraînement ainsi que vos repas sur la semaine !<br/>
+                        Rendez vous dans l'onglet <Link to='/nutrition/new' className='text-orange-500'>Nutrition</Link> pour créer vos repas et calculer leurs
+                        valeurs nutritionnelles<br/>
+                        La page <Link to='/workout' className='text-blue-500'>Sport</Link> quant à elle vous permettra de paramétrer vos entraînements physiques et de les
+                        enregistrer pour traquer l'amélioration de vos progrès<br/>
+                        Enfin, rendez vous dans votre <Link to='/schedule' className='text-green-500'>Emploi du temps</Link> pour créer votre routine de la semaine grace à
+                        vos repas et séances sportives précédemment enregistrées
                     </p>
                 </div>
             </div>

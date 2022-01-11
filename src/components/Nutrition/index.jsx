@@ -333,6 +333,9 @@ const Nutrition = () => {
                 </div>
                 {foodInfoDisplay}
             </div>
+            <div className='w-1/3 h-64 bg-gradient-to-r from-yellow-50 to-orange-100 rounded shadow-md shadow-orange-100'>
+
+            </div>
         </div>
     )
 }

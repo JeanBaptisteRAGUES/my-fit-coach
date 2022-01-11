@@ -12,11 +12,11 @@
     }
 
     .window-sport {
-        @apply bg-gradient-to-r from-cyan-100 to-blue-100 rounded px-8 pt-6 pb-2 mb-4 shadow-md h-max flex flex-col justify-center items-center
+        @apply bg-gradient-to-r from-cyan-100 to-blue-100 rounded px-8 pt-6 pb-2 mb-4 shadow-md shadow-blue-700 h-max flex flex-col justify-center items-center
     }
 
     .window-sport-start {
-        @apply bg-gradient-to-r from-cyan-100 to-blue-100 rounded px-8 pt-6 pb-2 mb-4 shadow-md h-max flex flex-col justify-center items-start
+        @apply bg-gradient-to-r from-cyan-100 to-blue-100 rounded px-8 pt-6 pb-2 mb-4 shadow-md shadow-blue-700 h-max flex flex-col justify-center items-start
     }
 
     .btn-container-row {
