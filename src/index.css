@@ -3,8 +3,29 @@
 @tailwind utilities;
 
 @layer components {
+    .flexCenter {
+        @apply flex flex-col justify-center items-center
+    }
+
+    .flexStart {
+        @apply flex flex-col justify-center items-start
+    }
+
+    .basicText {
+        @apply md:text-base text-slate-700 text-xs
+    }
+
+    .basicText-white {
+        @apply md:text-base text-white text-xs
+    }
+
+    .basicText-dimmed {
+        @apply md:text-base text-slate-200 text-xs
+    }
+
+
     .btn-primary {
-        @apply shadow border rounded text-gray-700 px-1 bg-gray-100 hover:bg-gray-50 hover:border-white w-fit cursor-pointer
+        @apply text-center min-w-max shadow border rounded px-1 bg-gray-100 hover:bg-gray-50 hover:border-white w-fit cursor-pointer basicText
     }
 
     .container-sport {
@@ -12,11 +33,11 @@
     }
 
     .window-sport {
-        @apply bg-gradient-to-r from-cyan-100 to-blue-100 rounded px-8 pt-6 pb-2 mb-4 shadow-md shadow-blue-700 h-max flex flex-col justify-center items-center
+        @apply bg-gradient-to-r from-cyan-100 to-blue-100 rounded px-8 pt-6 pb-2 mb-4 shadow-md shadow-gray-700 h-max flex flex-col justify-center items-center
     }
 
     .window-sport-start {
-        @apply bg-gradient-to-r from-cyan-100 to-blue-100 rounded px-8 pt-6 pb-2 mb-4 shadow-md shadow-blue-700 h-max flex flex-col justify-center items-start
+        @apply bg-gradient-to-r from-cyan-100 to-blue-100 rounded px-8 pt-6 pb-2 mb-4 shadow-md shadow-gray-700 h-max flex flex-col justify-center items-start
     }
 
     .btn-container-row {
@@ -29,5 +50,17 @@
 
     .btn-delete {
         @apply flex flex-col justify-center items-center shadow border rounded w-6 h-6 mx-2 py-1 px-1 text-gray-700 cursor-pointer hover:text-red-600
+    }
+
+    .title {
+        @apply md:text-3xl text-lg text-slate-700
+    }
+
+    .title-dimmed {
+        @apply md:text-3xl text-lg text-slate-200
+    }
+
+    .title-white {
+        @apply md:text-3xl text-lg text-white
     }
 }

@@ -113,7 +113,7 @@ const Exercice = () => {
     )
 
     const lastTrainingDisplay = lastTraining !== null && (
-        <div className='my-4'>
+        <div className='my-4 basicText'>
             Dernier entrainement ({lastTraining.date}) :<br/>
             {
                 Object.entries(lastTraining).map(([key, value]) => {
@@ -143,13 +143,15 @@ const Exercice = () => {
     )
 
     const exerciceDisplay = exerciceData !== null && !showHistory && (
-        <div className='window-sport w-1/3 text-gray-700'>
-            <span className='font-bold text-3xl' >{exerciceData.title}</span>
-            <div className='flex flex-col justify-center items-start w-full my-8 font-bold' >
+        <div className='window-sport w-2/3 md:w-1/2'>
+            <span className='font-bold title' >{exerciceData.title}</span>
+            <div className='flex flex-col justify-center items-start w-full my-8 font-bold basicText' >
                 Description :<br/>
                 {exerciceData.description}
             </div>
-            {lastTrainingDisplay}
+            <div className='flex flex-col justify-center items-start w-full'>
+                {lastTrainingDisplay}
+            </div>
             <div className='btn-primary' onClick={() => setShowHistory(true)} >Historique</div>
             <div className='btn-container-row'>
                 {addTrainingBtn}

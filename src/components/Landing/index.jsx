@@ -76,8 +76,8 @@ const Landing = () => {
 
     return (
         <div className='flex flex-col justify-center items-center'>
-            <div className='flex flex-col justify-center items-center h-screen bg-slate-300 bg-landing-main bg-cover w-full'>
-                <div ref={refLanding} className={"flex flex-col justify-center items-center text-center h-2/3 w-2/3 bg-transparent text-slate-200 font-bold text-xl leading-loose " + landingAnimation}>
+            <div className='flex flex-col justify-center items-center min-h-screen bg-slate-300 bg-landing-main bg-cover w-full'>
+                <div ref={refLanding} className={"flex flex-col justify-center items-center text-center h-2/3 w-2/3 bg-transparent text-slate-200 font-bold text-sm md:text-xl leading-loose " + landingAnimation}>
                     <p>
                         Bienvenue sur My Fit Coach, l'endroit où vous pourrez gérer vos entraînement ainsi que vos repas sur la semaine !<br/>
                         Rendez vous dans l'onglet <Link to='/nutrition/new' className='text-orange-500'>Nutrition</Link> pour créer vos repas et calculer leurs

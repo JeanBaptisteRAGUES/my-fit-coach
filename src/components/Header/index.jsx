@@ -1,10 +1,14 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { Fragment } from 'react/cjs/react.development';
 import { FirebaseContext } from '../Firebase';
+import MenuLinks from './menuLinks';
+import { FiMenu } from 'react-icons/fi';
 
 const Header = () => {
     const firebase = useContext(FirebaseContext);
     const [user, setUser] = useState(null);
+    const [showMenu, setShowMenu] = useState(false);
 
     useEffect(async () => {
         firebase.auth.onAuthStateChanged( async (user) => {
@@ -18,38 +22,51 @@ const Header = () => {
         });
     }, []);
 
+    const profile = user !== null && (
+        <div className='md:flex flex-col justify-center items-center text-white w-fit hidden'>
+            <span onClick={() => setShowMenu(!showMenu)} className='font-bold cursor-pointer'>{user.username}</span>
+        </div>
+    )
+
     const disconnect = () => {
         console.log("Déconnexion");
         setUser(null);
         firebase.signoutUser();
     }
 
-    const profile = user !== null && (
-        <div className='flex flex-col justify-center items-center text-white w-fit'>
-            <span className='font-bold'>{user.username}</span>
-            <span className='cursor-pointer' onClick={() => disconnect()}>Déconnexion</span>
-        </div>
+    const profileLinks = showMenu && (
+        <MenuLinks user={user} disconnect={disconnect}/>
     )
 
     const disconnectedDisplay = user === null && (
-        <div className='flex flex-row justify-center items-center text-white w-fit'>
+        <div className='md:flex flex-row justify-center items-center text-white w-fit hidden'>
             <Link className='mx-1' to='/signup'>S'inscrire</Link>
             <Link className='mx-1' to='/login'>Se connecter</Link>
         </div>
     )
 
+    const burgerMenu = (
+        <FiMenu className='md:hidden text-white cursor-pointer' onClick={() => setShowMenu(!showMenu)} >
+
+        </FiMenu>
+    )
+
     return (
-        <div className='flex flex-row justify-around items-center fixed top-0 z-50 bg-slate-600 h-10 w-full'>
-            <div className='text-white font-bold' >My Fit Coach</div>
-            <ul className='flex flex-row justify-around items-center text-white'>
-                <li className='m-2' ><Link to='/'>Accueil</Link></li>
-                {user !== null ? <li className='m-2' ><Link to='/schedule'>Emploi du temps</Link></li> : <Link className='m-2' to='/login'>Emploi du temps</Link>}
-                {user !== null ? <li className='m-2'><Link to='/workout' >Sport</Link></li> : <Link className='m-2' to='/login'>Sport</Link>}
-                {user !== null ? <li className='m-2'><Link to='/nutrition/new' state={{userID: user.userID}}>Nutrition</Link></li> : <Link className='m-2' to='/login'>Nutrition</Link>}
-            </ul>
-            {profile}
-            {disconnectedDisplay}
-        </div>
+        <Fragment>
+            <div className='flex flex-row justify-around items-center fixed top-0 z-50 bg-slate-600 min-h-10 w-full'>
+                <div className='text-white font-bold' >My Fit Coach</div>
+                <ul className='md:flex flex-row justify-around items-center text-white hidden'>
+                    <li className='m-2' ><Link to='/'>Accueil</Link></li>
+                    {user !== null ? <li className='m-2' ><Link to='/schedule'>Emploi du temps</Link></li> : <Link className='m-2' to='/login'>Emploi du temps</Link>}
+                    {user !== null ? <li className='m-2'><Link to='/workout' >Sport</Link></li> : <Link className='m-2' to='/login'>Sport</Link>}
+                    {user !== null ? <li className='m-2'><Link to='/nutrition/new' state={{userID: user.userID}}>Nutrition</Link></li> : <Link className='m-2' to='/login'>Nutrition</Link>}
+                </ul>
+                {profile}
+                {burgerMenu}
+                {disconnectedDisplay}
+            </div>
+            {profileLinks}
+        </Fragment>
     )
 }
 
