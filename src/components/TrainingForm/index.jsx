@@ -1,6 +1,7 @@
 import moment from 'moment';
 import React, { useContext, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { useEffect } from 'react/cjs/react.development';
 import { FirebaseContext } from '../Firebase';
 import './training.css';
 
@@ -10,10 +11,15 @@ import './training.css';
 const TrainingForm = () => {
     const firebase = useContext(FirebaseContext);
     const location = useLocation();
-    const {userID, exerciceID} = location.state;
-    const navigate = useNavigate();
+    let navigate = useNavigate();
+    const {userID, exerciceID} = location.state !== null && location.state !== undefined ? location.state : {userID: null, exerciceID: null};
     const [title, setTitle] = useState("");
     const [parameters, setParameters] = useState([]);
+
+    useEffect(() => {
+        if(userID === null){navigate('/login'); return};
+        if(exerciceID === null){navigate('/exercice-menu'); return};
+    }, []);
 
     const setFormParameters = async (exid) => {
         console.log("Exercice ID : " + exerciceID);

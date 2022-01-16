@@ -6,12 +6,16 @@ import './exercice-form.css';
 const ExerciceForm = () => {
     const firebase = useContext(FirebaseContext);
     const location = useLocation();
-    const {userID} = location.state;
-    const navigate = useNavigate();
+    let navigate = useNavigate();
+    const {userID} = location.state !== null && location.state !== undefined ? location.state : {userID: null};
     const [newParam, setNewParam] = useState("");
     const [paramsList, setParamsList] = useState([["Commentaire", "textarea"]]); //[name, type]
     const [exerciceTitle, setExerciceTitle] = useState("Nouveau exercice");
     const [exerciceDescription, setExerciceDescription] = useState("");
+
+    useEffect(() => {
+        if(userID === null) {navigate('/login'); return};
+    }, [])
 
     const addParameter = (e) => {
         e.preventDefault();

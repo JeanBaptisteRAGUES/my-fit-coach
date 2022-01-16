@@ -3,6 +3,13 @@ module.exports = {
     "./src/**/*.{js,jsx,ts,tsx}",
   ],
   theme: {
+    screens: {
+      'sm': '640px',
+      'md': '768px',
+      'lg': '1024px',
+      'xl': '1280px',
+      'uhd': '3840px'
+    },
     extend: {
       backgroundImage: {
         'sport': "url('/src/images/bg-sport2.png')",
@@ -30,7 +37,7 @@ module.exports = {
       },
       variants: {
         animation: ["motion-safe"]
-      }
+      },
     },
   },
   plugins: [],

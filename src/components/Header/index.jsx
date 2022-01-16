@@ -7,7 +7,7 @@ import { FiMenu } from 'react-icons/fi';
 
 const Header = () => {
     const firebase = useContext(FirebaseContext);
-    const [user, setUser] = useState(null);
+    const [user, setUser] = useState({userID: null, username: ""});
     const [showMenu, setShowMenu] = useState(false);
 
     useEffect(async () => {
@@ -30,6 +30,7 @@ const Header = () => {
 
     const disconnect = () => {
         console.log("Déconnexion");
+        setShowMenu(false);
         setUser(null);
         firebase.signoutUser();
     }
@@ -57,9 +58,9 @@ const Header = () => {
                 <div className='text-white font-bold' >My Fit Coach</div>
                 <ul className='md:flex flex-row justify-around items-center text-white hidden'>
                     <li className='m-2' ><Link to='/'>Accueil</Link></li>
-                    {user !== null ? <li className='m-2' ><Link to='/schedule'>Emploi du temps</Link></li> : <Link className='m-2' to='/login'>Emploi du temps</Link>}
-                    {user !== null ? <li className='m-2'><Link to='/workout' >Sport</Link></li> : <Link className='m-2' to='/login'>Sport</Link>}
-                    {user !== null ? <li className='m-2'><Link to='/nutrition/new' state={{userID: user.userID}}>Nutrition</Link></li> : <Link className='m-2' to='/login'>Nutrition</Link>}
+                    <li className='m-2' ><Link to='/schedule' state={{userID: user.id}}>Emploi du temps</Link></li>
+                    <li className='m-2'><Link to='/workout' state={{userID: user.id}}>Sport</Link></li>
+                    <li className='m-2'><Link to='/nutrition/new' state={{userID: user.id}}>Nutrition</Link></li>
                 </ul>
                 {profile}
                 {burgerMenu}

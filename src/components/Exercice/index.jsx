@@ -2,11 +2,12 @@ import moment from 'moment';
 import React, { useContext, useEffect, useState } from 'react';
 import './exercice.css';
 import { FirebaseContext } from '../Firebase';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 const Exercice = () => {
     const location = useLocation();
-    const {userID, exerciceID} = location.state;
+    let navigate = useNavigate();
+    const {userID, exerciceID} = location.state !== null && location.state !== undefined ? location.state : {userID: null, exerciceID: null};
     const firebase = useContext(FirebaseContext);
     const [exerciceData, setExerciceData] = useState(null);
     const [showHistory, setShowHistory] = useState(false);
@@ -18,6 +19,9 @@ const Exercice = () => {
 
 
     useEffect(() => {
+        if(userID === null) {navigate('/login'); return};
+        if(exerciceID === null){navigate('/exercice-menu'); return};
+
         if(!showHistory){
             setTrainingsHistory([]);
             return null;
@@ -94,10 +98,11 @@ const Exercice = () => {
                                 Entrainement du {training.date} :<br/>
                                 {
                                     Object.entries(returnOrderedTraining(training)).map(([key, value]) => {
-                                        if(key === "exerciceID" || key === "date") return null;
+                                        if(key === "exerciceID" || key === "date" || key === "Commentaire") return null;
                                         return <div key={key}>{key} : {value}</div>
                                     })
                                 }
+                                <div key="Commentaire">Commentaire : {lastTraining["Commentaire"]}</div>
                             </div>
                         )
                     })
@@ -117,10 +122,11 @@ const Exercice = () => {
             Dernier entrainement ({lastTraining.date}) :<br/>
             {
                 Object.entries(lastTraining).map(([key, value]) => {
-                    if(key === "exerciceID" || key === "date") return null;
+                    if(key === "exerciceID" || key === "date" || key === "Commentaire") return null;
                     return <div key={key}>{key} : {value}</div>
                 })
             }
+            <div key="Commentaire">Commentaire : {lastTraining["Commentaire"]}</div>
         </div>
     )
 
@@ -143,7 +149,7 @@ const Exercice = () => {
     )
 
     const exerciceDisplay = exerciceData !== null && !showHistory && (
-        <div className='window-sport w-2/3 md:w-1/2'>
+        <div className='window-sport w-3/4 md:w-1/2 basicText'>
             <span className='font-bold title' >{exerciceData.title}</span>
             <div className='flex flex-col justify-center items-start w-full my-8 font-bold basicText' >
                 Description :<br/>

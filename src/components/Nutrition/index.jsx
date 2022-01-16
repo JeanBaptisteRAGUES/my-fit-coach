@@ -313,17 +313,17 @@ const Nutrition = () => {
     }
 
     return (
-        <div className='w-full h-screen flex flex-col items-center justify-center bg-nutrition overflow-x-hidden'>
-            {mealForm}
+        <div className='w-full h-screen grid grid-cols-6 grid-rows-6 bg-nutrition overflow-x-hidden'>
+            {/*mealForm*/}
             {mealDisplay}
             {selectQuantity}
-            <div className="N_menu">
+            <div className="window-nutrition flexCenter basicText gap-4 col-start-2 col-span-4 md:col-start-3 md:col-span-2 row-start-2 w-full">
                 <h1>Food</h1>
-                <form>
-                    <input type="text" placeholder="aliment" onChange={(e) => updateFoodName(e)}/>
-                    <input type="text" placeholder="marque" onChange={(e) => setCurrentBrand(e.target.value)}/>
+                <form className='flex flex-row justify-around items-center gap-4 w-full'>
+                    <input className='input' type="text" placeholder="aliment" onChange={(e) => updateFoodName(e)}/>
+                    <input className='input' type="text" placeholder="marque" onChange={(e) => setCurrentBrand(e.target.value)}/>
                 </form>
-                <button onClick={() => searchFood(currentFoodName, currentBrand, 1)}>Chercher</button>
+                <button className='btn-primary' onClick={() => searchFood(currentFoodName, currentBrand, 1)}>Chercher</button>
                 <div className="navBtns">
                     {startBtn}
                     {prevBtn}
@@ -332,9 +332,6 @@ const Nutrition = () => {
                     {endBtn}
                 </div>
                 {foodInfoDisplay}
-            </div>
-            <div className='w-1/3 h-64 bg-gradient-to-r from-yellow-50 to-orange-100 rounded shadow-md shadow-orange-100'>
-
             </div>
         </div>
     )

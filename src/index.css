@@ -12,20 +12,24 @@
     }
 
     .basicText {
-        @apply md:text-base text-slate-700 text-xs
+        @apply md:text-base md:text-slate-700 text-xs uhd:text-5xl text-red-800
     }
 
     .basicText-white {
-        @apply md:text-base text-white text-xs
+        @apply md:text-base md:text-white text-xs uhd:text-5xl text-red-300
     }
 
     .basicText-dimmed {
-        @apply md:text-base text-slate-200 text-xs
+        @apply md:text-base md:text-slate-200 text-xs uhd:text-5xl text-red-600
     }
 
 
     .btn-primary {
         @apply text-center min-w-max shadow border rounded px-1 bg-gray-100 hover:bg-gray-50 hover:border-white w-fit cursor-pointer basicText
+    }
+
+    .btn-glass {
+        @apply text-center min-w-max w-fit rounded px-1 cursor-pointer basicText bg-white/30 hover:bg-white/50
     }
 
     .container-sport {
@@ -40,6 +44,14 @@
         @apply bg-gradient-to-r from-cyan-100 to-blue-100 rounded px-8 pt-6 pb-2 mb-4 shadow-md shadow-gray-700 h-max flex flex-col justify-center items-start
     }
 
+    .window-nutrition {
+        @apply bg-gradient-to-r from-yellow-50 to-orange-50 rounded px-8 pt-6 pb-2 mb-4 shadow-md shadow-gray-700 h-max
+    }
+
+    .window-glass {
+        @apply flexCenter backdrop-blur-sm bg-white/30 rounded px-8 pt-6 pb-2 mb-4
+    }
+
     .btn-container-row {
         @apply flex flex-row justify-around w-full items-center mt-8
     }
@@ -49,7 +61,7 @@
     }
 
     .btn-delete {
-        @apply flex flex-col justify-center items-center shadow border rounded w-6 h-6 mx-2 py-1 px-1 text-gray-700 cursor-pointer hover:text-red-600
+        @apply flexCenter shadow border rounded w-4 h-4 mx-2 p-1 md:w-6 md:h-6 basicText cursor-pointer hover:text-red-600
     }
 
     .title {

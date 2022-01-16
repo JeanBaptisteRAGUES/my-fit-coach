@@ -1,16 +1,18 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { FirebaseContext } from '../Firebase';
 import './session-menu.css';
 
 const SessionMenu = () => {
     const firebase = useContext(FirebaseContext);
     const location = useLocation();
-    const {userID} = location.state;
+    let navigate = useNavigate();
+    const {userID} = location.state !== null && location.state !== undefined ? location.state : {userID: null};
     const [sessions, setSessions] = useState([]);
     const [selectedSession, setSelectedSession] = useState('');
 
     useEffect(() => {
+        if(userID === null){navigate('/login'); return};
         if(sessions.length > 0)return null;
 
         let newSessions = [];
@@ -81,7 +83,7 @@ const SessionMenu = () => {
 
     return (
         <div className='container-sport'>
-            <div className='window-sport'>
+            <div className='window-sport basicText'>
                 {sessionsSelect}
                 <div className='btn-container-row'>
                     {loadSessionFormBtn}

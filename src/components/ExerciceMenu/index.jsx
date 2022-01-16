@@ -1,16 +1,18 @@
 import React, { useContext, useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { FirebaseContext } from '../Firebase';
 import './exercice-menu.css';
 
 const ExerciceMenu = () => {
     const firebase = useContext(FirebaseContext);
     const location = useLocation();
-    const {userID} = location.state;
+    let navigate = useNavigate();
+    const {userID} = location.state !== null && location.state !== undefined ? location.state : {userID: null};
     const [exercices, setExercices] = useState([]);
     const [selectedExercice, setSelectedExercice] = useState('');
 
     useEffect(() => {
+        if(userID === null){navigate('/login'); return};
         if(exercices.length > 0)return null;
 
         let newExercices = [];

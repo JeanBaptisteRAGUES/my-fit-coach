@@ -7,15 +7,21 @@ import ExerciceForm from '../ExerciceForm';
 import TrainingForm from '../TrainingForm';
 import SessionMenu from '../SessionMenu';
 import SessionForm from '../SessionForm';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 const Workout = () => {
     const firebase = useContext(FirebaseContext);
+    const location = useLocation();
+    let navigate = useNavigate();
+    console.log(location.state);
+    const {userID} = location.state !== null && location.state !== undefined ? location.state : {userID: null};
     const [selectedSession, setSelectedSession] = useState("");
     const [displayMode, setDisplayMode] = useState("");
     const [user, setUser] = useState("");
 
     useEffect(() => {
+        if(userID === null){navigate('/login'); return};
+        console.log("userID : " + userID);
         firebase.auth.onAuthStateChanged((user) => {
             if(user){
                 setUser(user);
@@ -55,7 +61,7 @@ const Workout = () => {
 
     return (
         <div className="container-sport">
-            <div className='window-sport'>
+            <div className='window-sport title'>
                 <h1>Workout</h1>
                 <Link to="/session-menu" state={{userID: user.uid}}>Sessions</Link>
                 <Link to="/exercice-menu" state={{userID: user.uid}}>Exercices</Link>

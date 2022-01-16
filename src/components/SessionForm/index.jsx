@@ -6,14 +6,15 @@ import './session-form.css';
 const SessionForm = () => {
     const firebase = useContext(FirebaseContext);
     const location = useLocation();
-    const {userID} = location.state;
-    const navigate = useNavigate();
+    let navigate = useNavigate();
+    const {userID} = location.state !== null && location.state !== undefined ? location.state : {userID: null};
     const [exercicesList, setExercicesList] = useState([]); //Tous les exercices de l'utilisateur
     const [selectedExercice, setSelectedExercice] = useState("");
     const [exercicesSession, setExercicesSession] = useState([]); //Seulement les exercices pour cet session en particulier
     const [sessionTitle, setSessionTitle] = useState("");
 
     useEffect(() => {
+        if(userID === null){navigate('/login'); return};
 
         let newExercicesList = [];
 
@@ -101,7 +102,7 @@ const SessionForm = () => {
             <div className='btn-primary opacity-50' disabled>Enregistrer</div>
 
     const sessionForm = (
-        <div className="window-sport-start text-gray-700">
+        <div className="window-sport-start basicText">
             <span className='mb-2 underline' >Formulaire nouvelle session :</span>
             <label htmlFor='titre'>Titre :</label>
             <input className='input' type="text" placeholder="titre" onChange={(e) => setSessionTitle(e.target.value)} value={sessionTitle}></input>

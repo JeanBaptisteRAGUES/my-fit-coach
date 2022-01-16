@@ -6,14 +6,16 @@ import './exercice-update.css';
 const ExerciceUpdate = () => {
     const firebase = useContext(FirebaseContext);
     const location = useLocation();
-    const {userID, exerciceID} = location.state;
-    const navigate = useNavigate();
+    let navigate = useNavigate();
+    const {userID, exerciceID} = location.state !== null && location.state !== undefined ? location.state : {userID: null, exerciceID: null};
     const [newParam, setNewParam] = useState("");
     const [paramsList, setParamsList] = useState([["Commentaire", "textarea"]]); //[name, type]
     const [exerciceTitle, setExerciceTitle] = useState("Nouveau exercice");
     const [exerciceDescription, setExerciceDescription] = useState("");
 
     useEffect(() => {
+        if(userID === null){navigate('/login'); return};
+        if(exerciceID === null){navigate('exercice-menu'); return};
         firebase.db.collection('exercices').doc(exerciceID).get()
         .then(myExercice => {
             let myExerciceData = myExercice.data();
