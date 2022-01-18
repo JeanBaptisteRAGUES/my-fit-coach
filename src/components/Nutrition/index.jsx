@@ -107,9 +107,9 @@ const Nutrition = () => {
     }
 
     const formSelectQuantityBtn = newFood[2] === '' ? 
-            <button disabled>Valider</button> 
+            <button className="btn-primary opacity-50">Valider</button> 
         : 
-            <button>Valider</button>
+            <button className="btn-primary">Valider</button>
 
     const selectQuantity = newFood[0] !== '' && (
         <div className="N_quantiy">
@@ -124,16 +124,16 @@ const Nutrition = () => {
     )
 
     const formAddMealBtn = mealTitle === '' ? 
-            <button disabled>Créer</button> 
+            <button className='btn-primary opacity-50'>Créer</button> 
         : 
-            <button>Créer</button>
+            <button className='btn-primary'>Créer</button>
 
     const mealForm = meal[0] === '' && (
-        <div className="N_mealDisplay">
-            <form onSubmit={createMeal} className="loginForm">
+        <div className="window-nutrition flexCenter basicText gap-4 md:col-start-1 md:col-span-2 md:row-start-2 md:row-span-1 h-full mx-2">
+            <form onSubmit={createMeal} className="flexCenter">
                 <div className="inputBox">
-                    <label htmlFor="title">Titre :</label><br/>
-                    <input onChange={(e) => setMealTitle(e.target.value)} value={mealTitle} type="text" id="title" autoComplete="off" required placeholder="Repas 1"/>
+                    <label className='' htmlFor="title">Titre :</label><br/>
+                    <input className='input' onChange={(e) => setMealTitle(e.target.value)} value={mealTitle} type="text" id="title" autoComplete="off" required placeholder="Repas 1"/>
                 </div>
                 {formAddMealBtn}
             </form>
@@ -183,27 +183,27 @@ const Nutrition = () => {
     }
 
     const mealVN = (
-        <div className="N_nutrimentsArray">
+        <div className="flexStart w-2/3 my-4 border border-black rounded p-1">
             <span>Valeurs nutritionnelles totales :</span> 
-            <span className="N_energy">Energie (kcal) : {VN["energy"]}</span>
-            <span className="N_fat">Matières grasses (g) : {VN["fat"]}</span>
-            <span className="N_carbohydrates">Glucides (g) : {VN["carbohydrates"]}</span>
-            <span className="N_sugars">Dont sucres (g) : {VN["sugars"]}</span>
-            <span className="N_fiber">Fibres (g) : {VN["fiber"]}</span>
-            <span className="N_proteins">Protéines (g) : {VN["proteins"]}</span>
-            <span className="N_salt">Sel (g) : {VN["salt"]}</span>
+            <span className=" bg-energy px-1 w-full text-black">Energie (kcal) : {VN["energy"]}</span>
+            <span className=" bg-fat px-1 w-full text-black">Matières grasses (g) : {VN["fat"]}</span>
+            <span className=" bg-carbohydrates px-1 w-full text-black">Glucides (g) : {VN["carbohydrates"]}</span>
+            <span className=" bg-carbohydrates px-1 w-full text-black">Dont sucres (g) : {VN["sugars"]}</span>
+            <span className=" bg-fiber px-1 w-full text-black">Fibres (g) : {VN["fiber"]}</span>
+            <span className=" bg-protein px-1 w-full text-black">Protéines (g) : {VN["proteins"]}</span>
+            <span className=" bg-salt px-1 w-full text-black">Sel (g) : {VN["salt"]}</span>
         </div>
     )
 
     const mealRegisterBtn = foodstuffs.length === 0 ?
-            <button disabled>Enregister</button> 
+            <button className="btn-primary opacity-50">Enregister</button> 
         : 
-            <button onClick={() => mealRegister()}>Enregistrer</button>
+            <button className="btn-primary" onClick={() => mealRegister()}>Enregistrer</button>
 
     const mealModifyBtn = foodstuffs.length === 0 ?
-            <button disabled>Enregister</button> 
+            <button className="btn-primary opacity-50">Enregister</button> 
         : 
-            <button onClick={() => mealModify()}>Enregistrer</button>
+            <button className="btn-primary" onClick={() => mealModify()}>Enregistrer</button>
 
     const deleteFood = (id) => {
         const newFoodstuffs = foodstuffs.filter(food => food[0] !== id);
@@ -211,18 +211,21 @@ const Nutrition = () => {
     }
 
     const mealDisplay = meal[0] !== '' && (
-        <div className="N_mealDisplay">
-            <h1>{mealTitle}</h1>
-            {
-                foodstuffs.map(food => {
-                    return  (
-                                <div key={food[0]} className="N_foodDisplay">
-                                    <div className="N_mealFood">-{food[1]} ({food[2]}g)</div>
-                                    <div onClick={() => deleteFood(food[0])}  className="N_foodDeleteBtn">X</div>
-                                </div>
-                            )
-                })
-            }
+        <div className="window-nutrition flexCenter sticky top-5 left-5 w-3/4 col-start-1 col-span-2 py-2">
+            <h1 className='title mb-4'>{mealTitle}</h1>
+            <div className='flexStart mx-4'>
+                <p className='underline'>Aliments :<br/></p>
+                {
+                    foodstuffs.map(food => {
+                        return  (
+                                    <p key={food[0]}>
+                                        -{food[1]} ({food[2]}g)
+                                        <span onClick={() => deleteFood(food[0])}  className="btn-delete2">X</span>
+                                    </p>
+                                )
+                    })
+                }
+            </div>
             {mealVN}
             {mealID[1] === "" ? mealRegisterBtn : mealModifyBtn }
         </div>
@@ -243,24 +246,26 @@ const Nutrition = () => {
 
     const foodInfoDisplay = foodInfo.length > 0 &&
         foodInfo.map(product => {
-            return <div key={product["_id"]} className="N_product">
+            return <div key={product["_id"]} className="flexCenter rounded basicText bg-white py-2 shadow w-3/4">
                         <p className="N_productName">{getProductName(product)}</p>
-                        <img className="N_productImg" src={product["image_url"]} />
-                        <p className="N_nutrimentsArray">
-                            <span>Valeurs nutritionnelles (pour 100g) :</span> 
-                            <span className="N_energy">Energie (kcal) : {Math.round(getNutrimentValue(product, "energy") / 4.1868)}</span>
-                            <span className="N_fat">Matières grasses (g) : {getNutrimentValue(product, "fat")}</span>
-                            <span className="N_carbohydrates">Glucides (g) : {getNutrimentValue(product, "carbohydrates")}</span>
-                            <span className="N_sugars">Dont sucres (g) : {getNutrimentValue(product, "sugars")}</span>
-                            <span className="N_fiber">Fibres (g) : {getNutrimentValue(product, "fiber")}</span>
-                            <span className="N_proteins">Protéines (g) : {getNutrimentValue(product, "proteins")}</span>
-                            <span className="N_salt">Sel (g) : {getNutrimentValue(product, "salt")}</span>
-                        </p>
+                        <img className="h-2/3 w-2/3" src={product["image_url"]} alt={getProductName(product)} title={getProductName(product)} />
+                        <div className='flexCenter'>
+                            <p className="flexStart w-full my-2 border border-black rounded p-1">
+                                <span>Valeurs nutritionnelles (pour 100g) :</span> 
+                                <span className=" bg-energy px-1 w-full text-black">Energie (kcal) : {Math.round(getNutrimentValue(product, "energy") / 4.1868)}</span>
+                                <span className=" bg-fat px-1 w-full text-black">Matières grasses (g) : {getNutrimentValue(product, "fat")}</span>
+                                <span className=" bg-carbohydrates px-1 w-full text-black">Glucides (g) : {getNutrimentValue(product, "carbohydrates")}</span>
+                                <span className=" bg-carbohydrates px-1 w-full text-black">Dont sucres (g) : {getNutrimentValue(product, "sugars")}</span>
+                                <span className=" bg-fiber px-1 w-full text-black">Fibres (g) : {getNutrimentValue(product, "fiber")}</span>
+                                <span className=" bg-protein px-1 w-full text-black">Protéines (g) : {getNutrimentValue(product, "proteins")}</span>
+                                <span className=" bg-salt px-1 w-full text-black">Sel (g) : {getNutrimentValue(product, "salt")}</span>
+                            </p>
+                        </div>
                         {
                         meal[0] === '' ? 
-                                <button disabled>Ajouter</button> 
+                                <button className=' btn-primary opacity-50'>Ajouter</button> 
                             : 
-                                <button onClick={() => setNewFood([product["_id"], getProductName(product), 100])}>Ajouter</button>
+                                <button className=' btn-primary' onClick={() => setNewFood([product["_id"], getProductName(product), 100])}>Ajouter</button>
                         }
                    </div>
         })
@@ -283,24 +288,24 @@ const Nutrition = () => {
     }
 
     const prevBtn = currentPage > 1 ? 
-        <button onClick={() => searchFood(currentFoodName, currentBrand, currentPage-1)}>Précédent</button>
+        <button className="btn-primary" onClick={() => searchFood(currentFoodName, currentBrand, currentPage-1)}>Précédent</button>
         :
-        <button className="N_dimmed">Précédent</button>
+        <button className="btn-primary opacity-50">Précédent</button>
 
     const nextBtn = currentPage < maxPages ? 
-        <button onClick={() => searchFood(currentFoodName, currentBrand, currentPage+1)}>Suivant</button>
+        <button className="btn-primary" onClick={() => searchFood(currentFoodName, currentBrand, currentPage+1)}>Suivant</button>
         :
-        <button className="N_dimmed">Suivant</button>
+        <button className="btn-primary opacity-50">Suivant</button>
 
     const startBtn = currentPage > 1 ? 
-        <button onClick={() => searchFood(currentFoodName, currentBrand, 1)}>Début</button>
+        <button className="btn-primary" onClick={() => searchFood(currentFoodName, currentBrand, 1)}>Début</button>
         :
-        <button className="N_dimmed">Début</button>
+        <button className="btn-primary opacity-50">Début</button>
 
     const endBtn = currentPage < maxPages ? 
-        <button onClick={() => searchFood(currentFoodName, currentBrand, maxPages)}>Fin</button>
+        <button className="btn-primary" onClick={() => searchFood(currentFoodName, currentBrand, maxPages)}>Fin</button>
         :
-        <button className="N_dimmed">Fin</button>
+        <button className="btn-primary opacity-50">Fin</button>
 
     const pageDisplay = <p>{currentPage}/{maxPages}</p>
 
@@ -313,25 +318,27 @@ const Nutrition = () => {
     }
 
     return (
-        <div className='w-full h-screen grid grid-cols-6 grid-rows-6 bg-nutrition overflow-x-hidden'>
-            {/*mealForm*/}
+        <div className='w-full h-screenMinusHeader grid grid-cols-6 grid-rows-6 bg-nutrition overflow-x-hidden'>
+            {mealForm}
             {mealDisplay}
             {selectQuantity}
-            <div className="window-nutrition flexCenter basicText gap-4 col-start-2 col-span-4 md:col-start-3 md:col-span-2 row-start-2 w-full">
+            <div className="window-nutrition flexCenter basicText gap-4 col-start-2 col-span-4 md:col-start-3 md:col-span-2 row-start-2">
                 <h1>Food</h1>
-                <form className='flex flex-row justify-around items-center gap-4 w-full'>
-                    <input className='input' type="text" placeholder="aliment" onChange={(e) => updateFoodName(e)}/>
-                    <input className='input' type="text" placeholder="marque" onChange={(e) => setCurrentBrand(e.target.value)}/>
+                <form className='flex flex-row justify-evenly items-center w-full'>
+                    <input className='input w-1/3' type="text" placeholder="aliment" onChange={(e) => updateFoodName(e)}/>
+                    <input className='input w-1/3' type="text" placeholder="marque" onChange={(e) => setCurrentBrand(e.target.value)}/>
                 </form>
                 <button className='btn-primary' onClick={() => searchFood(currentFoodName, currentBrand, 1)}>Chercher</button>
-                <div className="navBtns">
+                <div className="flex flex-row justify-around items-center w-full">
                     {startBtn}
                     {prevBtn}
                     {pageDisplay}
                     {nextBtn}
                     {endBtn}
                 </div>
-                {foodInfoDisplay}
+                <div className='flexCenter gap-8 w-full'>
+                    {foodInfoDisplay}
+                </div>
             </div>
         </div>
     )

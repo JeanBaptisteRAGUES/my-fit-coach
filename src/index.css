@@ -45,7 +45,7 @@
     }
 
     .window-nutrition {
-        @apply bg-gradient-to-r from-yellow-50 to-orange-50 rounded px-8 pt-6 pb-2 mb-4 shadow-md shadow-gray-700 h-max
+        @apply bg-gradient-to-r from-violet-100 to-purple-100 rounded mb-4 shadow-md shadow-gray-700 h-max
     }
 
     .window-glass {
@@ -62,6 +62,10 @@
 
     .btn-delete {
         @apply flexCenter shadow border rounded w-4 h-4 mx-2 p-1 md:w-6 md:h-6 basicText cursor-pointer hover:text-red-600
+    }
+
+    .btn-delete2 {
+        @apply text-center shadow border rounded basicText cursor-pointer hover:text-red-600 w-4 h-4 mx-2 px-1 md:w-6 md:h-6
     }
 
     .title {

@@ -60,7 +60,7 @@ const Landing = () => {
 
     return (
         <div className='flex flex-col justify-center items-center'>
-            <div className='flex flex-col justify-center items-center min-h-screen bg-slate-300 bg-landing-main bg-cover w-full'>
+            <div className='flex flex-col justify-center items-center min-h-screenMinusHeader bg-slate-300 bg-landing-main bg-cover w-full'>
                 <div ref={refLanding} className={"flex flex-col justify-center items-center text-center h-2/3 w-2/3 bg-transparent font-bold basicText-dimmed leading-loose " + landingAnimation}>
                     <p>
                         Bienvenue sur My Fit Coach, l'endroit où vous pourrez gérer vos entraînement ainsi que vos repas sur la semaine !<br/>
@@ -73,12 +73,12 @@ const Landing = () => {
                     </p>
                 </div>
             </div>
-            <div className='flex flex-col justify-center items-center h-screen bg-slate-300 bg-landing-nutrition bg-cover w-full'>
+            <div className='flex flex-col justify-center items-center min-h-screenMinusHeader bg-slate-300 bg-landing-nutrition bg-cover w-full'>
                 <div ref={refNutrition} className={"flex flex-col justify-center items-center border rounded shadow-md shadow-blue-300 h-1/3 w-1/3 bg-gradient-to-r from-cyan-100 to-sky-100 " + nutritionAnimation}>
                     Nutrition
                 </div>
             </div>
-            <div className='flex flex-col justify-center items-center h-screen bg-slate-300 bg-landing-sport bg-cover w-full'>
+            <div className='flex flex-col justify-center items-center min-h-screenMinusHeader bg-slate-300 bg-landing-sport bg-cover w-full'>
                 <div ref={refSport} className={"flex flex-col justify-center items-center border rounded shadow-md shadow-blue-300 h-1/3 w-1/3 bg-gradient-to-r from-cyan-100 to-sky-100 " + sportAnimation}>
                     Sport
                 </div>

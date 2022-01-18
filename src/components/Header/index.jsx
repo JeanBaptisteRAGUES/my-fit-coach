@@ -54,7 +54,7 @@ const Header = () => {
 
     return (
         <Fragment>
-            <div className='flex flex-row justify-around items-center fixed top-0 z-50 bg-slate-600 min-h-10 w-full'>
+            <div className='flex flex-row justify-around items-center sticky top-0 z-50 bg-slate-600 h-header w-full'>
                 <div className='text-white font-bold' >My Fit Coach</div>
                 <ul className='md:flex flex-row justify-around items-center text-white hidden'>
                     <li className='m-2' ><Link to='/'>Accueil</Link></li>
