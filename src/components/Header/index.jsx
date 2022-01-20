@@ -23,7 +23,7 @@ const Header = () => {
     }, []);
 
     const profile = user !== null && (
-        <div className='md:flex flex-col justify-center items-center text-white w-fit hidden'>
+        <div className='md:flex flex-col justify-center items-center basicText-white w-fit hidden'>
             <span onClick={() => setShowMenu(!showMenu)} className='font-bold cursor-pointer'>{user.username}</span>
         </div>
     )
@@ -41,8 +41,8 @@ const Header = () => {
 
     const disconnectedDisplay = user === null && (
         <div className='md:flex flex-row justify-center items-center text-white w-fit hidden'>
-            <Link className='mx-1' to='/signup'>S'inscrire</Link>
-            <Link className='mx-1' to='/login'>Se connecter</Link>
+            <Link className='basicText-white mx-1' to='/signup'>S'inscrire</Link>
+            <Link className='basicText-white mx-1' to='/login'>Se connecter</Link>
         </div>
     )
 
@@ -55,8 +55,8 @@ const Header = () => {
     return (
         <Fragment>
             <div className='flex flex-row justify-around items-center sticky top-0 z-50 bg-slate-600 h-header w-full'>
-                <div className='text-white font-bold' >My Fit Coach</div>
-                <ul className='md:flex flex-row justify-around items-center text-white hidden'>
+                <div className='basicText-white font-bold' >My Fit Coach</div>
+                <ul className='md:flex flex-row justify-around items-center basicText-white hidden'>
                     <li className='m-2' ><Link to='/'>Accueil</Link></li>
                     <li className='m-2' ><Link to='/schedule' state={{userID: user.id}}>Emploi du temps</Link></li>
                     <li className='m-2'><Link to='/workout' state={{userID: user.id}}>Sport</Link></li>

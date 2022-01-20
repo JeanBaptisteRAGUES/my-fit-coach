@@ -27,6 +27,15 @@ module.exports = {
         'header': '5vh',
         'screenMinusHeader': '95vh'
       },
+      spacing: {
+        '1/10': '10vh',
+        '1/20': '5vh',
+        '9/10': '90vh',
+        '19/20': '95vh',
+        'header': '5vh',
+        'header2': '4.9vh',
+        'screenMinusHeader': '95vh'
+      },
       backgroundImage: {
         'sport': "url('/src/images/bg-sport2.png')",
         'nutrition': "url('/src/images/bg-nutrition.png')",

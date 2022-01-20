@@ -4,3 +4,9 @@
     align-items: center;
     justify-content: center;
 }
+
+.no-lag{
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    background-color: red;
+}

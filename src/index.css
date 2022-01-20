@@ -69,7 +69,7 @@
     }
 
     .title {
-        @apply md:text-3xl text-lg text-slate-700
+        @apply md:text-3xl text-lg text-slate-700 uhd:text-8xl
     }
 
     .title-dimmed {

@@ -3,7 +3,10 @@ import { useParams } from 'react-router';
 import './nutrition.css';
 import axios from 'axios';
 import {FirebaseContext} from '../Firebase';
-import { Fragment } from 'react/cjs/react.production.min';
+import {HiShoppingCart} from 'react-icons/hi';
+import { RiCloseLine } from 'react-icons/ri';
+import MealDisplay from './meal-display';
+import { Fragment } from 'react/cjs/react.development';
 
 const Nutrition = () => {
     const firebase = useContext(FirebaseContext);
@@ -24,9 +27,9 @@ const Nutrition = () => {
         fiber: 0,
         proteins: 0,
         salt: 0
-    })
-
+    });
     let mealID = useParams()["mealID"];
+    const [showMenu, setShowMenu] = useState(false);
 
     const getMealData = async (mealID) => {
         const myMeal = await firebase.meal(mealID).get();
@@ -129,7 +132,7 @@ const Nutrition = () => {
             <button className='btn-primary'>Créer</button>
 
     const mealForm = meal[0] === '' && (
-        <div className="window-nutrition flexCenter basicText gap-4 md:col-start-1 md:col-span-2 md:row-start-2 md:row-span-1 h-full mx-2">
+        <div className="window-nutrition md:flexCenter basicText gap-4 md:col-start-1 md:col-span-2 md:row-start-2 md:row-span-1 h-full mx-2 hidden">
             <form onSubmit={createMeal} className="flexCenter">
                 <div className="inputBox">
                     <label className='' htmlFor="title">Titre :</label><br/>
@@ -185,13 +188,13 @@ const Nutrition = () => {
     const mealVN = (
         <div className="flexStart w-2/3 my-4 border border-black rounded p-1">
             <span>Valeurs nutritionnelles totales :</span> 
-            <span className=" bg-energy px-1 w-full text-black">Energie (kcal) : {VN["energy"]}</span>
-            <span className=" bg-fat px-1 w-full text-black">Matières grasses (g) : {VN["fat"]}</span>
-            <span className=" bg-carbohydrates px-1 w-full text-black">Glucides (g) : {VN["carbohydrates"]}</span>
-            <span className=" bg-carbohydrates px-1 w-full text-black">Dont sucres (g) : {VN["sugars"]}</span>
-            <span className=" bg-fiber px-1 w-full text-black">Fibres (g) : {VN["fiber"]}</span>
-            <span className=" bg-protein px-1 w-full text-black">Protéines (g) : {VN["proteins"]}</span>
-            <span className=" bg-salt px-1 w-full text-black">Sel (g) : {VN["salt"]}</span>
+            <span className=" bg-energy px-1 w-full text-black uhd:py-2">Energie (kcal) : {VN["energy"]}</span>
+            <span className=" bg-fat px-1 w-full text-black uhd:py-2">Matières grasses (g) : {VN["fat"]}</span>
+            <span className=" bg-carbohydrates px-1 w-full text-black uhd:py-2">Glucides (g) : {VN["carbohydrates"]}</span>
+            <span className=" bg-carbohydrates px-1 w-full text-black uhd:py-2">Dont sucres (g) : {VN["sugars"]}</span>
+            <span className=" bg-fiber px-1 w-full text-black uhd:py-2">Fibres (g) : {VN["fiber"]}</span>
+            <span className=" bg-protein px-1 w-full text-black uhd:py-2">Protéines (g) : {VN["proteins"]}</span>
+            <span className=" bg-salt px-1 w-full text-black uhd:py-2">Sel (g) : {VN["salt"]}</span>
         </div>
     )
 
@@ -211,8 +214,8 @@ const Nutrition = () => {
     }
 
     const mealDisplay = meal[0] !== '' && (
-        <div className="window-nutrition flexCenter sticky top-5 left-5 w-3/4 col-start-1 col-span-2 py-2">
-            <h1 className='title mb-4'>{mealTitle}</h1>
+        <div className="window-nutrition basicText md:flexCenter sticky top-5 left-5 w-3/4 col-start-1 col-span-2 py-2 hidden">
+            <span className='title mb-4'>{mealTitle}</span>
             <div className='flexStart mx-4'>
                 <p className='underline'>Aliments :<br/></p>
                 {
@@ -231,9 +234,30 @@ const Nutrition = () => {
         </div>
     )
 
-    const displayProductJSON = (product) => {
-        console.log(JSON.stringify(product["_id"]));
-    }
+    const burgerMenu = (
+        <div className='flexStart fixed top-header z-50 m-1 w-full text-white col-start-1 col-span-6 md:hidden'>
+            {
+                showMenu ? 
+                        <RiCloseLine className='flexCenter rounded p-1 cursor-pointer h-1/3 w-1/6 bg-slate-600' onClick={() => setShowMenu(!showMenu)}></RiCloseLine>
+                    :
+                        <HiShoppingCart className='flexCenter rounded p-1 cursor-pointer h-1/3 w-1/6 bg-slate-600' onClick={() => setShowMenu(!showMenu)} >
+
+                        </HiShoppingCart>
+            }
+        </div>
+    )
+
+    //{meal, mealID, foodstuffs, VN, deleteFood, mealRegister, mealModify}
+
+    const mealDisplayMobile = showMenu && (
+        <MealDisplay meal={meal} mealTitle={mealTitle} mealID={mealID} foodstuffs={foodstuffs} VN={VN} deleteFood={deleteFood} mealRegister={mealRegister} mealModify={mealModify} ></MealDisplay>
+    )
+
+    /*
+    const profileLinks = showMenu && (
+        <MenuLinks user={user} disconnect={disconnect}/>
+    )
+    */
 
     const getProductName = (product) => {
         let productName = product["product_name_fr"];
@@ -252,13 +276,13 @@ const Nutrition = () => {
                         <div className='flexCenter'>
                             <p className="flexStart w-full my-2 border border-black rounded p-1">
                                 <span>Valeurs nutritionnelles (pour 100g) :</span> 
-                                <span className=" bg-energy px-1 w-full text-black">Energie (kcal) : {Math.round(getNutrimentValue(product, "energy") / 4.1868)}</span>
-                                <span className=" bg-fat px-1 w-full text-black">Matières grasses (g) : {getNutrimentValue(product, "fat")}</span>
-                                <span className=" bg-carbohydrates px-1 w-full text-black">Glucides (g) : {getNutrimentValue(product, "carbohydrates")}</span>
-                                <span className=" bg-carbohydrates px-1 w-full text-black">Dont sucres (g) : {getNutrimentValue(product, "sugars")}</span>
-                                <span className=" bg-fiber px-1 w-full text-black">Fibres (g) : {getNutrimentValue(product, "fiber")}</span>
-                                <span className=" bg-protein px-1 w-full text-black">Protéines (g) : {getNutrimentValue(product, "proteins")}</span>
-                                <span className=" bg-salt px-1 w-full text-black">Sel (g) : {getNutrimentValue(product, "salt")}</span>
+                                <span className=" bg-energy px-1 w-full text-black uhd:py-2">Energie (kcal) : {Math.round(getNutrimentValue(product, "energy") / 4.1868)}</span>
+                                <span className=" bg-fat px-1 w-full text-black uhd:py-2">Matières grasses (g) : {getNutrimentValue(product, "fat")}</span>
+                                <span className=" bg-carbohydrates px-1 w-full text-black uhd:py-2">Glucides (g) : {getNutrimentValue(product, "carbohydrates")}</span>
+                                <span className=" bg-carbohydrates px-1 w-full text-black uhd:py-2">Dont sucres (g) : {getNutrimentValue(product, "sugars")}</span>
+                                <span className=" bg-fiber px-1 w-full text-black uhd:py-2">Fibres (g) : {getNutrimentValue(product, "fiber")}</span>
+                                <span className=" bg-protein px-1 w-full text-black uhd:py-2">Protéines (g) : {getNutrimentValue(product, "proteins")}</span>
+                                <span className=" bg-salt px-1 w-full text-black uhd:py-2">Sel (g) : {getNutrimentValue(product, "salt")}</span>
                             </p>
                         </div>
                         {
@@ -288,24 +312,24 @@ const Nutrition = () => {
     }
 
     const prevBtn = currentPage > 1 ? 
-        <button className="btn-primary" onClick={() => searchFood(currentFoodName, currentBrand, currentPage-1)}>Précédent</button>
+        <button className="btn-primary" onClick={() => searchFood(currentFoodName, currentBrand, currentPage-1)}>{'<'}</button>
         :
-        <button className="btn-primary opacity-50">Précédent</button>
+        <button className="btn-primary opacity-50">{'<'}</button>
 
     const nextBtn = currentPage < maxPages ? 
-        <button className="btn-primary" onClick={() => searchFood(currentFoodName, currentBrand, currentPage+1)}>Suivant</button>
+        <button className="btn-primary" onClick={() => searchFood(currentFoodName, currentBrand, currentPage+1)}>{'>'}</button>
         :
-        <button className="btn-primary opacity-50">Suivant</button>
+        <button className="btn-primary opacity-50">{'>'}</button>
 
     const startBtn = currentPage > 1 ? 
-        <button className="btn-primary" onClick={() => searchFood(currentFoodName, currentBrand, 1)}>Début</button>
+        <button className="btn-primary" onClick={() => searchFood(currentFoodName, currentBrand, 1)}>{'<<'}</button>
         :
-        <button className="btn-primary opacity-50">Début</button>
+        <button className="btn-primary opacity-50">{'<<'}</button>
 
     const endBtn = currentPage < maxPages ? 
-        <button className="btn-primary" onClick={() => searchFood(currentFoodName, currentBrand, maxPages)}>Fin</button>
+        <button className="btn-primary" onClick={() => searchFood(currentFoodName, currentBrand, maxPages)}>{'>>'}</button>
         :
-        <button className="btn-primary opacity-50">Fin</button>
+        <button className="btn-primary opacity-50">{'>>'}</button>
 
     const pageDisplay = <p>{currentPage}/{maxPages}</p>
 
@@ -318,29 +342,33 @@ const Nutrition = () => {
     }
 
     return (
-        <div className='w-full h-screenMinusHeader grid grid-cols-6 grid-rows-6 bg-nutrition overflow-x-hidden'>
-            {mealForm}
-            {mealDisplay}
-            {selectQuantity}
-            <div className="window-nutrition flexCenter basicText gap-4 col-start-2 col-span-4 md:col-start-3 md:col-span-2 row-start-2">
-                <h1>Food</h1>
-                <form className='flex flex-row justify-evenly items-center w-full'>
-                    <input className='input w-1/3' type="text" placeholder="aliment" onChange={(e) => updateFoodName(e)}/>
-                    <input className='input w-1/3' type="text" placeholder="marque" onChange={(e) => setCurrentBrand(e.target.value)}/>
-                </form>
-                <button className='btn-primary' onClick={() => searchFood(currentFoodName, currentBrand, 1)}>Chercher</button>
-                <div className="flex flex-row justify-around items-center w-full">
-                    {startBtn}
-                    {prevBtn}
-                    {pageDisplay}
-                    {nextBtn}
-                    {endBtn}
-                </div>
-                <div className='flexCenter gap-8 w-full'>
-                    {foodInfoDisplay}
+        <Fragment>
+            <div className='w-full h-screenMinusHeader grid grid-cols-6 grid-rows-6 bg-nutrition overflow-x-hidden'>
+                {mealForm}
+                {mealDisplay}
+                {selectQuantity}
+                {burgerMenu}
+                <div className="window-nutrition flexCenter basicText gap-4 col-start-2 col-span-4 md:col-start-3 md:col-span-2 row-start-2">
+                    <h1>Food</h1>
+                    <form className='flex flex-row justify-evenly items-center w-full'>
+                        <input className='input w-1/3' type="text" placeholder="aliment" onChange={(e) => updateFoodName(e)}/>
+                        <input className='input w-1/3' type="text" placeholder="marque" onChange={(e) => setCurrentBrand(e.target.value)}/>
+                    </form>
+                    <button className='btn-primary' onClick={() => searchFood(currentFoodName, currentBrand, 1)}>Chercher</button>
+                    <div className="flex flex-row justify-around items-center w-full">
+                        {startBtn}
+                        {prevBtn}
+                        {pageDisplay}
+                        {nextBtn}
+                        {endBtn}
+                    </div>
+                    <div className='flexCenter gap-8 w-full'>
+                        {foodInfoDisplay}
+                    </div>
                 </div>
             </div>
-        </div>
+            {mealDisplayMobile}
+        </Fragment>
     )
 }
 
