@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useState } from 'react/cjs/react.development';
 import { Fragment } from 'react/cjs/react.production.min';
 import {FirebaseContext} from '../Firebase';
+import Day from './day';
 import './schedule.css';
 
 const Schedule = () => {
@@ -265,21 +266,16 @@ const Schedule = () => {
             {
             daysArray.map((dayName, d) => {
                 return (
-                    <div key={d} className="S_daySchedule">
-                        <span key={dayName} className="S_hourSchedule">{dayName}</span>
-                        {
-                            eventsArray.filter(e => e.day === dayName).map(eJour => {
-                                return <span 
-                                    key={dayName+eJour.title} 
-                                    className={getEventClassname(eJour)} 
-                                    style={{top: getEventTop(eJour), height: getEventHeight(eJour)}}
-                                    onClick={() => displayEvent(eJour)}
-                                    >
-                                        {shortTitle(eJour.title, 7)}
-                                    </span>
-                            })
-                        }
-                    </div>
+                    //{dayName, eventsArray, getEventClassname, getEventTop, getEventHeight, displayEvent, shortTitle}
+                    <Day 
+                        dayName={dayName} 
+                        eventsArray={eventsArray} 
+                        getEventClassname={getEventClassname} 
+                        getEventTop={getEventTop} 
+                        getEventHeight={getEventHeight}
+                        displayEvent={displayEvent}
+                        shortTitle={shortTitle} 
+                    />
                 )
             })
             }
@@ -314,11 +310,24 @@ const Schedule = () => {
         </div>
     )
 
+    /*
     return (
         <div className="S_mainContainer">
             Emploi du temps :
             {scheduleDisplay}
             {displayEventMeal}
+        </div>
+    )
+    */
+    return (
+        <div className='flexCenter w-full h-screenMinusHeader bg-slate-300'>
+            <Day 
+                dayName={"Jeudi"} 
+                eventsArray={eventsArray}
+                scheduleStart={scheduleStart}
+                scheduleEnd={scheduleEnd} 
+                displayEvent={displayEvent}
+            />
         </div>
     )
 }
