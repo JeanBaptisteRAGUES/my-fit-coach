@@ -17,6 +17,8 @@ import React from 'react';
 
 const Day = ({dayName, scheduleStart, scheduleEnd, eventsArray, displayEvent}) => {
 
+    console.log(eventsArray);
+
     const calcHeight = (start, end) => {
         return Math.round(100*(end-start)/(scheduleEnd-(scheduleStart-1))) + "%";
     }
@@ -25,18 +27,43 @@ const Day = ({dayName, scheduleStart, scheduleEnd, eventsArray, displayEvent}) =
         return Math.round(100*(start-(scheduleStart-1))/(scheduleEnd-(scheduleStart-1))) + "%";
     }
 
-    const test = (h, x) => {
-        return "h-[" + (h*x).toString() + "%]";
+    const shortTitle = (title, length) => {
+        if(title.length > length) return (title.slice(0, length)).trim() + "..";
+        return title;
     }
 
+    /*
+    {
+        refID: newEventRefID,
+        day: newEventDay,
+        start: newEventStart,
+        end: newEventEnd,
+        title: newEventTitle,
+        type: newEventType
+    }
+    */
+
+    const eventColor = (eventType) => {
+        if(eventType === "0") return "bg-blue-500";
+        return "bg-orange-500";
+    }
+
+    const events = (
+        eventsArray.filter(event => event.day === dayName).map(dayEvent => (
+            <div 
+                className={"flexCenter absolute z-10 rounded w-full border border-white " + eventColor(dayEvent.type)} 
+                style={{height: calcHeight(dayEvent.start, dayEvent.end), top: calcTop(dayEvent.start)}}
+            >
+                {shortTitle(dayEvent.title, 7)}
+            </div>
+        ))
+    )
+
     return (
-    <div key={dayName} className="basicText relative box-border bg-slate-600 h-[80%] w-1/2 md:w-[10%]">
-        <span className="flexCenter w-full absolute z-10 border border-black bg-green-400" style={{height: calcHeight(5, 6), top: calcTop(5)}}>{dayName}</span>
-        <div className="flexCenter absolute z-10 rounded bg-orange-400 w-full" style={{height: calcHeight(6, 7), top: calcTop(6)}}>Déjeuner</div>
-        <div className="flexCenter absolute z-10 rounded bg-orange-400 w-full" style={{height: calcHeight(12, 14), top: calcTop(12)}}>Repas</div>
-        <div className="flexCenter absolute z-10 rounded bg-sky-400 w-full" style={{height: calcHeight(15.5, 18), top: calcTop(15.5)}}>Muscu</div>
-        <div className="flexCenter absolute z-10 rounded bg-orange-400 w-full" style={{height: calcHeight(22, 23), top: calcTop(22)}}>Souper</div>
-    </div>
+        <div key={dayName} className="basicText relative box-border bg-slate-600 h-9/10 w-1/2 md:w-[12.5%] border border-black min-w-[100px]">
+            <span className="flexCenter w-full absolute z-10 border-b border-black bg-green-400" style={{height: calcHeight(5, 6), top: calcTop(5)}}>{dayName}</span>
+            {events}
+        </div>
     )
 };
 

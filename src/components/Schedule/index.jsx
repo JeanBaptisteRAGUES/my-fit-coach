@@ -82,22 +82,6 @@ const Schedule = () => {
     initHoursArray();
     //if(eventsArray.length === 0) initEvents();
 
-    const getEventTop = (event) => {
-        return caseSize*(event['start'] - scheduleStart) + caseSize - 1;
-    }
-
-    const getEventHeight = (event) => {
-        return caseSize*(event['end'] - event['start']) - 2;
-    }
-
-    const getEventClassname = (event) => {
-        if(event["type"] === "0"){
-            return "S_sportEvent";
-        }else{
-            return "S_mealEvent";
-        }
-    }
-
     const additionNutriments = (nut1, nut2) => {
         let nutSum = {
             energy: 0,
@@ -208,14 +192,6 @@ const Schedule = () => {
         setNewEventTitle(eventSelected[1]);
     }
 
-    const shortTitle = (title, length) => {
-        if(title.length > length){
-            return (title.slice(0, length)).trim() + "..";
-        }else{
-            return title;
-        }
-    }
-
     const displayEvent = async (event) => {
         console.log(event);
         if(event["type"] === 0){
@@ -254,59 +230,58 @@ const Schedule = () => {
         </div>
     )
 
+    const scheduleForm = (
+        <div className="S_formContainer">
+            <form onSubmit={addEvent} className="loginForm">
+                <div className="inputBox">
+                    <label htmlFor="title">Titre :</label><br/>
+                    <input onChange={(e) => setNewEventTitle(e.target.value)} value={newEventTitle} type="text" id="title" autoComplete="off" required placeholder="Repas 1" maxLength="7"/>
+                </div>
+                <label htmlFor="eventSelect">Choisissez un évènement :</label><br/>
+                <select name="events" id="eventSelect" onChange={(e) => onChangeEventSelection(e)}>
+                    <option value="">--Sélectionnez un évènement--</option>
+                    {mealsOptions}
+                    {sessionsOptions}
+                </select>
+                <div className="inputBox">
+                    <label htmlFor="day">Jour :</label><br/>
+                    <input onChange={(e) => setNewEventDay(e.target.value)} value={newEventDay} type="text" id="day" autoComplete="off" required placeholder="Jeudi"/>
+                </div>
+                <div className="inputBox">
+                    <label htmlFor="start">Heure début :</label><br/>
+                    <input onChange={(e) => setNewEventStart(e.target.value)} value={newEventStart} type="text" id="start" autoComplete="off" required placeholder="9"/>
+                </div>
+                <div className="inputBox">
+                    <label htmlFor="end">Heure fin :</label><br/>
+                    <input onChange={(e) => setNewEventEnd(e.target.value)} value={newEventEnd} type="text" id="end" autoComplete="off" required placeholder="11"/>
+                </div>
+                {formAddEventBtn}
+            </form>
+            <button onClick={() => getDailyNutriments(newEventDay)}>Test VN {newEventDay}</button>
+        </div>
+    )
+
     const scheduleDisplay = daysArray.length > 0 && (
         <div className="S_scheduleContainer">
             <div className="S_hours">
                 {
-                    hoursArray.map(hour => {
-                        return <span key={hour} className="S_hour">{hour}</span>
-                    })
+                    hoursArray.map(hour => (
+                        <span key={hour} className="S_hour">{hour}</span>
+                    ))
                 }
             </div>
             {
-            daysArray.map((dayName, d) => {
-                return (
+            daysArray.map((dayName, d) => (
                     //{dayName, eventsArray, getEventClassname, getEventTop, getEventHeight, displayEvent, shortTitle}
                     <Day 
                         dayName={dayName} 
-                        eventsArray={eventsArray} 
-                        getEventClassname={getEventClassname} 
-                        getEventTop={getEventTop} 
-                        getEventHeight={getEventHeight}
+                        eventsArray={eventsArray}
+                        scheduleStart={scheduleStart}
+                        scheduleEnd={scheduleEnd} 
                         displayEvent={displayEvent}
-                        shortTitle={shortTitle} 
                     />
-                )
-            })
+                ))
             }
-            <div className="S_formContainer">
-                <form onSubmit={addEvent} className="loginForm">
-                    <div className="inputBox">
-                        <label htmlFor="title">Titre :</label><br/>
-                        <input onChange={(e) => setNewEventTitle(e.target.value)} value={newEventTitle} type="text" id="title" autoComplete="off" required placeholder="Repas 1" maxLength="7"/>
-                    </div>
-                    <label htmlFor="eventSelect">Choisissez un évènement :</label><br/>
-                    <select name="events" id="eventSelect" onChange={(e) => onChangeEventSelection(e)}>
-                        <option value="">--Sélectionnez un évènement--</option>
-                        {mealsOptions}
-                        {sessionsOptions}
-                    </select>
-                    <div className="inputBox">
-                        <label htmlFor="day">Jour :</label><br/>
-                        <input onChange={(e) => setNewEventDay(e.target.value)} value={newEventDay} type="text" id="day" autoComplete="off" required placeholder="Jeudi"/>
-                    </div>
-                    <div className="inputBox">
-                        <label htmlFor="start">Heure début :</label><br/>
-                        <input onChange={(e) => setNewEventStart(e.target.value)} value={newEventStart} type="text" id="start" autoComplete="off" required placeholder="9"/>
-                    </div>
-                    <div className="inputBox">
-                        <label htmlFor="end">Heure fin :</label><br/>
-                        <input onChange={(e) => setNewEventEnd(e.target.value)} value={newEventEnd} type="text" id="end" autoComplete="off" required placeholder="11"/>
-                    </div>
-                    {formAddEventBtn}
-                </form>
-                <button onClick={() => getDailyNutriments(newEventDay)}>Test VN {newEventDay}</button>
-            </div>
         </div>
     )
 
@@ -319,15 +294,114 @@ const Schedule = () => {
         </div>
     )
     */
+
+    /*
+        <div className='flex flex-row justify-start items-start max-w-[90%] min-w-[100px] bg-white'>
+                <div className=" flexCenter w-1/2 md:w-[12.5%] relative">
+                    {
+                        hoursArray.map((hour, i) => (
+                            <span key={hour} className=" flexCenter absolute w-full border border-black" style={{height: calcHeight(), top: calcTop(i+scheduleStart)}}>{hour}</span>
+                        ))
+                    }
+                </div>
+                <Day 
+                    dayName={"Lundi"} 
+                    eventsArray={eventsArray}
+                    scheduleStart={scheduleStart}
+                    scheduleEnd={scheduleEnd} 
+                    displayEvent={displayEvent}
+                />
+                <Day 
+                    dayName={"Mardi"} 
+                    eventsArray={eventsArray}
+                    scheduleStart={scheduleStart}
+                    scheduleEnd={scheduleEnd} 
+                    displayEvent={displayEvent}
+                />
+                <Day 
+                    dayName={"Mercredi"} 
+                    eventsArray={eventsArray}
+                    scheduleStart={scheduleStart}
+                    scheduleEnd={scheduleEnd} 
+                    displayEvent={displayEvent}
+                />
+                <Day 
+                    dayName={"Jeudi"} 
+                    eventsArray={eventsArray}
+                    scheduleStart={scheduleStart}
+                    scheduleEnd={scheduleEnd} 
+                    displayEvent={displayEvent}
+                />
+                <Day 
+                    dayName={"Vendredi"} 
+                    eventsArray={eventsArray}
+                    scheduleStart={scheduleStart}
+                    scheduleEnd={scheduleEnd} 
+                    displayEvent={displayEvent}
+                />
+                <Day 
+                    dayName={"Samedi"} 
+                    eventsArray={eventsArray}
+                    scheduleStart={scheduleStart}
+                    scheduleEnd={scheduleEnd} 
+                    displayEvent={displayEvent}
+                />
+                <Day 
+                    dayName={"Dimanche"} 
+                    eventsArray={eventsArray}
+                    scheduleStart={scheduleStart}
+                    scheduleEnd={scheduleEnd} 
+                    displayEvent={displayEvent}
+                />
+            </div>
+    */
+
+
+    const calcHeight = () => {
+        return Math.round(100/(scheduleEnd-(scheduleStart-1))) + "%";
+    }
+
+    const calcTop = (start) => {
+        return Math.round(100*(start-(scheduleStart-1))/(scheduleEnd-(scheduleStart-1))) + "%";
+    }
+
+    const [displayIndex, setDisplayIndex] = useState(1);
+    const indexes = [1,2,3];
+
+    const indexesMenu = (
+        <div className='flex flex-row justify-center items-end h-[10%] w-full md:hidden bg-slate-500'>
+            {
+                indexes.map(myIndex => (
+                    myIndex === displayIndex ?
+                        <div className=' flexCenter cursor-pointer h-[40%] w-[10%] border border-black bg-gray-200' onClick={() => setDisplayIndex(myIndex)} >{myIndex}</div>
+                    :
+                        <div className=' flexCenter cursor-pointer h-[30%] w-[10%] border border-black bg-gray-200' onClick={() => setDisplayIndex(myIndex)}>{myIndex}</div>
+                ))
+            }
+        </div>
+    )
+
+    const indexesDisplay = (
+        <div className='flex flex-col md:flex-row justify-center items-center h-[90%] w-full'>
+            {
+                indexes.map(myIndex => (
+                    myIndex === displayIndex ?
+                        <div className=' flexCenter md:w-[30%] w-[90%] h-full font-bold rounded border border-black'>{myIndex}</div>
+                    :
+                        <div className=' md:flexCenter md:w-[30%] w-[90%] h-full font-bold rounded border border-black hidden'>{myIndex}</div>
+                ))
+            }
+        </div>
+    )
+
+
+
     return (
         <div className='flexCenter w-full h-screenMinusHeader bg-slate-300'>
-            <Day 
-                dayName={"Jeudi"} 
-                eventsArray={eventsArray}
-                scheduleStart={scheduleStart}
-                scheduleEnd={scheduleEnd} 
-                displayEvent={displayEvent}
-            />
+            <div className='flexCenter h-[90%] w-full bg-white'>
+                {indexesMenu}
+                {indexesDisplay}
+            </div>
         </div>
     )
 }
