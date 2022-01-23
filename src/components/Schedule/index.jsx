@@ -381,14 +381,63 @@ const Schedule = () => {
         </div>
     )
 
+    const hoursDisplay = (
+        <div className='flex flex-col justify-center items-center h-[90%] w-[10%] bg-red-200'>
+            {
+                hoursArray.map(hour => (
+                    <div key={hour} >{hour}</div>
+                ))
+            }
+        </div>
+    )
+
     const indexesDisplay = (
-        <div className='flex flex-col md:flex-row justify-center items-center h-[90%] w-full'>
+        <div className='flex flex-col md:flex-row justify-center items-center h-[90%] w-[90%] bg-green-200'>
             {
                 indexes.map(myIndex => (
                     myIndex === displayIndex ?
-                        <div className=' flexCenter md:w-[30%] w-[90%] h-full font-bold rounded border border-black'>{myIndex}</div>
+                        <div className=' flexCenter md:w-[33.33%] w-[100%] h-full font-bold rounded border border-black'>{myIndex}</div>
                     :
-                        <div className=' md:flexCenter md:w-[30%] w-[90%] h-full font-bold rounded border border-black hidden'>{myIndex}</div>
+                        <div className=' md:flexCenter md:w-[33.33%] w-[100%] h-full font-bold rounded border border-black hidden'>{myIndex}</div>
+                ))
+            }
+        </div>
+    )
+
+    /*
+        <div className='flexCenter h-[90%] w-full bg-white px-2'>
+            {indexesMenu}
+            <div className='flex flex-row justify-center items-center h-[90%] w-full'>
+                {hoursDisplay}
+                {indexesDisplay}
+            </div>
+        </div>
+    */
+
+    const [dayDisplay, setDayDisplay] = useState("Lundi");
+
+    const daysDisplay = (
+        <div className='flex flex-col md:flex-row justify-center items-center h-[90%] w-[90%] bg-green-200'>
+            {
+                daysArray.map(myDay => (
+                    myDay === dayDisplay ?
+                        <Day 
+                            dayName={myDay} 
+                            eventsArray={eventsArray}
+                            scheduleStart={scheduleStart}
+                            scheduleEnd={scheduleEnd} 
+                            displayEvent={displayEvent}
+                            hidden={false}
+                        />
+                    :
+                        <Day 
+                            dayName={myDay} 
+                            eventsArray={eventsArray}
+                            scheduleStart={scheduleStart}
+                            scheduleEnd={scheduleEnd} 
+                            displayEvent={displayEvent}
+                            hidden={true}
+                        />
                 ))
             }
         </div>
@@ -398,9 +447,12 @@ const Schedule = () => {
 
     return (
         <div className='flexCenter w-full h-screenMinusHeader bg-slate-300'>
-            <div className='flexCenter h-[90%] w-full bg-white'>
+            <div className='flexCenter h-[90%] w-full bg-white px-2'>
                 {indexesMenu}
-                {indexesDisplay}
+                <div className='flex flex-row justify-center items-center h-[90%] w-full'>
+                    {hoursDisplay}
+                    {daysDisplay}
+                </div>
             </div>
         </div>
     )

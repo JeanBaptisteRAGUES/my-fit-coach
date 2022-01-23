@@ -15,7 +15,7 @@ import React from 'react';
 }
 */
 
-const Day = ({dayName, scheduleStart, scheduleEnd, eventsArray, displayEvent}) => {
+const Day = ({dayName, scheduleStart, scheduleEnd, eventsArray, displayEvent, hidden}) => {
 
     console.log(eventsArray);
 
@@ -53,14 +53,20 @@ const Day = ({dayName, scheduleStart, scheduleEnd, eventsArray, displayEvent}) =
             <div 
                 className={"flexCenter absolute z-10 rounded w-full border border-white " + eventColor(dayEvent.type)} 
                 style={{height: calcHeight(dayEvent.start, dayEvent.end), top: calcTop(dayEvent.start)}}
+                onClick={displayEvent}
             >
                 {shortTitle(dayEvent.title, 7)}
             </div>
         ))
     )
 
+    const isHidden = () => {
+        if(hidden) return "hidden";
+        return "";
+    }
+
     return (
-        <div key={dayName} className="basicText relative box-border bg-slate-600 h-9/10 w-1/2 md:w-[12.5%] border border-black min-w-[100px]">
+        <div key={dayName} className={" md:flex basicText relative box-border bg-slate-600 h-full w-full md:w-[14.28%] border border-black min-w-[100px] " + isHidden()} >
             <span className="flexCenter w-full absolute z-10 border-b border-black bg-green-400" style={{height: calcHeight(5, 6), top: calcTop(5)}}>{dayName}</span>
             {events}
         </div>
