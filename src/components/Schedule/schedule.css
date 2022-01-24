@@ -111,7 +111,7 @@
     justify-content: flex-start;
     align-items: center;
     position: absolute;
-    z-index: auto;
+    z-index: 50;
     width: 400px;
     height: 600px;
     background-color: white;

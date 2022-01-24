@@ -1,9 +1,8 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useState } from 'react/cjs/react.development';
-import { Fragment } from 'react/cjs/react.production.min';
 import {FirebaseContext} from '../Firebase';
 import Day from './day';
+import NutritionalInfos from './nutritional-infos';
 import './schedule.css';
 
 const Schedule = () => {
@@ -17,8 +16,8 @@ const Schedule = () => {
     const [newEventType, setNewEventType] = useState('');
     const hoursArray = [];
     const caseSize = 20;
-    const scheduleStart = 6;
-    const scheduleEnd = 22;
+    const scheduleStart = 0;
+    const scheduleEnd = 24;
     const [eventsArray, setEventsArray] = useState([]);
     const [schedule, setSchedule] = useState([]);
     const [userMeals, setUserMeals] = useState([]);
@@ -39,7 +38,7 @@ const Schedule = () => {
     }, []);
 
     const initHoursArray = () => {
-        for(let h = 6; h < 23; h++){
+        for(let h = scheduleStart; h <= scheduleEnd; h++){
             hoursArray.push(h + 'h');
         }
     }
@@ -62,7 +61,6 @@ const Schedule = () => {
             const eventsIDs = JSON.parse(user.data()["eventsIDs"]);
             const meals = JSON.parse(user.data()["mealsIDs"]);
             const sessions = JSON.parse(user.data()["sessionsIDs"]);
-            console.log("Events IDs : " + eventsIDs);
             const events = [];
 
             for(let evtID of eventsIDs){
@@ -70,9 +68,6 @@ const Schedule = () => {
                 events.push(event1);
             }
             
-            console.log("Events : " + JSON.stringify(events));
-            console.log("Meals : " + JSON.stringify(meals));
-            console.log("Sessions : " + sessions);
             setEventsArray(events);
             setUserMeals(meals)
             setUserSessions(sessions);
@@ -202,33 +197,11 @@ const Schedule = () => {
         }
     }
 
+
     const displayEventMeal = selectedEventMeal.length > 0 && (
-        <div className="S_displayEventMeal">
-            <div className="S_titleBig">{selectedEventMeal[1].title}</div>
-            <div className="S_titleMedium">{selectedEventMeal[0].day + " (" + selectedEventMeal[0].start + 'h - ' + selectedEventMeal[0].end + 'h)'}</div>
-            {
-                JSON.parse(selectedEventMeal[1]["foodstuffs"]).map(food => {
-                    return  (
-                                <div key={food[0]} className="N_foodDisplay">
-                                    <div className="N_mealFood">-{food[1]} ({food[2]}g)</div>
-                                </div>
-                            )
-                })
-            }
-            <div className="N_nutrimentsArray">
-                <span>Valeurs nutritionnelles totales :</span> 
-                <span className="N_energy">Energie (kcal) : {JSON.parse(selectedEventMeal[1]["nutriments"])["energy"]}</span>
-                <span className="N_fat">Matières grasses (g) : {JSON.parse(selectedEventMeal[1]["nutriments"])["fat"]}</span>
-                <span className="N_carbohydrates">Glucides (g) : {JSON.parse(selectedEventMeal[1]["nutriments"])["carbohydrates"]}</span>
-                <span className="N_sugars">Dont sucres (g) : {JSON.parse(selectedEventMeal[1]["nutriments"])["sugars"]}</span>
-                <span className="N_fiber">Fibres (g) : {JSON.parse(selectedEventMeal[1]["nutriments"])["fiber"]}</span>
-                <span className="N_proteins">Protéines (g) : {JSON.parse(selectedEventMeal[1]["nutriments"])["proteins"]}</span>
-                <span className="N_salt">Sel (g) : {JSON.parse(selectedEventMeal[1]["nutriments"])["salt"]}</span>
-            </div>
-            <Link to={"/nutrition/" + selectedEventMeal[0].refID}>Modifier</Link>
-            <button onClick={() => setSelectedEventMeal([])}>Fermer</button>
-        </div>
+        <NutritionalInfos selectedEventMeal={selectedEventMeal} setSelectedEventMeal={setSelectedEventMeal} eventsArray={eventsArray} />
     )
+    
 
     const scheduleForm = (
         <div className="S_formContainer">
@@ -261,101 +234,6 @@ const Schedule = () => {
         </div>
     )
 
-    const scheduleDisplay = daysArray.length > 0 && (
-        <div className="S_scheduleContainer">
-            <div className="S_hours">
-                {
-                    hoursArray.map(hour => (
-                        <span key={hour} className="S_hour">{hour}</span>
-                    ))
-                }
-            </div>
-            {
-            daysArray.map((dayName, d) => (
-                    //{dayName, eventsArray, getEventClassname, getEventTop, getEventHeight, displayEvent, shortTitle}
-                    <Day 
-                        dayName={dayName} 
-                        eventsArray={eventsArray}
-                        scheduleStart={scheduleStart}
-                        scheduleEnd={scheduleEnd} 
-                        displayEvent={displayEvent}
-                    />
-                ))
-            }
-        </div>
-    )
-
-    /*
-    return (
-        <div className="S_mainContainer">
-            Emploi du temps :
-            {scheduleDisplay}
-            {displayEventMeal}
-        </div>
-    )
-    */
-
-    /*
-        <div className='flex flex-row justify-start items-start max-w-[90%] min-w-[100px] bg-white'>
-                <div className=" flexCenter w-1/2 md:w-[12.5%] relative">
-                    {
-                        hoursArray.map((hour, i) => (
-                            <span key={hour} className=" flexCenter absolute w-full border border-black" style={{height: calcHeight(), top: calcTop(i+scheduleStart)}}>{hour}</span>
-                        ))
-                    }
-                </div>
-                <Day 
-                    dayName={"Lundi"} 
-                    eventsArray={eventsArray}
-                    scheduleStart={scheduleStart}
-                    scheduleEnd={scheduleEnd} 
-                    displayEvent={displayEvent}
-                />
-                <Day 
-                    dayName={"Mardi"} 
-                    eventsArray={eventsArray}
-                    scheduleStart={scheduleStart}
-                    scheduleEnd={scheduleEnd} 
-                    displayEvent={displayEvent}
-                />
-                <Day 
-                    dayName={"Mercredi"} 
-                    eventsArray={eventsArray}
-                    scheduleStart={scheduleStart}
-                    scheduleEnd={scheduleEnd} 
-                    displayEvent={displayEvent}
-                />
-                <Day 
-                    dayName={"Jeudi"} 
-                    eventsArray={eventsArray}
-                    scheduleStart={scheduleStart}
-                    scheduleEnd={scheduleEnd} 
-                    displayEvent={displayEvent}
-                />
-                <Day 
-                    dayName={"Vendredi"} 
-                    eventsArray={eventsArray}
-                    scheduleStart={scheduleStart}
-                    scheduleEnd={scheduleEnd} 
-                    displayEvent={displayEvent}
-                />
-                <Day 
-                    dayName={"Samedi"} 
-                    eventsArray={eventsArray}
-                    scheduleStart={scheduleStart}
-                    scheduleEnd={scheduleEnd} 
-                    displayEvent={displayEvent}
-                />
-                <Day 
-                    dayName={"Dimanche"} 
-                    eventsArray={eventsArray}
-                    scheduleStart={scheduleStart}
-                    scheduleEnd={scheduleEnd} 
-                    displayEvent={displayEvent}
-                />
-            </div>
-    */
-
 
     const calcHeight = () => {
         return Math.round(100/(scheduleEnd-(scheduleStart-1))) + "%";
@@ -365,54 +243,26 @@ const Schedule = () => {
         return Math.round(100*(start-(scheduleStart-1))/(scheduleEnd-(scheduleStart-1))) + "%";
     }
 
-    const [displayIndex, setDisplayIndex] = useState(1);
-    const indexes = [1,2,3];
-
-    const indexesMenu = (
-        <div className='flex flex-row justify-center items-end h-[10%] w-full md:hidden bg-slate-500'>
-            {
-                indexes.map(myIndex => (
-                    myIndex === displayIndex ?
-                        <div className=' flexCenter cursor-pointer h-[40%] w-[10%] border border-black bg-gray-200' onClick={() => setDisplayIndex(myIndex)} >{myIndex}</div>
-                    :
-                        <div className=' flexCenter cursor-pointer h-[30%] w-[10%] border border-black bg-gray-200' onClick={() => setDisplayIndex(myIndex)}>{myIndex}</div>
-                ))
-            }
-        </div>
-    )
-
     const hoursDisplay = (
-        <div className='flex flex-col justify-center items-center h-[90%] w-[10%] bg-red-200'>
+        <div className='flex flex-col justify-center items-center h-[90%] w-[10%] box-border'>
             {
                 hoursArray.map(hour => (
-                    <div key={hour} >{hour}</div>
+                    <div key={hour} className=' basicText relative w-full box-border' style={{height: calcHeight()}}>
+                        <div className=' flex flex-col justify-center items-end absolute h-full md:top-[50%] top-[65%] right-[0%] border border-slate-500 box-border w-full'>
+                            {hour}
+                        </div>
+                    </div>
                 ))
             }
         </div>
     )
 
-    const indexesDisplay = (
-        <div className='flex flex-col md:flex-row justify-center items-center h-[90%] w-[90%] bg-green-200'>
-            {
-                indexes.map(myIndex => (
-                    myIndex === displayIndex ?
-                        <div className=' flexCenter md:w-[33.33%] w-[100%] h-full font-bold rounded border border-black'>{myIndex}</div>
-                    :
-                        <div className=' md:flexCenter md:w-[33.33%] w-[100%] h-full font-bold rounded border border-black hidden'>{myIndex}</div>
-                ))
-            }
+    const test = (
+        <div className='flexCenter h-[90%] w-[10%]'>
+            <div className=' w-full h-[50%] bg-red-600 border-8 border-blue-500 box-border'></div>
+            <div className=' w-full h-[50%] bg-green-600 border border-black box-border'></div>
         </div>
     )
-
-    /*
-        <div className='flexCenter h-[90%] w-full bg-white px-2'>
-            {indexesMenu}
-            <div className='flex flex-row justify-center items-center h-[90%] w-full'>
-                {hoursDisplay}
-                {indexesDisplay}
-            </div>
-        </div>
-    */
 
     const [dayDisplay, setDayDisplay] = useState("Lundi");
 
@@ -443,17 +293,52 @@ const Schedule = () => {
         </div>
     )
 
+    const daysMenu = (
+        <div className='flex flex-row justify-center items-end basicText h-[10%] w-full md:hidden bg-slate-500'>
+            {
+                daysArray.map(myDay => (
+                    myDay === dayDisplay ?
+                        <div className=' flexCenter cursor-pointer h-[40%] w-[10%] border border-black bg-gray-200' onClick={() => setDayDisplay(myDay)} >{myDay.slice(0,1)}</div>
+                    :
+                        <div className=' flexCenter cursor-pointer h-[30%] w-[10%] border border-black bg-gray-200' onClick={() => setDayDisplay(myDay)}>{myDay.slice(0,1)}</div>
+                ))
+            }
+        </div>
+    )
 
-
+    /*
     return (
         <div className='flexCenter w-full h-screenMinusHeader bg-slate-300'>
             <div className='flexCenter h-[90%] w-full bg-white px-2'>
-                {indexesMenu}
+                {daysMenu}
                 <div className='flex flex-row justify-center items-center h-[90%] w-full'>
                     {hoursDisplay}
                     {daysDisplay}
                 </div>
             </div>
+            {displayEventMeal}
+        </div>
+    )
+    */
+
+    return (
+        <div className='flexCenter w-full h-screenMinusHeader bg-slate-300'>
+            <div className=' grid grid-cols-7 gap-0 h-[90%] w-full bg-white px-2'>
+                <div className=' col-start-1 col-span-1 border border-black'></div>
+                <div className=' col-start-2 col-span-1 border border-black'></div>
+                <div className={' grid grid-col-1 col-start-3 col-span-1 border border-black ' + `grid-rows-[repeat(${(scheduleEnd-scheduleStart)*60},minmax(0,1fr))]`}>
+                    <div className={' col-start-1 col-span-1 bg-red-500 w-full ' + `row-start-[${11*60}] row-[span_${1*60}_/_span_${1*60}]`}></div>
+                    <div className={' flexCenter col-start-1 col-span-1 z-10 text-ellipsis ' + `row-start-[${11*60}] row-[span_${1*60}_/_span_${1*60}]`}>Burgers</div>
+                </div>
+                <div className=' grid grid-col-1 grid-rows-[repeat(1440,minmax(0,1fr))] col-start-4 col-span-1 border border-black'>
+                    <div className=' col-start-1 col-span-1 row-start-[660] row-[span_60_/_span_60] bg-green-500 w-full'></div>
+                    <div className=' flexCenter col-start-1 col-span-1 row-start-[660] z-10 row-[span_60_/_span_60] text-ellipsis '>Frites</div>
+                </div>
+                <div className=' col-start-5 col-span-1 border border-black'></div>
+                <div className=' col-start-6 col-span-1 border border-black'></div>
+                <div className=' col-start-7 col-span-1 border border-black'></div>
+            </div>
+            {displayEventMeal}
         </div>
     )
 }
