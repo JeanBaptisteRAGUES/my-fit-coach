@@ -267,12 +267,20 @@ const Schedule = () => {
     const [dayDisplay, setDayDisplay] = useState("Lundi");
 
     const daysDisplay = (
-        <div className='flex flex-col md:flex-row justify-center items-center h-[90%] w-[90%] bg-green-200'>
+        <div className='grid grid-cols-7 gap-0 h-[90%] w-[90%] bg-green-200 px-2'>
             {
-                daysArray.map(myDay => (
+                daysArray.map((myDay, i) => (
+                    /*
+                        <div className={` grid grid-cols-1 grid-rows-[repeat(288,minmax(0,1fr))] col-start-${i+1} col-span-1 border border-black`}>
+                            <div className=' col-start-1 col-span-1 row-start-[131] row-[span_24_/_span_24] bg-green-500 w-full'></div>
+                            <div className=' flexCenter col-start-1 col-span-1 row-start-[131] z-10 row-[span_24_/_span_24] text-ellipsis '>{myDay + ` (${i})`}</div>
+                        </div>
+                    */
                     myDay === dayDisplay ?
                         <Day 
                             dayName={myDay} 
+                            dayIndex={i}
+                            hoursArray={hoursArray} 
                             eventsArray={eventsArray}
                             scheduleStart={scheduleStart}
                             scheduleEnd={scheduleEnd} 
@@ -281,7 +289,9 @@ const Schedule = () => {
                         />
                     :
                         <Day 
-                            dayName={myDay} 
+                            dayName={myDay}
+                            dayIndex={i}
+                            hoursArray={hoursArray} 
                             eventsArray={eventsArray}
                             scheduleStart={scheduleStart}
                             scheduleEnd={scheduleEnd} 
@@ -306,12 +316,12 @@ const Schedule = () => {
         </div>
     )
 
-    /*
+    
     return (
         <div className='flexCenter w-full h-screenMinusHeader bg-slate-300'>
             <div className='flexCenter h-[90%] w-full bg-white px-2'>
                 {daysMenu}
-                <div className='flex flex-row justify-center items-center h-[90%] w-full'>
+                <div className='flex flex-row justify-center items-center h-[90%] w-full bg-orange-500'>
                     {hoursDisplay}
                     {daysDisplay}
                 </div>
@@ -319,20 +329,20 @@ const Schedule = () => {
             {displayEventMeal}
         </div>
     )
-    */
 
+    /*
     return (
         <div className='flexCenter w-full h-screenMinusHeader bg-slate-300'>
-            <div className=' grid grid-cols-7 gap-0 h-[90%] w-full bg-white px-2'>
+            <div className=' grid grid-cols-7 gap-0 h-[400px] w-[90%] bg-white px-2'>
                 <div className=' col-start-1 col-span-1 border border-black'></div>
                 <div className=' col-start-2 col-span-1 border border-black'></div>
-                <div className={' grid grid-col-1 col-start-3 col-span-1 border border-black ' + `grid-rows-[repeat(${(scheduleEnd-scheduleStart)*60},minmax(0,1fr))]`}>
-                    <div className={' col-start-1 col-span-1 bg-red-500 w-full ' + `row-start-[${11*60}] row-[span_${1*60}_/_span_${1*60}]`}></div>
-                    <div className={' flexCenter col-start-1 col-span-1 z-10 text-ellipsis ' + `row-start-[${11*60}] row-[span_${1*60}_/_span_${1*60}]`}>Burgers</div>
+                <div className={' grid grid-cols-1 col-start-3 col-span-1 border border-black ' + `grid-rows-[repeat(288,minmax(0,1fr))]`}>
+                    <div className={' col-start-1 col-span-1 bg-red-500 w-full ' + `row-start-[132] row-[span_24_/_span_24]`}></div>
+                    <div className={' flexCenter col-start-1 col-span-1 z-10 text-ellipsis ' + `row-start-[132] row-[span_24_/_span_24]`}>Burgers</div>
                 </div>
-                <div className=' grid grid-col-1 grid-rows-[repeat(1440,minmax(0,1fr))] col-start-4 col-span-1 border border-black'>
-                    <div className=' col-start-1 col-span-1 row-start-[660] row-[span_60_/_span_60] bg-green-500 w-full'></div>
-                    <div className=' flexCenter col-start-1 col-span-1 row-start-[660] z-10 row-[span_60_/_span_60] text-ellipsis '>Frites</div>
+                <div className=' grid grid-cols-1 grid-rows-[repeat(288,minmax(0,1fr))] col-start-4 col-span-1 border border-black'>
+                    <div className=' col-start-1 col-span-1 row-start-[131] row-[span_24_/_span_24] bg-green-500 w-full'></div>
+                    <div className=' flexCenter col-start-1 col-span-1 row-start-[131] z-10 row-[span_24_/_span_24] text-ellipsis '>Frites</div>
                 </div>
                 <div className=' col-start-5 col-span-1 border border-black'></div>
                 <div className=' col-start-6 col-span-1 border border-black'></div>
@@ -341,6 +351,7 @@ const Schedule = () => {
             {displayEventMeal}
         </div>
     )
+    */
 }
 
 export default Schedule;
