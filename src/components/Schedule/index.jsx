@@ -16,8 +16,8 @@ const Schedule = () => {
     const [newEventType, setNewEventType] = useState('');
     const hoursArray = [];
     const caseSize = 20;
-    const scheduleStart = 0;
-    const scheduleEnd = 24;
+    const scheduleStart = 6;
+    const scheduleEnd = 22;
     const [eventsArray, setEventsArray] = useState([]);
     const [schedule, setSchedule] = useState([]);
     const [userMeals, setUserMeals] = useState([]);
@@ -39,7 +39,7 @@ const Schedule = () => {
 
     const initHoursArray = () => {
         for(let h = scheduleStart; h <= scheduleEnd; h++){
-            hoursArray.push(h + 'h');
+            hoursArray.push(h);
         }
     }
 
@@ -243,14 +243,28 @@ const Schedule = () => {
         return Math.round(100*(start-(scheduleStart-1))/(scheduleEnd-(scheduleStart-1))) + "%";
     }
 
+    /*
     const hoursDisplay = (
         <div className='flex flex-col justify-center items-center h-[90%] w-[10%] box-border'>
             {
                 hoursArray.map(hour => (
                     <div key={hour} className=' basicText relative w-full box-border' style={{height: calcHeight()}}>
                         <div className=' flex flex-col justify-center items-end absolute h-full md:top-[50%] top-[65%] right-[0%] border border-slate-500 box-border w-full'>
-                            {hour}
+                            {hour}h
                         </div>
+                    </div>
+                ))
+            }
+        </div>
+    )
+    */
+
+    const hoursDisplay = (
+        <div className={`grid grid-cols-1 grid-rows-[repeat(${(hoursArray.length)*12},minmax(0,1fr))] h-[90%] w-[10%] md:w-[3%] box-border`}>
+            {
+                hoursArray.slice(0, hoursArray.length).map((h, i) => (
+                    <div key={h} className={` relative flexCenter col-start-1 col-span-1 row-start-[${i*12 + 1}] row-[span_12_/_span_12]`}>
+                        <div className=' flex flex-col justify-center items-end text-xs md:text-sm uhd:text-3xl absolute z-10 top-[45%] mr-[2px] w-full h-full'>{h}h</div>
                     </div>
                 ))
             }
@@ -267,7 +281,7 @@ const Schedule = () => {
     const [dayDisplay, setDayDisplay] = useState("Lundi");
 
     const daysDisplay = (
-        <div className='grid grid-cols-7 gap-0 h-[90%] w-[90%] bg-green-200 px-2'>
+        <div className='grid grid-cols-7 gap-0 h-[90%] w-[90%] md:w-[97%]'>
             {
                 daysArray.map((myDay, i) => (
                     /*
@@ -319,9 +333,9 @@ const Schedule = () => {
     
     return (
         <div className='flexCenter w-full h-screenMinusHeader bg-slate-300'>
-            <div className='flexCenter h-[90%] w-full bg-white px-2'>
+            <div className='flexCenter h-[90%] w-full px-2'>
                 {daysMenu}
-                <div className='flex flex-row justify-center items-center h-[90%] w-full bg-orange-500'>
+                <div className='flex flex-row justify-center items-center h-[90%] w-full'>
                     {hoursDisplay}
                     {daysDisplay}
                 </div>

@@ -53,20 +53,23 @@ const Day = ({dayName, dayIndex, scheduleStart, scheduleEnd, hoursArray, eventsA
         eventsArray.filter(event => event.day === dayName).map(dayEvent => (
             <div 
                 className={`relative col-start-1 col-span-1`}
-                style={{gridRow: `${dayEvent.start*12} / span ${(dayEvent.end-dayEvent.start)*12}`}}
+                style={{gridRow: `${(dayEvent.start-scheduleStart)*12 + 12} / span ${(dayEvent.end-dayEvent.start)*12}`}}
             >
-                <div className={`flexCenter text-sm absolute top-0 w-full h-full rounded border border-gray-50 box-border ${eventColor(dayEvent.type)} truncate`}>
-                    {shortTitle(dayEvent.title, 5)}
+                <div 
+                    className={`flexCenter text-sm absolute top-[1px] w-full h-full rounded border border-gray-50 box-border ${eventColor(dayEvent.type)} cursor-pointer truncate`}
+                    onClick={() => displayEvent(dayEvent)}
+                >
+                    {shortTitle(dayEvent.title, 20)}
                 </div>
             </div>
         ))
     )
 
-    const testHours = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23]
+    //const testHours = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23];
 
     const grid = (
-        testHours.map((h) => (
-            <div key={h} className={` text-xs flexCenter col-start-1 col-span-1 row-start-[${h*12 + 1}] row-[span_12_/_span_12] border-b border-slate-400 truncate`}></div>
+        hoursArray.slice(0, hoursArray.length-1).map((h, i) => (
+            <div key={h} className={` text-xs flexCenter col-start-1 col-span-1 row-start-[${i*12 + 1}] row-[span_12_/_span_12] border-b border-slate-400 truncate`}></div>
         ))
     )
 
@@ -120,8 +123,13 @@ const Day = ({dayName, dayIndex, scheduleStart, scheduleEnd, hoursArray, eventsA
     */
 
     return (
-        <div className={` grid grid-cols-1 grid-rows-[repeat(288,minmax(0,1fr))] col-start-${dayIndex+1} col-span-1 box-border border border-black`}>
+        <div className={` md:grid grid-cols-1 col-start-1 col-span-7 md:col-start-${dayIndex+1} md:col-span-1 box-border border border-black ${hidden ? 'hidden' : 'grid'}`} style={{gridTemplateRows: `repeat(${(hoursArray.length)*12},minmax(0,1fr))`}}>
             {grid}
+            <div className={`relative col-start-1 col-span-1 row-start-1 row-[span_12_/_span_12]`}>
+                <div className={`flexCenter text-sm absolute top-0 w-full h-full bg-green-500 truncate`}>
+                    {dayName}
+                </div>
+            </div>
             {events}
         </div>
     )
