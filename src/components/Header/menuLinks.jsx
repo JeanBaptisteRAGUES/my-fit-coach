@@ -31,7 +31,7 @@ const MenuLinks = ({user, disconnect}) => {
     )
 
     return (
-        <div className='flex flex-row justify-center font-bold text-2xl items-center fixed top-0 z-10 text-white w-full min-h-screen backdrop-blur-md bg-slate-900/50 motion-safe:animate-fall'>
+        <div className='flex flex-row justify-center font-bold text-2xl items-center fixed top-0 z-40 text-white w-full min-h-screen backdrop-blur-md bg-slate-900/50 motion-safe:animate-fall'>
             {userMenu}
             {disconnectedMenu}
             {burgerMenu}
