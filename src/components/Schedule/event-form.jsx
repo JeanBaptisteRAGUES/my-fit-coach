@@ -41,6 +41,7 @@ const EventForm = ({ userID, eventsArray, setEventsArray, setDisplayEventForm}) 
     )
 
     useEffect(() => {
+        console.log("Bonjour");
         firebase.userMeals(userID).get()
         .then(meals => {
             const newMeals = [];

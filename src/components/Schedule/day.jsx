@@ -11,9 +11,17 @@ const Day = ({dayName, dayIndex, scheduleStart, scheduleEnd, hoursArray, eventsA
     //console.log(Array.from('x'.repeat(scheduleEnd-scheduleStart)));
 
     const eventColor = (eventType) => {
-        if(eventType === "0") return "bg-blue-500";
+        if(eventType === 0) return "bg-blue-500";
         return "bg-orange-500";
     }
+
+    const testEvent = (
+        <div 
+            className={`relative col-start-1 col-span-1 bg-sky-400 rounded border border-slate-100 opacity-80`}
+            style={{gridRow: `72 / span 24`}}
+        >
+        </div>
+    )
 
     const events = (
         eventsArray.filter(event => event.day === dayName).map(dayEvent => (
@@ -35,7 +43,10 @@ const Day = ({dayName, dayIndex, scheduleStart, scheduleEnd, hoursArray, eventsA
 
     const grid = (
         hoursArray.slice(0, hoursArray.length-1).map((h, i) => (
-            <div key={h} className={` text-xs flexCenter col-start-1 col-span-1 row-start-[${i*12 + 1}] row-[span_12_/_span_12] border-b border-slate-400 truncate`}></div>
+            <div key={h} 
+                className={` text-xs flexCenter col-start-1 col-span-1 border-b border-slate-400 truncate`}
+                style={{gridRow: `${i*12 + 1} / span 12`}}
+            ></div>
         ))
     )
 

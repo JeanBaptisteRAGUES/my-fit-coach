@@ -33,35 +33,23 @@ const Schedule = () => {
         }
     }
 
-    const getEventData = async evtID => {
-        const testEvent = await firebase.event(evtID).get();
-        const eventData = testEvent.data();
-        return eventData;
-    }
-
     const getCurrentUser = async userID => {
         const currentUser = await firebase.user(userID).get();
         return currentUser;
     }
 
     const initEvents = () => {
-        firebase.user(userID).get()
-        .then(async user => {
-            console.log(user.data());
-            const eventsIDs = JSON.parse(user.data()["eventsIDs"]);
-            //const meals = JSON.parse(user.data()["mealsIDs"]);
-            //const sessions = JSON.parse(user.data()["sessionsIDs"]);
+        firebase.userEvents(userID).get()
+        .then(myEvents => {
             const events = [];
-
-            for(let evtID of eventsIDs){
-                const event1 =  await getEventData(evtID);
-                events.push(event1);
-            }
-            
+            myEvents.forEach(myEvent => {
+                const newEvent = myEvent.data();
+                newEvent.id = myEvent.id;
+                events.push(newEvent);
+            })
             setEventsArray(events);
-            //setUserMeals(meals)
-            //setUserSessions(sessions);
         })
+        .catch(err => console.log("Erreur lors de la récupération des évènements de l'utilisateur : " + err));
     }
 
     initHoursArray();
@@ -137,7 +125,7 @@ const Schedule = () => {
         </div>
     )
 
-    //{ userID, userMeals, userSessions, eventsArray, setEventsArray, setDisplayEventForm}
+    //{ userID, eventsArray, setEventsArray, setDisplayEventForm}
     const scheduleForm = displayEventForm && (
         <EventForm userID={userID} eventsArray={eventsArray} setEventsArray={setEventsArray} setDisplayEventForm={setDisplayEventForm} />
     )
