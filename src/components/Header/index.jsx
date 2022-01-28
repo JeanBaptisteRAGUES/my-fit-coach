@@ -60,7 +60,7 @@ const Header = () => {
                     <li className='m-2' ><Link to='/'>Accueil</Link></li>
                     <li className='m-2' ><Link to='/schedule' state={{userID: user.id}}>Emploi du temps</Link></li>
                     <li className='m-2'><Link to='/workout' state={{userID: user.id}}>Sport</Link></li>
-                    <li className='m-2'><Link to='/nutrition/new' state={{userID: user.id}}>Nutrition</Link></li>
+                    <li className='m-2'><Link to='/nutrition' state={{userID: user.id, mealID: null}}>Nutrition</Link></li>
                 </ul>
                 {profile}
                 {burgerMenu}

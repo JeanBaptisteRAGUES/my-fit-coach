@@ -51,6 +51,14 @@ class Firebase {
     training = (tid) => this.db.doc(`trainings/${tid}`);
 
     usersCollection = () => this.db.collection('users');
+
+    userExercices = (uid) => this.db.collection('exercices').where("userID", "==", uid);
+
+    userSessions = (uid) => this.db.collection('sessions').where("userID", "==", uid);
+
+    userMeals = (uid) => this.db.collection('meals').where("userID", "==", uid);
+
+    userEvents = (uid) => this.db.collection('events').where("userID", "==", uid);
 }
 
 export default Firebase;

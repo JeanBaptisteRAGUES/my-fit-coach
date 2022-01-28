@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router';
+import { useLocation, useNavigate } from 'react-router-dom';
 import './nutrition.css';
 import axios from 'axios';
 import {FirebaseContext} from '../Firebase';
@@ -10,6 +11,9 @@ import { Fragment } from 'react/cjs/react.development';
 
 const Nutrition = () => {
     const firebase = useContext(FirebaseContext);
+    const location = useLocation();
+    let navigate = useNavigate();
+    const {userID, mealID} = location.state !== null && location.state !== undefined ? location.state : {userID: null, mealID: null};
     const [foodInfo, setFoodInfo] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [maxPages, setMaxPages] = useState(1);
@@ -28,8 +32,12 @@ const Nutrition = () => {
         proteins: 0,
         salt: 0
     });
-    let mealID = useParams()["mealID"];
+    //let mealID = useParams()["mealID"];
     const [showMenu, setShowMenu] = useState(false);
+
+    useEffect(() => {
+        if(userID === null){navigate('/login'); return};
+    }, []);
 
     const getMealData = async (mealID) => {
         const myMeal = await firebase.meal(mealID).get();
@@ -42,7 +50,7 @@ const Nutrition = () => {
         setFoodstuffs(myMealFoodstuffs);
     }
     
-    if(mealID !== "new" && meal[1] === ""){
+    if(mealID !== null && mealID !== undefined){
         console.log("Meal ID : " + mealID);
         getMealData(mealID);
     }
@@ -144,22 +152,12 @@ const Nutrition = () => {
     )
 
     const mealRegister = () => {
+        console.log(userID);
         firebase.db.collection('meals').add({
             title: meal[0],
             foodstuffs: JSON.stringify(foodstuffs),
-            nutriments: JSON.stringify(VN)
-        })
-        .then(async (res) => {
-            const resID = res.id;
-            const currentUser = await firebase.user(firebase.auth.currentUser.uid).get();
-            console.log(currentUser.data());
-            let newMealsIDs = [...JSON.parse(currentUser.data()["mealsIDs"]), [resID, meal[0]]];
-            console.log(newMealsIDs);
-            firebase.db.collection('users').doc(firebase.auth.currentUser.uid).update(
-                {
-                    mealsIDs: JSON.stringify(newMealsIDs)
-                }
-            );
+            nutriments: JSON.stringify(VN),
+            userID: userID
         })
         .then(() => {
             setMeal(["", ""]);
@@ -204,9 +202,9 @@ const Nutrition = () => {
             <button className="btn-primary" onClick={() => mealRegister()}>Enregistrer</button>
 
     const mealModifyBtn = foodstuffs.length === 0 ?
-            <button className="btn-primary opacity-50">Enregister</button> 
+            <button className="btn-primary opacity-50">Modifier</button> 
         : 
-            <button className="btn-primary" onClick={() => mealModify()}>Enregistrer</button>
+            <button className="btn-primary" onClick={() => mealModify()}>Modifier</button>
 
     const deleteFood = (id) => {
         const newFoodstuffs = foodstuffs.filter(food => food[0] !== id);
@@ -230,7 +228,7 @@ const Nutrition = () => {
                 }
             </div>
             {mealVN}
-            {mealID[1] === "" ? mealRegisterBtn : mealModifyBtn }
+            {mealID === null || mealID === undefined ? mealRegisterBtn : mealModifyBtn }
         </div>
     )
 

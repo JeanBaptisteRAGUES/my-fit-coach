@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {FirebaseContext} from '../Firebase';
 import Day from './day';
 import NutritionalInfos from './nutritional-infos';
@@ -9,7 +9,9 @@ import './schedule.css';
 
 const Schedule = () => {
     const firebase = useContext(FirebaseContext);
-
+    const location = useLocation();
+    let navigate = useNavigate();
+    const {userID} = location.state !== null && location.state !== undefined ? location.state : {userID: null};
     const [daysArray, setDaysArray] = useState(['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche']);
     const hoursArray = [];
     const caseSize = 20;
@@ -17,22 +19,12 @@ const Schedule = () => {
     const scheduleEnd = 22;
     const [eventsArray, setEventsArray] = useState([]);
     const [schedule, setSchedule] = useState([]);
-    const [userMeals, setUserMeals] = useState([]);
-    const [userSessions, setUserSessions] = useState([]);
-    const [selectedMeal, setSelectedMeal] = useState([]);
-    const [selectedSession, setSelectedSession] = useState([]);
     const [selectedEventMeal, setSelectedEventMeal] = useState([]);
     const [displayEventForm, setDisplayEventForm] = useState(false);
 
     useEffect(() => {
-        firebase.auth.onAuthStateChanged((user) => {
-            if(user){
-                if(eventsArray.length === 0) initEvents();
-            }else{
-                console.log("Deconnexion");
-                setEventsArray([]);
-            }
-        });
+        if(userID === null){navigate('/login'); return};
+        if(eventsArray.length === 0) initEvents();
     }, []);
 
     const initHoursArray = () => {
@@ -53,12 +45,12 @@ const Schedule = () => {
     }
 
     const initEvents = () => {
-        firebase.user(firebase.auth.currentUser.uid).get()
+        firebase.user(userID).get()
         .then(async user => {
             console.log(user.data());
             const eventsIDs = JSON.parse(user.data()["eventsIDs"]);
-            const meals = JSON.parse(user.data()["mealsIDs"]);
-            const sessions = JSON.parse(user.data()["sessionsIDs"]);
+            //const meals = JSON.parse(user.data()["mealsIDs"]);
+            //const sessions = JSON.parse(user.data()["sessionsIDs"]);
             const events = [];
 
             for(let evtID of eventsIDs){
@@ -67,8 +59,8 @@ const Schedule = () => {
             }
             
             setEventsArray(events);
-            setUserMeals(meals)
-            setUserSessions(sessions);
+            //setUserMeals(meals)
+            //setUserSessions(sessions);
         })
     }
 
@@ -116,40 +108,7 @@ const Schedule = () => {
         }
 
         console.log(dailyNutriments);
-    }
-
-    const addEvent = (e, newEvent) => {
-        e.preventDefault();
-        console.log(newEvent);
-        /*
-        const newEventRefID = newEventType === 0 ? selectedMeal[0] : selectedSession[0];
-        firebase.db.collection('events').add({
-            refID: newEventRefID,
-            day: newEventDay,
-            start: newEventStart,
-            end: newEventEnd,
-            title: newEventTitle,
-            type: newEventType
-        })
-        .then(async (newEvent) => {
-            console.log("New Event ID : " + newEvent.id);
-            
-            let currentUser = await getCurrentUser(firebase.auth.currentUser.uid);
-            console.log("Current User Data : " + JSON.stringify(currentUser.data()));
-            let newEventsIDs = [...JSON.parse(currentUser.data()["eventsIDs"]), newEvent.id];
-            console.log("New Events IDs" + JSON.stringify(newEventsIDs));
-            
-            firebase.db.collection('users').doc(firebase.auth.currentUser.uid).update(
-                {
-                    eventsIDs: JSON.stringify(newEventsIDs)
-                }
-            );
-        })
-        .then(() => {
-            setEventsArray([...eventsArray, {refID: newEventRefID, day: newEventDay, start: newEventStart, end: newEventEnd, title: newEventTitle, type: newEventType}]);
-        })
-        */
-    }    
+    }  
 
     const displayEvent = async (event) => {
         console.log(event);
@@ -163,7 +122,7 @@ const Schedule = () => {
 
 
     const displayEventMeal = selectedEventMeal.length > 0 && (
-        <NutritionalInfos selectedEventMeal={selectedEventMeal} setSelectedEventMeal={setSelectedEventMeal} eventsArray={eventsArray} />
+        <NutritionalInfos selectedEventMeal={selectedEventMeal} setSelectedEventMeal={setSelectedEventMeal} eventsArray={eventsArray} userID={userID} />
     )
     
     const eventFormBtnMobile = !displayEventForm && (
@@ -172,14 +131,15 @@ const Schedule = () => {
         </div>
     )
 
-    const eventFormBtnDesktop = !displayEventForm && (
+    const eventFormBtnDesktop = (
         <div className='md:flexCenter w-full h-fit hidden'>
             <div className='btn-primary' onClick={() => setDisplayEventForm(true)}>Ajouter un évènement</div>
         </div>
     )
 
+    //{ userID, userMeals, userSessions, eventsArray, setEventsArray, setDisplayEventForm}
     const scheduleForm = displayEventForm && (
-        <EventForm userMeals={userMeals} userSessions={userSessions} setSelectedMeal={setSelectedMeal} setSelectedSession={setSelectedSession} addEvent={addEvent} setDisplayEventForm={setDisplayEventForm} />
+        <EventForm userID={userID} eventsArray={eventsArray} setEventsArray={setEventsArray} setDisplayEventForm={setDisplayEventForm} />
     )
 
    

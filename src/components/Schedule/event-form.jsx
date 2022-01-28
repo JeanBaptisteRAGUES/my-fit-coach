@@ -1,14 +1,19 @@
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { FirebaseContext } from '../Firebase';
 import { RiCloseLine } from 'react-icons/ri';
 import './schedule.css';
 
-const EventForm = ({ userMeals, userSessions, setSelectedMeal, setSelectedSession, addEvent, setDisplayEventForm}) => {
+const EventForm = ({ userID, eventsArray, setEventsArray, setDisplayEventForm}) => {
+    const firebase = useContext(FirebaseContext);
+    const [userMeals, setUserMeals] = useState([]);
+    const [userSessions, setUserSessions] = useState([]);
     const [newEventTitle, setNewEventTitle] = useState('');
     const [newEventDay, setNewEventDay] = useState('');
     const [newEventStart, setNewEventStart] = useState('');
     const [newEventEnd, setNewEventEnd] = useState('');
     const [newEventType, setNewEventType] = useState('');
+    const [newEventRefID, setNewEventRefID] = useState('');
 
     const formAddEventBtn = newEventDay === '' || newEventStart === '' || newEventEnd === '' || newEventTitle === '' || newEventType === '' ? 
             <button className="btn-primary opacity-50">Ajouter</button> 
@@ -19,7 +24,7 @@ const EventForm = ({ userMeals, userSessions, setSelectedMeal, setSelectedSessio
         <optgroup label="Nutrition">
             {
                 userMeals.map(meal => {
-                    return <option key={meal[0]} value={JSON.stringify([...meal, 0])}>{meal[1]}</option>
+                    return <option key={meal[0]} value={JSON.stringify([meal[0], meal[1], 1])}>{meal[1]}</option>
                 })
             }
         </optgroup>
@@ -29,28 +34,64 @@ const EventForm = ({ userMeals, userSessions, setSelectedMeal, setSelectedSessio
         <optgroup label="Sport">
             {
                 userSessions.map(session => {
-                    return <option key={session[0]} value={[...session, 1]}>{session[1]}</option>
+                    return <option key={session[0]} value={JSON.stringify([session[0], session[1], 0])}>{session[1]}</option>
                 })
             }
         </optgroup>
     )
 
+    useEffect(() => {
+        firebase.userMeals(userID).get()
+        .then(meals => {
+            const newMeals = [];
+
+            meals.forEach(meal => {
+                newMeals.push([meal.id, meal.data()["title"]]);
+            })
+
+            setUserMeals(newMeals);
+        })
+        .catch((err) => {
+            console.log("Erreur obtention repas utilisateur : " + err);
+        })
+
+        firebase.userSessions(userID).get()
+        .then(sessions => {
+            const newSessions = [];
+
+            sessions.forEach(session => {
+                newSessions.push([session.id, session.data()["title"]])
+            })
+
+            setUserSessions(newSessions);
+        })
+        .catch(err => {
+            console.log("Erreur obtention sessions utilisateur : " + err);
+        })
+
+    }, []);
+
+    const addEvent = (e, newEvent) => {
+        e.preventDefault();
+        console.log(newEvent);
+        firebase.db.collection('events').add(newEvent)
+        .then(() => {
+            setEventsArray([...eventsArray, newEvent]);
+        })
+    }  
+
     const onChangeEventSelection = e => {
         const eventSelected = JSON.parse(e.currentTarget.value);
-        if(eventSelected[2] === 0){
-            setSelectedMeal(eventSelected);
-            setNewEventType(0);
-        }else{
-            setSelectedSession(eventSelected);
-            setNewEventType(1);
-        }
+        console.log(eventSelected);
+        setNewEventRefID(eventSelected[0]);
         setNewEventTitle(eventSelected[1]);
+        setNewEventType(eventSelected[2]);
     }
 
     return (
         <div className='flex flex-row justify-center font-bold text-2xl items-center fixed top-0 z-10 basicText w-full min-h-screen backdrop-blur-md bg-slate-900/50 motion-safe:animate-fall'>
             <div className="window-nutrition basicText flexCenter sticky top-5 left-5 p-2 w-3/4 md:w-1/3">
-                <form onSubmit={(e) => addEvent(e, {newEventTitle, newEventDay, newEventStart, newEventEnd, newEventType})} className="flexCenter">
+                <form onSubmit={(e) => addEvent(e, {userID, refID: newEventRefID, title: newEventTitle, day: newEventDay, start: newEventStart, end: newEventEnd, type: newEventType})} className="flexCenter">
                     <div className='flexStart'>
                         <div className="inputBox">
                             <label htmlFor="title">Titre :</label><br/>

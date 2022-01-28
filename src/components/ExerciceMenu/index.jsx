@@ -17,7 +17,8 @@ const ExerciceMenu = () => {
 
         let newExercices = [];
 
-        firebase.db.collection('exercices').where("userID", "==", userID).get()
+        //firebase.db.collection('exercices').where("userID", "==", userID).get()
+        firebase.userExercices(userID).get()
         .then((results) => {
             if(results.size === 0) {
                 console.log("Aucun exercice n'a encore été enregistré")

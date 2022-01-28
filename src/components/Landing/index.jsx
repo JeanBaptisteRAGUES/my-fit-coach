@@ -64,7 +64,7 @@ const Landing = () => {
                 <div ref={refLanding} className={"flex flex-col justify-center items-center text-center h-2/3 w-2/3 bg-transparent font-bold basicText-dimmed leading-loose " + landingAnimation}>
                     <p>
                         Bienvenue sur My Fit Coach, l'endroit où vous pourrez gérer vos entraînement ainsi que vos repas sur la semaine !<br/>
-                        Rendez vous dans l'onglet <Link to='/nutrition/new' state={{userID: user.userID}} className='text-orange-500'>Nutrition</Link> pour créer vos repas et calculer leurs
+                        Rendez vous dans l'onglet <Link to='/nutrition' state={{userID: user.userID, mealID: null}} className='text-orange-500'>Nutrition</Link> pour créer vos repas et calculer leurs
                         valeurs nutritionnelles<br/>
                         La page <Link to='/workout' state={{userID: user.id}} className='text-blue-500'>Sport</Link> quant à elle vous permettra de paramétrer vos entraînements physiques et de les
                         enregistrer pour traquer l'amélioration de vos progrès<br/>
