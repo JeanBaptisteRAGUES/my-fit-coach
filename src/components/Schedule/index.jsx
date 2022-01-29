@@ -4,6 +4,7 @@ import {FirebaseContext} from '../Firebase';
 import Day from './day';
 import NutritionalInfos from './nutritional-infos';
 import EventForm from './event-form';
+import NutrtitionalStats from './nutritional-stats';
 import { RiAddCircleFill } from 'react-icons/ri';
 import './schedule.css';
 
@@ -21,6 +22,7 @@ const Schedule = () => {
     const [schedule, setSchedule] = useState([]);
     const [selectedEventMeal, setSelectedEventMeal] = useState([]);
     const [displayEventForm, setDisplayEventForm] = useState(false);
+    const [displayStats, setDisplayStats] = useState('');
 
     useEffect(() => {
         if(userID === null){navigate('/login'); return};
@@ -53,60 +55,21 @@ const Schedule = () => {
     }
 
     initHoursArray();
-    //if(eventsArray.length === 0) initEvents();
-
-    const additionNutriments = (nut1, nut2) => {
-        let nutSum = {
-            energy: 0,
-            fat: 0,
-            carbohydrates: 0,
-            sugars: 0,
-            fiber: 0,
-            proteins: 0,
-            salt: 0
-        };
-        nutSum["energy"] = nut1["energy"] + nut2["energy"];
-        nutSum["fat"] = nut1["fat"] + nut2["fat"];
-        nutSum["carbohydrates"] = nut1["carbohydrates"] + nut2["carbohydrates"];
-        nutSum["sugars"] = nut1["sugars"] + nut2["sugars"];
-        nutSum["fiber"] = nut1["fiber"] + nut2["fiber"];
-        nutSum["proteins"] = nut1["proteins"] + nut2["proteins"];
-        nutSum["salt"] = nut1["salt"] + nut2["salt"];
-        return nutSum;
-    }
-
-    const getDailyNutriments = async (day) => {
-        const dayEvents = eventsArray.filter(myEvent => { return myEvent["day"] === day});
-        console.log(dayEvents);
-        let dailyNutriments = {
-            energy: 0,
-            fat: 0,
-            carbohydrates: 0,
-            sugars: 0,
-            fiber: 0,
-            proteins: 0,
-            salt: 0
-        }
-
-        for(let dayEvent of dayEvents){
-            let dayMeal = await firebase.meal(dayEvent["refID"]).get();
-            let dayMealData = dayMeal.data();
-            console.log(dayMealData);
-            dailyNutriments = additionNutriments(dailyNutriments, JSON.parse(dayMealData["nutriments"]));
-        }
-
-        console.log(dailyNutriments);
-    }  
+    //if(eventsArray.length === 0) initEvents(); 
 
     const displayEvent = async (event) => {
         console.log(event);
-        if(event["type"] === 0){
+        if(event["type"] === 1){
             let meal = await firebase.meal(event["refID"]).get();
             meal = meal.data();
             console.log(meal);
             setSelectedEventMeal([event, meal]);
         }
     }
+
+    const displayStatsWindow = displayStats !== '' && (
+        <NutrtitionalStats day={displayStats} eventsArray={eventsArray} displayStats={setDisplayStats} />
+    )
 
 
     const displayEventMeal = selectedEventMeal.length > 0 && (
@@ -172,6 +135,7 @@ const Schedule = () => {
                             scheduleStart={scheduleStart}
                             scheduleEnd={scheduleEnd} 
                             displayEvent={displayEvent}
+                            displayStats={setDisplayStats}
                             hidden={false}
                         />
                     :
@@ -183,6 +147,7 @@ const Schedule = () => {
                             scheduleStart={scheduleStart}
                             scheduleEnd={scheduleEnd} 
                             displayEvent={displayEvent}
+                            displayStats={setDisplayStats}
                             hidden={true}
                         />
                 ))
@@ -217,6 +182,7 @@ const Schedule = () => {
             {scheduleForm}
             {eventFormBtnMobile}
             {eventFormBtnDesktop}
+            {displayStatsWindow}
         </div>
     )
 }

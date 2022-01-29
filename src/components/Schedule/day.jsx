@@ -1,7 +1,7 @@
 import React from 'react';
 import { BsFillFileBarGraphFill, BsFileBarGraph } from 'react-icons/bs';
 
-const Day = ({dayName, dayIndex, scheduleStart, scheduleEnd, hoursArray, eventsArray, displayEvent, hidden}) => {
+const Day = ({dayName, dayIndex, scheduleStart, scheduleEnd, hoursArray, eventsArray, displayEvent, displayStats, hidden}) => {
 
     const shortTitle = (title, length) => {
         if(title.length > length) return (title.slice(0, length)).trim() + "..";
@@ -61,7 +61,7 @@ const Day = ({dayName, dayIndex, scheduleStart, scheduleEnd, hoursArray, eventsA
                         </div>
                     </div>
                     <div className='relative col-start-6 col-span-1'>
-                        <BsFileBarGraph className='flexCenter absolute top-0 w-full h-full cursor-pointer text-green-500' onClick={() => alert("Valeurs nutritionnelles")}/>
+                        <BsFileBarGraph className='flexCenter absolute top-0 w-full h-full cursor-pointer text-green-500' onClick={() => displayStats(dayName)}/>
                     </div>
                 </div>
             </div>

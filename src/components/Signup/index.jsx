@@ -104,6 +104,7 @@ const Signup = (props) => {
         </div>
     )
 
+    //remplacer par date de naissance
     const formAge = (
         <div className="w-2/3">
             <label htmlFor="age">Age :</label><br/>
