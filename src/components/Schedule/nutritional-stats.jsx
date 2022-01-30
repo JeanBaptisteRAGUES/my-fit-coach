@@ -7,6 +7,7 @@ const NutrtitionalStats = ({day, eventsArray, displayStats}) => {
     const firebase = useContext(FirebaseContext);
     const [dailyNutriments, setDailyNutriments] = useState(null);
     const [weeklyNutriments, setWeeklyNutriments] = useState(null);
+    const [displayOption, setDisplayOption] = useState('day');
 
     useEffect(async () => {
         console.log("ok");
@@ -26,6 +27,8 @@ const NutrtitionalStats = ({day, eventsArray, displayStats}) => {
             let newDayNutriments = await getDailyNutriments(weekDay);
             newWeeklyNutriments = additionNutriments(newWeeklyNutriments, newDayNutriments);
         }
+
+        newWeeklyNutriments = divideNutriments(newWeeklyNutriments, 7);
 
         console.log(newDailyNutriments);
         console.log(newWeeklyNutriments);
@@ -54,6 +57,42 @@ const NutrtitionalStats = ({day, eventsArray, displayStats}) => {
         return nutSum;
     }
 
+    const roundNutriments = (nut) => {
+        nut["energy"] = Math.round(nut["energy"]);
+        nut["fat"] = Math.round(nut["fat"]);
+        nut["carbohydrates"] = Math.round(nut["carbohydrates"]);
+        nut["sugars"] = Math.round(nut["sugars"]);
+        nut["fiber"] = Math.round(nut["fiber"]);
+        nut["proteins"] = Math.round(nut["proteins"]);
+        nut["salt"] = Math.round(nut["salt"] * 1e2) / 1e2;
+        return nut;
+    }
+
+    const divideNutriments = (nut, div) => {
+        if(div === 0) div = 1;
+
+        let nutRes = {
+            energy: 0,
+            fat: 0,
+            carbohydrates: 0,
+            sugars: 0,
+            fiber: 0,
+            proteins: 0,
+            salt: 0
+        };
+
+        nutRes["energy"] = nut["energy"]/div;
+        nutRes["fat"] = nut["fat"]/div;
+        nutRes["carbohydrates"] = nut["carbohydrates"]/div;
+        nutRes["sugars"] = nut["sugars"]/div;
+        nutRes["fiber"] = nut["fiber"]/div;
+        nutRes["proteins"] = nut["proteins"]/div;
+        nutRes["salt"] = nut["salt"]/div;
+        nutRes = roundNutriments(nutRes)
+
+        return nutRes;
+    }
+
     const getDailyNutriments = async (day) => {
         const dayEvents = eventsArray.filter(myEvent => { return (myEvent.day === day && myEvent.type === 1)});
         //console.log(dayEvents);
@@ -77,13 +116,34 @@ const NutrtitionalStats = ({day, eventsArray, displayStats}) => {
         return dailyNutriments;
     }
 
-    const loadingDisplay = dailyNutriments === null || weeklyNutriments === null && (
+    const loadingDisplay = (dailyNutriments === null || weeklyNutriments === null) && (
         <div className="flexStart w-2/3 my-4 p-1">
             <span className='title'>Loading..</span>
         </div>
     )
+
+    const dayBtn = (
+        displayOption === 'day' ?
+            <div className=' flexCenter basicText cursor-pointer h-[80%] w-fit px-1 border border-slate-500 bg-gray-200' onClick={() => setDisplayOption('day')} >{day}</div>
+        :
+            <div className=' flexCenter basicText cursor-pointer h-[60%] w-fit px-1 border border-slate-500 bg-gray-200' onClick={() => setDisplayOption('day')}>{day}</div>
+    )
+
+    const weekBtn = (
+        displayOption === 'week' ?
+            <div className=' flexCenter basicText cursor-pointer h-[80%] w-fit px-1 border border-slate-500 bg-gray-200' onClick={() => setDisplayOption('week')} >Semaine</div>
+        :
+            <div className=' flexCenter basicText cursor-pointer h-[60%] w-fit px-1 border border-slate-500 bg-gray-200' onClick={() => setDisplayOption('week')}>Semaine</div>
+    )
+
+    const statsMenu = (
+        <div className='flex flex-row justify-center items-end basicText h-[10%] w-full'>
+            {dayBtn}
+            {weekBtn}
+        </div>
+    )
     
-    const dailyNutrimentsDisplay = dailyNutriments !== null && (
+    const dailyNutrimentsDisplay = dailyNutriments !== null && displayOption === 'day' && (
         <div className="flexStart w-2/3 my-4 border border-black rounded p-1">
             <span>Valeurs nutritionnelles ({day}) :</span> 
             <span className=" bg-energy px-1 w-full text-black uhd:py-2">Energie (kcal) : {dailyNutriments["energy"]}</span>
@@ -96,7 +156,7 @@ const NutrtitionalStats = ({day, eventsArray, displayStats}) => {
         </div>
     )
 
-    const weeklyNutrimentsDisplay = weeklyNutriments !== null && (
+    const weeklyNutrimentsDisplay = weeklyNutriments !== null && displayOption === 'week' && (
         <div className="flexStart w-2/3 my-4 border border-black rounded p-1">
             <span>Valeurs nutritionnelles semaine :</span> 
             <span className=" bg-energy px-1 w-full text-black uhd:py-2">Energie (kcal) : {weeklyNutriments["energy"]}</span>
@@ -110,8 +170,9 @@ const NutrtitionalStats = ({day, eventsArray, displayStats}) => {
     )
 
     const statsWindow = (
-        <div className="window-nutrition basicText flexCenter sticky top-5 left-5 p-2 w-3/4">
+        <div className="window-nutrition basicText flexCenter sticky top-5 left-5 p-2 w-3/4 h-[50vh] border border-black">
             <span className='title'>{day}</span>
+            {statsMenu}
             {dailyNutrimentsDisplay}
             {weeklyNutrimentsDisplay}
             {loadingDisplay}
