@@ -8,6 +8,356 @@ const NutrtitionalStats = ({day, eventsArray, displayStats}) => {
     const [dailyNutriments, setDailyNutriments] = useState(null);
     const [weeklyNutriments, setWeeklyNutriments] = useState(null);
     const [displayOption, setDisplayOption] = useState('day');
+    //Ensuite utiliser date de naissance
+    const profileLose = {
+        age: 28,
+        height: 180,
+        weight: 85,
+        gender: "male",
+        objective: "lose",
+        nap: "moderate"
+    }
+    const profileMaintaining = {
+        age: 28,
+        height: 180,
+        weight: 85,
+        gender: "male",
+        objective: "maintain",
+        nap: "moderate"
+    }
+    const profileGain = {
+        age: 28,
+        height: 180,
+        weight: 85,
+        gender: "male",
+        objective: "gain",
+        nap: "moderate"
+    }
+    //const [mb, setMB] = useState(2000);
+    //const [napFactor, setNAPFactor] = useState(1);
+    const [needs, setNeeds] = useState(null);
+    const [bej, setBEJ] = useState(2000);
+    /*
+    const [energyNeeds, setEnergyNeeds] = useState(0);
+    const [fatNeeds, setFatNeeds] = useState(0);
+    const [carbohydratesNeeds, setCarbohydratesNeeds] = useState(0);
+    const [sugarNeeds, setSugarNeeds] = useState(0);
+    const [fiberNeeds, setFiberNeeds] = useState(0);
+    const [proteinsNeeds, setProteinsNeeds] = useState(0);
+    const [saltNeeds, setSaltNeeds] = useState(0);
+    */
+
+    const calculateMB = (profile) => {
+        if(profile.gender === "male"){
+            return Math.round(13.707*profile.weight + 492.3*(profile.height/100) - 6.673*profile.age + 77.607);
+        }else{
+            return Math.round(9.740*profile.weight + 172.9*(profile.height/100) - 4.7373*profile.age + 667.051);
+        }
+    }
+
+    const calculateBEJ = (profile) => {
+        let mb = calculateMB(profile);
+        
+        switch (profile.nap) {
+            case "sedentary":
+                return mb*1.375;
+            case "leight":
+                return mb*1.56;
+            case "moderate":
+                return mb*1.64;
+            case "high":
+                return mb*1.82;
+            default:
+                console.log("Erreur, valeur NAP inconnue : " + profile.nap);
+                break;
+        }
+    }
+
+    const getEnergyScore = (profile, energy) => {
+        let energyScore = {
+            color: ``,
+            message: ``
+        }
+        let energyNeeds = bej;
+        if(profile.objective === `lose`) energyNeeds *= 0.9;
+        if(profile.objective === `gain`) energyNeeds *= 1.1;
+        energyNeeds = Math.round(energyNeeds);
+
+        if(energy < energyNeeds*0.8){
+            energyScore.color = `red`;
+            energyScore.message = `Attention, votre apport calorique est BEAUCOUP trop bas ! Apport conseillé : ${energyNeeds} kcal`;
+        }
+
+        if(energy >= energyNeeds*0.8 && energy < energyNeeds*0.9){
+            energyScore.color = `orange`;
+            energyScore.message = `Attention, votre apport calorique est trop bas`;
+        }
+
+        if(energy >= energyNeeds*0.9 && energy < energyNeeds*0.95){
+            energyScore.color = `yellow`;
+            energyScore.message = `Attention, votre apport calorique est un peu trop bas`;
+        }
+
+        if(energy >= energyNeeds*0.95 && energy <= energyNeeds*1.05){
+            energyScore.color = `green`;
+            energyScore.message = `C'est bon ! Votre apport calorique est correct`;
+        }
+
+        if(energy > energyNeeds*1.05 && energy <= energyNeeds*1.1){
+            energyScore.color = `yellow`;
+            energyScore.message = `Attention, votre apport calorique est un peu trop haut`;
+        }
+
+        if(energy > energyNeeds*1.1 && energy <= energyNeeds*1.2){
+            energyScore.color = `orange`;
+            energyScore.message = `Attention, votre apport calorique est trop haut`;
+        }
+
+        if(energy > energyNeeds*1.2){
+            energyScore.color = `red`;
+            energyScore.message = `Attention, votre apport calorique est BEAUCOUP trop haut`;
+        }
+
+        return energyScore;
+    }
+
+    const getFatScore = (fat) => {
+        let fatScore = {
+            color: ``,
+            message: ``
+        }
+        let fatNeeds = Math.round((bej/9)*0.3);
+
+        if(fat < fatNeeds*0.8){
+            fatScore.color = `red`;
+            fatScore.message = `Attention, votre apport en lipides est BEAUCOUP trop bas ! Apport conseillé : ${fatNeeds} g`;
+        }
+
+        if(fat >= fatNeeds*0.8 && fat < fatNeeds*0.9){
+            fatScore.color = `orange`;
+            fatScore.message = `Attention, votre apport en lipides est trop bas. Apport conseillé : ${fatNeeds} g`;
+        }
+
+        if(fat >= fatNeeds*0.9 && fat < fatNeeds*0.95){
+            fatScore.color = `yellow`;
+            fatScore.message = `Attention, votre apport en lipides est un peu trop bas. Apport conseillé : ${fatNeeds} g`;
+        }
+
+        if(fat >= fatNeeds*0.95 && fat <= fatNeeds*1.05){
+            fatScore.color = `green`;
+            fatScore.message = `C'est bon ! Votre apport en lipides est correct.  Apport conseillé : ${fatNeeds} g`;
+        }
+
+        if(fat > fatNeeds*1.05 && fat <= fatNeeds*1.1){
+            fatScore.color = `yellow`;
+            fatScore.message = `Attention, votre apport en lipides est un peu trop haut. Apport conseillé : ${fatNeeds} g`;
+        }
+
+        if(fat > fatNeeds*1.1 && fat <= fatNeeds*1.2){
+            fatScore.color = `orange`;
+            fatScore.message = `Attention, votre apport en lipides est trop haut.  Apport conseillé : ${fatNeeds} g`;
+        }
+
+        if(fat > fatNeeds*1.2){
+            fatScore.color = `red`;
+            fatScore.message = `Attention, votre apport en lipides est BEAUCOUP trop haut ! Apport conseillé : ${fatNeeds} g`;
+        }
+
+        return fatScore;
+    }
+
+    const getCarbohydratesScore = (profile, carbohydrates) => {
+        let carbohydratesScore = {
+            color: ``,
+            message: ``
+        }
+        let carbohydratesNeeds = (bej/4)*0.5;
+        if(profile.objective === `lose`) carbohydratesNeeds = (bej/4)*0.4;
+        if(profile.objective === `gain`) carbohydratesNeeds = (bej/4)*0.6;
+        carbohydratesNeeds = Math.round(carbohydratesNeeds);
+
+        if(carbohydrates < carbohydratesNeeds*0.8){
+            carbohydratesScore.color = `red`;
+            carbohydratesScore.message = `Attention, votre apport en glucides est BEAUCOUP trop bas ! Apport conseillé : ${carbohydratesNeeds} g`;
+        }
+
+        if(carbohydrates >= carbohydratesNeeds*0.8 && carbohydrates < carbohydratesNeeds*0.9){
+            carbohydratesScore.color = `orange`;
+            carbohydratesScore.message = `Attention, votre apport en glucides est trop bas. Apport conseillé : ${carbohydratesNeeds} g`;
+        }
+
+        if(carbohydrates >= carbohydratesNeeds*0.9 && carbohydrates < carbohydratesNeeds*0.95){
+            carbohydratesScore.color = `yellow`;
+            carbohydratesScore.message = `Attention, votre apport en glucides est un peu trop bas. Apport conseillé : ${carbohydratesNeeds} g`;
+        }
+
+        if(carbohydrates >= carbohydratesNeeds*0.95 && carbohydrates <= carbohydratesNeeds*1.05){
+            carbohydratesScore.color = `green`;
+            carbohydratesScore.message = `C'est bon ! Votre apport en glucides est correct. Apport conseillé : ${carbohydratesNeeds} g`;
+        }
+
+        if(carbohydrates > carbohydratesNeeds*1.05 && carbohydrates <= carbohydratesNeeds*1.1){
+            carbohydratesScore.color = `yellow`;
+            carbohydratesScore.message = `Attention, votre apport en glucides est un peu trop haut. Apport conseillé : ${carbohydratesNeeds} g`;
+        }
+
+        if(carbohydrates > carbohydratesNeeds*1.1 && carbohydrates <= carbohydratesNeeds*1.2){
+            carbohydratesScore.color = `orange`;
+            carbohydratesScore.message = `Attention, votre apport en glucides est trop haut. Apport conseillé : ${carbohydratesNeeds} g`;
+        }
+
+        if(carbohydrates > carbohydratesNeeds*1.2){
+            carbohydratesScore.color = `red`;
+            carbohydratesScore.message = `Attention, votre apport en glucides est BEAUCOUP trop haut ! Apport conseillé : ${carbohydratesNeeds} g`;
+        }
+
+        return carbohydratesScore;
+    }
+
+    const getSugarScore = (sugar) => {
+        let sugarScore = {
+            color: ``,
+            message: ``
+        }
+        let sugarNeeds = Math.round((bej/4)*0.05);
+
+        if(sugar <= sugarNeeds*1.05){
+            sugarScore.color = `green`;
+            sugarScore.message = `C'est bon ! Votre apport en sucre est correct. Apport conseillé : ${sugarNeeds} g`;
+        }
+
+        if(sugar > sugarNeeds*1.05 && sugar <= sugarNeeds*1.1){
+            sugarScore.color = `yellow`;
+            sugarScore.message = `Attention, votre apport en sucre est un peu trop haut. Apport conseillé : ${sugarNeeds} g`;
+        }
+
+        if(sugar > sugarNeeds*1.1 && sugar <= sugarNeeds*1.2){
+            sugarScore.color = `orange`;
+            sugarScore.message = `Attention, votre apport en sucre est trop haut. Apport conseillé : ${sugarNeeds} g`;
+        }
+
+        if(sugar > sugarNeeds*1.2){
+            sugarScore.color = `red`;
+            sugarScore.message = `Attention, votre apport en sucre est BEAUCOUP trop haut ! Apport conseillé : ${sugarNeeds} g`;
+        }
+
+        return sugarScore;
+    }
+
+    const getFiberScore = (fiber) => {
+        let fiberScore = {
+            color: ``,
+            message: ``
+        }
+        let fiberNeeds = 25;
+
+        if(fiber > fiberNeeds*0.9){
+            fiberScore.color = `green`;
+            fiberScore.message = `C'est bon ! Votre apport en fibres est correct. Apport conseillé : ${fiberNeeds} g`;
+        }
+
+        if(fiber > fiberNeeds*0.8 && fiber <= fiberNeeds*0.9){
+            fiberScore.color = `yellow`;
+            fiberScore.message = `Attention, votre apport en fibres est un peu trop bas. Apport conseillé : ${fiberNeeds} g`;
+        }
+
+        if(fiber > fiberNeeds*0.6 && fiber <= fiberNeeds*0.8){
+            fiberScore.color = `orange`;
+            fiberScore.message = `Attention, votre apport en fibres est trop bas. Apport conseillé : ${fiberNeeds} g`;
+        }
+
+        if(fiber <= fiberNeeds*0.6){
+            fiberScore.color = `red`;
+            fiberScore.message = `Attention, votre apport en fibres est BEAUCOUP trop bas ! Apport conseillé : ${fiberNeeds} g`;
+        }
+
+        return fiberScore;
+    }
+
+    const getProteinsScore = (proteins) => {
+        let proteinsScore = {
+            color: ``,
+            message: ``
+        }
+        let proteinsNeeds = Math.round((bej/4)*0.2);
+
+        if(proteins < proteinsNeeds*0.8){
+            proteinsScore.color = `red`;
+            proteinsScore.message = `Attention, votre apport en protéines est BEAUCOUP trop bas ! Apport conseillé : ${proteinsNeeds} g`;
+        }
+
+        if(proteins >= proteinsNeeds*0.8 && proteins < proteinsNeeds*0.9){
+            proteinsScore.color = `orange`;
+            proteinsScore.message = `Attention, votre apport en protéines est trop bas. Apport conseillé : ${proteinsNeeds} g`;
+        }
+
+        if(proteins >= proteinsNeeds*0.9 && proteins < proteinsNeeds*0.95){
+            proteinsScore.color = `yellow`;
+            proteinsScore.message = `Attention, votre apport en protéines est un peu trop bas. Apport conseillé : ${proteinsNeeds} g`;
+        }
+
+        if(proteins >= proteinsNeeds*0.95 && proteins <= proteinsNeeds*1.2){
+            proteinsScore.color = `green`;
+            proteinsScore.message = `C'est bon ! Votre apport en protéines est correct. Apport conseillé : ${proteinsNeeds} g`;
+        }
+
+        if(proteins > proteinsNeeds*1.2 && proteins <= proteinsNeeds*1.3){
+            proteinsScore.color = `yellow`;
+            proteinsScore.message = `Attention, votre apport en protéines est un peu trop haut. Apport conseillé : ${proteinsNeeds} g`;
+        }
+
+        if(proteins > proteinsNeeds*1.3 && proteins <= proteinsNeeds*1.4){
+            proteinsScore.color = `orange`;
+            proteinsScore.message = `Attention, votre apport en protéines est trop haut. Apport conseillé : ${proteinsNeeds} g`;
+        }
+
+        if(proteins > proteinsNeeds*1.4){
+            proteinsScore.color = `red`;
+            proteinsScore.message = `Attention, votre apport en protéines est BEAUCOUP trop haut ! Apport conseillé : ${proteinsNeeds} g`;
+        }
+
+        return proteinsScore;
+    }
+
+    const getSaltScore = (salt) => {
+        let saltScore = {
+            color: ``,
+            message: ``
+        }
+        let saltNeeds = 5;
+
+        if(salt <= saltNeeds*1.2){
+            saltScore.color = `green`;
+            saltScore.message = `C'est bon ! Votre apport en sel est correct. Apport conseillé : ${saltNeeds} g`;
+        }
+
+        if(salt > saltNeeds*1.2 && salt <= saltNeeds*1.5){
+            saltScore.color = `yellow`;
+            saltScore.message = `Attention, votre apport en sel est un peu trop haut. Apport conseillé : ${saltNeeds} g`;
+        }
+
+        if(salt > saltNeeds*1.5 && salt <= saltNeeds*1.8){
+            saltScore.color = `orange`;
+            saltScore.message = `Attention, votre apport en sel est trop haut. Apport conseillé : ${saltNeeds} g`;
+        }
+
+        if(salt > saltNeeds*1.8){
+            saltScore.color = `red`;
+            saltScore.message = `Attention, votre apport en sel est BEAUCOUP trop haut ! Apport conseillé : ${saltNeeds} g`;
+        }
+
+        return saltScore;
+    }
+
+    const getStats = () => {
+        console.log(getEnergyScore(profileLose, dailyNutriments["energy"]));
+        console.log(getFatScore(dailyNutriments["fat"]));
+        console.log(getCarbohydratesScore(profileLose, dailyNutriments["carbohydrates"]));
+        console.log(getSugarScore(dailyNutriments["sugars"]));
+        console.log(getFiberScore(dailyNutriments["fiber"]));
+        console.log(getProteinsScore(dailyNutriments["proteins"]));
+        console.log(getSaltScore(dailyNutriments["salt"]));
+    }
 
     useEffect(async () => {
         console.log("ok");
@@ -34,7 +384,7 @@ const NutrtitionalStats = ({day, eventsArray, displayStats}) => {
         console.log(newWeeklyNutriments);
         setDailyNutriments(newDailyNutriments);
         setWeeklyNutriments(newWeeklyNutriments);
-
+        setBEJ(calculateBEJ(profileLose));
     }, [])
 
     const additionNutriments = (nut1, nut2) => {
@@ -176,6 +526,7 @@ const NutrtitionalStats = ({day, eventsArray, displayStats}) => {
             {dailyNutrimentsDisplay}
             {weeklyNutrimentsDisplay}
             {loadingDisplay}
+            <div className='btn-primary' onClick={() => getStats()} >Avis du coach</div>
         </div>
     )
 
