@@ -50,7 +50,7 @@ const Nutrition = () => {
         setFoodstuffs(myMealFoodstuffs);
     }
     
-    if(mealID !== null && mealID !== undefined){
+    if(mealID !== null && mealID !== undefined && mealTitle === ""){
         console.log("Meal ID : " + mealID);
         getMealData(mealID);
     }
@@ -123,11 +123,11 @@ const Nutrition = () => {
             <button className="btn-primary">Valider</button>
 
     const selectQuantity = newFood[0] !== '' && (
-        <div className="N_quantiy">
+        <div className="window-sport flexCenter absolute top-[50%] left-[41%]">
             <form onSubmit={addFood} className="loginForm">
-                <div className="inputBox">
+                <div className="flexStart basicText">
                     <label htmlFor="quantity">Quantité (en g) :</label><br/>
-                    <input onChange={(e) => setNewFood([newFood[0], newFood[1], e.target.value])} value={newFood[2]} type="text" id="quantity" autoComplete="off" required placeholder="100"/>
+                    <input className='input' onChange={(e) => setNewFood([newFood[0], newFood[1], e.target.value])} value={newFood[2]} type="text" id="quantity" autoComplete="off" required placeholder="100" autoFocus/>
                 </div>
                 {formSelectQuantityBtn}
             </form>
