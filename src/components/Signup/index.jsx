@@ -1,46 +1,28 @@
 import moment from 'moment';
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 import {FirebaseContext} from '../Firebase';
 //import './signup.css';
 
-const Signup = (props) => {
+const Signup = () => {
     const firebase = useContext(FirebaseContext);
     let navigate = useNavigate();
-
-    const data = {
-        username: '',
-        email: '',
-        age: '',
-        height: '',
-        weight: '',
-        gender: '',
-        password: '',
-        confirmPassword: ''
-    }
-
-    const [loginData, setLoginData] = useState(data);
+    const [username, setUsername] = useState("");
+    const [email, setEmail] = useState("");
+    const [birth, setBirth] = useState("");
+    const [height, setHeight] = useState(0);
+    const [weight, setWeight] = useState(0);
+    const [gender, setGender] = useState("");
+    const [goal, setGoal] = useState("");
+    const [password, setPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
     const [error, setError] = useState('');
 
-    const handleChange = e => {
-        //ex: setLoginData({...loginData, ["username"]: Nico31});
-        setLoginData({...loginData, [e.target.id]: e.target.value});
-    }
-
-    const createNewUser = (authUser, username, email, age, height, weight, gender) => {
-        const formatedDate = moment(Date.now()).format('DD MMM hh:mm a');
-        return firebase.user(authUser.user.uid).set({
-            id: authUser.user.uid,
-            username: username,
-            email: email,
-            age: age,
-            height: height,
-            weight: weight,
-            gender: gender,
-            weightHistory: JSON.stringify([[weight, formatedDate]]),
-            eventsIDs: JSON.stringify([]),
-            lastCoDate: formatedDate
-        });
+    const createNewUser = (authUser, userData) => {
+        const formatedDate = moment(Date.now()).format('MMMM Do YYYY hh:mm a');
+        userData.weightHistory = JSON.stringify([[weight, formatedDate]]);
+        userData.registrationDate = formatedDate;
+        return firebase.user(authUser.user.uid).set(userData);
     }
 
     const addDisplayNameToCurrentUser = () => {
@@ -51,23 +33,18 @@ const Signup = (props) => {
 
     const handleSubmit = e => {
         e.preventDefault();
-        const {email, password, username, age, height, weight, gender} = loginData;
         firebase.signupUser(email, password)
         .then((authUser) => {
-            createNewUser(authUser, username, email, age, height, weight, gender);
+            createNewUser(authUser, {username, email, birth, height, weight, gender, goal});
         })
         .then(() => {
-            setLoginData({...data});
             navigate('/');
             addDisplayNameToCurrentUser();
         })
         .catch(error => {
             setError(error);
-            setLoginData({...data});
         });
     }
-
-    const {username, email, age, height, weight, gender, password, confirmPassword} = loginData;
 
     //gestion erreurs
     const errorMsg = error !== '' && <div className="text-red-600">{error.message}</div>;
@@ -77,7 +54,7 @@ const Signup = (props) => {
             <label htmlFor="username">Pseudo :</label><br/>
             <input 
                 className='input'
-                onChange={handleChange} 
+                onChange={(e) => setUsername(e.target.value)} 
                 value={username} 
                 type="text" 
                 id="username" 
@@ -93,7 +70,7 @@ const Signup = (props) => {
             <label htmlFor="email">Email :</label><br/>
             <input 
                 className='input'
-                onChange={handleChange} 
+                onChange={(e) => setEmail(e.target.value)} 
                 value={email} 
                 type="email" 
                 id="email" 
@@ -105,18 +82,17 @@ const Signup = (props) => {
     )
 
     //remplacer par date de naissance
-    const formAge = (
+    const formBirth = (
         <div className="w-2/3">
-            <label htmlFor="age">Age :</label><br/>
+            <label htmlFor="birth">Date de naissance :</label><br/>
             <input 
                 className='input'
-                onChange={handleChange} 
-                value={age} 
-                type="text" 
-                id="age" 
+                onChange={(e) => setBirth(e.target.value)} 
+                value={birth} 
+                type="date" 
+                id="birth" 
                 autoComplete="off" 
-                required 
-                placeholder="35"
+                required
             />
         </div>
     )
@@ -126,9 +102,9 @@ const Signup = (props) => {
             <label htmlFor="height">Taille (en cm) :</label><br/>
             <input 
                 className='input'
-                onChange={handleChange} 
+                onChange={(e) => setHeight(e.target.value)} 
                 value={height} 
-                type="text" 
+                type="number" 
                 id="height" 
                 autoComplete="off" 
                 required 
@@ -142,9 +118,9 @@ const Signup = (props) => {
             <label htmlFor="weight">Poids (en kg) :</label><br/>
             <input 
                 className='input'
-                onChange={handleChange} 
+                onChange={(e) => setWeight(e.target.value)} 
                 value={weight} 
-                type="text" 
+                type="number" 
                 id="weight" 
                 autoComplete="off" 
                 required 
@@ -156,7 +132,7 @@ const Signup = (props) => {
     const formGender = (
         <div className="w-2/3">
             <label htmlFor="gender">Sexe :</label><br/>
-            <select className='input' id="gender" name="gender" onChange={handleChange} value={gender}>
+            <select className='input' id="gender" name="gender" onChange={(e) => setGender(e.target.value)} value={gender}>
                 <option value="">Précisez votre sexe</option>
                 <option value="male">Homme</option>
                 <option value="female">Femme</option>
@@ -164,12 +140,24 @@ const Signup = (props) => {
         </div>
     )
 
+    const formGoal = (
+        <div className='w-2/3'>
+            <label htmlFor="goal">Objectif :</label><br/>
+            <select id='goal' onChange={(e) => setGoal(e.target.value)}>
+                <option value="">--Choisissez une option--</option>
+                <option value="maintain">Maintenir son poids</option>
+                <option value="lose">Perdre du gras</option>
+                <option value="gain">Gagner du muscle</option>
+            </select>
+        </div>
+    )
+
     const formPassword = (
-        <div className="w-2/3">
+        <div className="min-w-2/3">
             <label htmlFor="password">Mot de passe :</label><br/>
             <input 
                 className='input'
-                onChange={handleChange} 
+                onChange={(e) => setPassword(e.target.value)} 
                 value={password} 
                 type="password" 
                 id="password" 
@@ -181,11 +169,11 @@ const Signup = (props) => {
     )
 
     const formPasswordConfirm = (
-        <div className="w-2/3">
+        <div className="min-w-2/3">
             <label htmlFor="confirmPassword">Confirmez le mot de passe :</label><br/>
             <input 
                 className='input'
-                onChange={handleChange} 
+                onChange={(e) => setConfirmPassword(e.target.value)} 
                 value={confirmPassword} 
                 type="password" 
                 id="confirmPassword" 
@@ -196,18 +184,19 @@ const Signup = (props) => {
         </div>
     )
 
-    const formSignupBtn = username === '' || email === '' || age === '' || height === '' || weight === '' ||
-     gender === '' || password === '' || password !== confirmPassword
+    const formSignupBtn = username === '' || email === '' || birth === '' || height === 0 || weight === 0 ||
+     gender === '' || goal === '' || password === '' || password !== confirmPassword
     ? <button disabled className="btn-primary opacity-50">Inscription</button> : <button className="btn-primary">Inscription</button>
 
     const signupForm = (
         <form onSubmit={handleSubmit} className="w-full">
             {formPseudo}
             {formEmail}
-            {formAge}
+            {formBirth}
             {formHeight}
             {formWeight}
             {formGender}
+            {formGoal}
             {formPassword}
             {formPasswordConfirm}
             <div className='flex flex-col justify-center items-center my-2'>

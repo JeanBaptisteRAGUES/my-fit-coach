@@ -31,19 +31,15 @@ const TrainingForm = () => {
     }
 
     const modifyParameterValue = (param, value) => {
-        console.log("Parameter : " + param);
-        console.log("Value : " + value);
         let mParam = parameters.find(testParam => testParam[0] === param);
         mParam[2] = value;
-        console.log(mParam);
-        console.log(parameters);
         let newParameters = JSON.parse(JSON.stringify(parameters));
         setParameters(newParameters);
     }
 
     const saveTraining = (e) => {
         e.preventDefault();
-        const formatedDate = moment(Date.now()).format('DD MMM hh:mm a');
+        const formatedDate = moment(Date.now()).format('MMMM Do YYYY hh:mm a');
 
         let trainingParams = {
             exerciceID: exerciceID,
@@ -80,7 +76,7 @@ const TrainingForm = () => {
                     )
                 })
             }
-            <div className='btn-primary self-center mt-2' >Enregistrer</div>
+            <button className='btn-primary self-center mt-2' >Enregistrer</button>
         </form>
     )
 
