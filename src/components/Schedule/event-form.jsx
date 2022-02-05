@@ -14,6 +14,7 @@ const EventForm = ({ userID, eventsArray, setEventsArray, setDisplayEventForm}) 
     const [newEventEnd, setNewEventEnd] = useState('');
     const [newEventType, setNewEventType] = useState('');
     const [newEventRefID, setNewEventRefID] = useState('');
+    const [errorMsg, setErrorMsg] = useState('');
 
     const formAddEventBtn = newEventDay === '' || newEventStart === '' || newEventEnd === '' || newEventTitle === '' || newEventType === '' ? 
             <button className="btn-primary opacity-50">Ajouter</button> 
@@ -72,14 +73,37 @@ const EventForm = ({ userID, eventsArray, setEventsArray, setDisplayEventForm}) 
 
     }, []);
 
-    const addEvent = (e, newEvent) => {
+    const getTimeDiff = (t1, t2) => {
+        let [h1, m1] = t1.split(':');
+        let [h2, m2] = t2.split(':');
+
+        return (h2-h1)*60 + (m2-m1);
+    }
+
+    const handleSubmit = (e, newEvent) => {
         e.preventDefault();
         console.log(newEvent);
+        let eventDuration = getTimeDiff(newEvent.start, newEvent.end);
+        if(eventDuration < 5){
+            console.log("Ajout impossible, évènement trop court : " + eventDuration);
+            setErrorMsg(`Impossible d'ajouter une plage horaire inférieure à 5 minutes !`);
+        }else{
+            console.log("Ajout de l'évènement possible : " + eventDuration);
+            setErrorMsg('');
+            addEvent(newEvent);
+        }
+    }
+
+    const addEvent = (newEvent) => {
         firebase.db.collection('events').add(newEvent)
         .then(() => {
             setEventsArray([...eventsArray, newEvent]);
         })
     }  
+
+    const errorMsgDisplay = errorMsg !== "" && (
+        <span className=' flexCenter text-center basicText text-red-600 font-bold'>{errorMsg}</span>
+    )
 
     const onChangeEventSelection = e => {
         const eventSelected = JSON.parse(e.currentTarget.value);
@@ -89,10 +113,24 @@ const EventForm = ({ userID, eventsArray, setEventsArray, setDisplayEventForm}) 
         setNewEventType(eventSelected[2]);
     }
 
+    const daySelect = (
+        <select className='input' name="days" id="daySelect" onChange={(e) => setNewEventDay(e.target.value)}>
+            <option value="">--Sélectionnez un jour de la semaine</option>
+            <option value="Lundi">Lundi</option>
+            <option value="Mardi">Mardi</option>
+            <option value="Mercredi">Mercredi</option>
+            <option value="Jeudi">Jeudi</option>
+            <option value="Vendredi">Vendredi</option>
+            <option value="Samedi">Samedi</option>
+            <option value="Dimanche">Dimanche</option>
+        </select>
+    )
+
     return (
         <div className='flex flex-row justify-center font-bold text-2xl items-center fixed top-0 z-10 basicText w-full min-h-screen backdrop-blur-md bg-slate-900/50 motion-safe:animate-fall'>
             <div className="window-nutrition basicText flexCenter sticky top-5 left-5 p-2 w-3/4 md:w-1/3">
-                <form onSubmit={(e) => addEvent(e, {userID, refID: newEventRefID, title: newEventTitle, day: newEventDay, start: newEventStart, end: newEventEnd, type: newEventType})} className="flexCenter">
+                {errorMsgDisplay}
+                <form onSubmit={(e) => handleSubmit(e, {userID, refID: newEventRefID, title: newEventTitle, day: newEventDay, start: newEventStart, end: newEventEnd, type: newEventType})} className="flexCenter">
                     <div className='flexStart'>
                         <div className="inputBox">
                             <label htmlFor="title">Titre :</label><br/>
@@ -107,16 +145,16 @@ const EventForm = ({ userID, eventsArray, setEventsArray, setDisplayEventForm}) 
                             </select>
                         </div>
                         <div className="inputBox">
-                            <label htmlFor="day">Jour :</label><br/>
-                            <input className='input' onChange={(e) => setNewEventDay(e.target.value)} value={newEventDay} type="text" id="day" autoComplete="off" required placeholder="Jeudi"/>
+                            <label htmlFor="daySelect">Jour :</label><br/>
+                            {daySelect}
                         </div>
                         <div className="inputBox">
                             <label htmlFor="start">Heure début :</label><br/>
-                            <input className='input' onChange={(e) => setNewEventStart(e.target.value)} value={newEventStart} type="text" id="start" autoComplete="off" required placeholder="9"/>
+                            <input className='input' onChange={(e) => setNewEventStart(e.target.value)} value={newEventStart} type="time" id="start" autoComplete="off" required placeholder="9"/>
                         </div>
                         <div className="inputBox">
                             <label htmlFor="end">Heure fin :</label><br/>
-                            <input className='input' onChange={(e) => setNewEventEnd(e.target.value)} value={newEventEnd} type="text" id="end" autoComplete="off" required placeholder="11"/>
+                            <input className='input' onChange={(e) => setNewEventEnd(e.target.value)} value={newEventEnd} type="time" id="end" autoComplete="off" required placeholder="11"/>
                         </div>
                     </div>
                     {formAddEventBtn}

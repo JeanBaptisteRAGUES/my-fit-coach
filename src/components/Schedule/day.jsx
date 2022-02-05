@@ -23,11 +23,21 @@ const Day = ({dayName, dayIndex, scheduleStart, scheduleEnd, hoursArray, eventsA
         </div>
     )
 
+    const parseTime = (time, step) => {
+        console.log("Time : " + time);
+        let [timeH, timeM] = time.split(':');
+        timeH = Math.round(timeH*(60/step));
+        timeM = Math.round(timeM/step);
+        console.log("TimeH : " + timeH);
+        console.log("TimeM : " + timeM);
+        return timeH + timeM;
+    }
+
     const events = (
         eventsArray.filter(event => event.day === dayName).map(dayEvent => (
             <div 
                 className={`relative col-start-1 col-span-1`}
-                style={{gridRow: `${(dayEvent.start-scheduleStart)*12 + 12} / span ${(dayEvent.end-dayEvent.start)*12}`}}
+                style={{gridRow: `${parseTime(dayEvent.start, 5)-scheduleStart*(60/5) + 12} / span ${parseTime(dayEvent.end, 5)-parseTime(dayEvent.start, 5)}`}}
             >
                 <div 
                     className={`flexCenter text-sm absolute top-[1px] w-full h-full rounded border border-gray-50 box-border ${eventColor(dayEvent.type)} cursor-pointer truncate`}
