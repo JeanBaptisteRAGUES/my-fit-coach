@@ -64,6 +64,8 @@ const Schedule = () => {
             meal = meal.data();
             console.log(meal);
             setSelectedEventMeal([event, meal]);
+        }else{
+            navigate('/session', {state: {userID: userID, sessionID: event.refID}});
         }
     }
 

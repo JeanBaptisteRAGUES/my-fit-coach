@@ -48,6 +48,7 @@ const Exercice = () => {
 
     const getExerciceData = async () => {
         let exerciceQuery = await firebase.exercice(exerciceID).get();
+        console.log(exerciceQuery.data());
         setExerciceData(exerciceQuery.data());
     }
 
@@ -89,8 +90,8 @@ const Exercice = () => {
 
     const trainingsHistoryDisplay = showHistory && (
         trainingsHistory.length > 0 ?
-            <div className='window-sport text-gray-700'>
-                Historique :
+            <div className='window-sport basicText'>
+                <span className='title'>Historique</span>
                 {
                     trainingsHistory.map((training, i) => {
                         return (
@@ -110,10 +111,10 @@ const Exercice = () => {
                 <div className='btn-primary' onClick={() => setShowHistory(false)}>Fermer</div>
             </div>
         :
-            <div className='E_trainingsHistory'>
-                Historique :<br/>
-                Vous n'avez encore enregistré aucun entraînement
-                <button onClick={() => setShowHistory(false)}>Fermer</button>
+            <div className='window-sport basicText'>
+                <span className='title'>Historique</span>
+                <span className='my-5'>Vous n'avez encore enregistré aucun entraînement</span>
+                <button className='btn-primary' onClick={() => setShowHistory(false)}>Fermer</button>
             </div>
     )
 
