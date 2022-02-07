@@ -14,6 +14,7 @@ const Signup = () => {
     const [weight, setWeight] = useState(0);
     const [gender, setGender] = useState("");
     const [goal, setGoal] = useState("");
+    const [nap, setNap] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [error, setError] = useState('');
@@ -35,7 +36,7 @@ const Signup = () => {
         e.preventDefault();
         firebase.signupUser(email, password)
         .then((authUser) => {
-            createNewUser(authUser, {username, email, birth, height, weight, gender, goal});
+            createNewUser(authUser, {username, email, birth, height, weight, gender, goal, nap});
         })
         .then(() => {
             navigate('/');
@@ -152,6 +153,19 @@ const Signup = () => {
         </div>
     )
 
+    const formNAP = (
+        <div className='w-2/3'>
+            <label htmlFor="nap">Niveau d'activité physique :</label><br/>
+            <select id='nap' onChange={(e) => setNap(e.target.value)}>
+                <option value="">--Choisissez une option--</option>
+                <option value="sedentary">Sédentaire</option>
+                <option value="light">Faible</option>
+                <option value="moderate">Modérée</option>
+                <option value="high">Élevée</option>
+            </select>
+        </div>
+    )
+
     const formPassword = (
         <div className="min-w-2/3">
             <label htmlFor="password">Mot de passe :</label><br/>
@@ -185,7 +199,7 @@ const Signup = () => {
     )
 
     const formSignupBtn = username === '' || email === '' || birth === '' || height === 0 || weight === 0 ||
-     gender === '' || goal === '' || password === '' || password !== confirmPassword
+     gender === '' || goal === '' || nap === '' || password === '' || password !== confirmPassword
     ? <button disabled className="btn-primary opacity-50">Inscription</button> : <button className="btn-primary">Inscription</button>
 
     const signupForm = (
@@ -197,6 +211,7 @@ const Signup = () => {
             {formWeight}
             {formGender}
             {formGoal}
+            {formNAP}
             {formPassword}
             {formPasswordConfirm}
             <div className='flex flex-col justify-center items-center my-2'>

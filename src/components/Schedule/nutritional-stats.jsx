@@ -2,8 +2,9 @@ import React, { Fragment, useContext, useEffect } from 'react';
 import { RiCloseLine } from 'react-icons/ri';
 import { useState } from 'react/cjs/react.development';
 import { FirebaseContext } from '../Firebase';
+import moment from 'moment';
 
-const NutrtitionalStats = ({day, eventsArray, displayStats}) => {
+const NutrtitionalStats = ({userID, day, eventsArray, displayStats}) => {
     const firebase = useContext(FirebaseContext);
     const [dailyNutriments, setDailyNutriments] = useState(null);
     const [weeklyNutriments, setWeeklyNutriments] = useState(null);
@@ -37,6 +38,7 @@ const NutrtitionalStats = ({day, eventsArray, displayStats}) => {
     //const [napFactor, setNAPFactor] = useState(1);
     const [needs, setNeeds] = useState(null);
     const [bej, setBEJ] = useState(2000);
+    const [goal, setGoal] = useState("");
     const [energyScore, setEnergyScore] = useState(null);
     const [fatScore, setFatScore] = useState(null);
     const [carbohydratesScore, setCarbohydratesScore] = useState(null);
@@ -44,28 +46,30 @@ const NutrtitionalStats = ({day, eventsArray, displayStats}) => {
     const [fiberScore, setFiberScore] = useState(null);
     const [proteinsScore, setProteinsScore] = useState(null);
     const [saltScore, setSaltScore] = useState(null);
-    const [displayAdvice, setDisplayAdvice] = useState(false);
+    const [displayMode, setDisplayMode] = useState("nutriments"); //nutriments / goal / coach
+    const [userProfile, setUserProfile] = useState(null);
 
     const calculateMB = (profile) => {
+        let age = moment().diff(profile.birth, 'years', false);
         if(profile.gender === "male"){
-            return Math.round(13.707*profile.weight + 492.3*(profile.height/100) - 6.673*profile.age + 77.607);
+            return Math.round(13.707*profile.weight + 492.3*(profile.height/100) - 6.673*age + 77.607);
         }else{
-            return Math.round(9.740*profile.weight + 172.9*(profile.height/100) - 4.7373*profile.age + 667.051);
+            return Math.round(9.740*profile.weight + 172.9*(profile.height/100) - 4.7373*age + 667.051);
         }
     }
 
     const calculateBEJ = (profile) => {
         let mb = calculateMB(profile);
-        
+        console.log("mb : " + mb);
         switch (profile.nap) {
             case "sedentary":
-                return mb*1.375;
-            case "leight":
-                return mb*1.56;
+                return Math.round(mb*1.375);
+            case "light":
+                return Math.round(mb*1.56);
             case "moderate":
-                return mb*1.64;
+                return Math.round(mb*1.64);
             case "high":
-                return mb*1.82;
+                return Math.round(mb*1.82);
             default:
                 console.log("Erreur, valeur NAP inconnue : " + profile.nap);
                 break;
@@ -78,15 +82,15 @@ const NutrtitionalStats = ({day, eventsArray, displayStats}) => {
         return `+${percentage}%`;
     }
 
-    const getEnergyScore = (profile, energy) => {
+    const getEnergyScore = (energy) => {
         let newEnergyScore = {
             color: ``,
             message: ``,
             needs: bej,
             percentage: ``
         }
-        if(profile.objective === `lose`) newEnergyScore.needs *= 0.9;
-        if(profile.objective === `gain`) newEnergyScore.needs *= 1.1;
+        if(goal === `lose`) newEnergyScore.needs *= 0.9;
+        if(goal === `gain`) newEnergyScore.needs *= 1.1;
         newEnergyScore.needs = Math.round(newEnergyScore.needs);
         newEnergyScore.percentage = getPercentage(energy, newEnergyScore.needs);
 
@@ -175,15 +179,15 @@ const NutrtitionalStats = ({day, eventsArray, displayStats}) => {
         setFatScore(newFatScore);
     }
 
-    const getCarbohydratesScore = (profile, carbohydrates) => {
+    const getCarbohydratesScore = (carbohydrates) => {
         let newCarbohydratesScore = {
             color: ``,
             message: ``,
             needs: (bej/4)*0.5,
             percentage: ``
         }
-        if(profile.objective === `lose`) newCarbohydratesScore.needs = (bej/4)*0.4;
-        if(profile.objective === `gain`) newCarbohydratesScore.needs = (bej/4)*0.6;
+        if(goal === `lose`) newCarbohydratesScore.needs = (bej/4)*0.4;
+        if(goal === `gain`) newCarbohydratesScore.needs = (bej/4)*0.6;
         newCarbohydratesScore.needs = Math.round(newCarbohydratesScore.needs);
         newCarbohydratesScore.percentage = getPercentage(carbohydrates, newCarbohydratesScore.needs);
 
@@ -372,21 +376,27 @@ const NutrtitionalStats = ({day, eventsArray, displayStats}) => {
         setSaltScore(newSaltScore);
     }
 
-    const getStats = () => {
-        getEnergyScore(profileLose, dailyNutriments["energy"])
+    const getStats = (newDisplayMode) => {
+        console.log("BEJ : " + bej);
+        getEnergyScore(dailyNutriments["energy"])
         getFatScore(dailyNutriments["fat"]);
-        getCarbohydratesScore(profileLose, dailyNutriments["carbohydrates"]);
+        getCarbohydratesScore(dailyNutriments["carbohydrates"]);
         getSugarScore(dailyNutriments["sugars"]);
         getFiberScore(dailyNutriments["fiber"]);
         getProteinsScore(dailyNutriments["proteins"]);
         getSaltScore(dailyNutriments["salt"]);
-        setDisplayAdvice(true);
+        setDisplayMode(newDisplayMode);
     }
 
     useEffect(async () => {
         console.log("ok");
         let newDailyNutriments = await getDailyNutriments(day);
+        let newUserProfile = await firebase.user(userID).get();
+        newUserProfile = newUserProfile.data();
+        let newBEJ = calculateBEJ(newUserProfile);
         roundNutriments(newDailyNutriments);
+
+        console.log(newBEJ);
 
         let newWeeklyNutriments = {
             energy: 0,
@@ -410,7 +420,9 @@ const NutrtitionalStats = ({day, eventsArray, displayStats}) => {
         console.log(newWeeklyNutriments);
         setDailyNutriments(newDailyNutriments);
         setWeeklyNutriments(newWeeklyNutriments);
-        setBEJ(calculateBEJ(profileLose));
+        setBEJ(newBEJ);
+        setGoal(newUserProfile.goal);
+        setUserProfile(newUserProfile)
     }, [])
 
     const additionNutriments = (nut1, nut2) => {
@@ -518,28 +530,44 @@ const NutrtitionalStats = ({day, eventsArray, displayStats}) => {
         </div>
     )
 
-    /*
-    const coachAdviceDisplay = energyScore !== null && fatScore !== null && carbohydratesScore !== null && sugarScore !== null && fiberScore !== null && proteinsScore !== null && saltScore !== null &&  displayAdvice && (
-        <div className="flexStart w-2/3 my-4 border border-black rounded p-1">
-            <span>Valeurs nutritionnelles ({day}) :</span> 
-            <span className={` ${energyScore.color} px-1 w-full text-black uhd:py-2`}>Energie (kcal) : {dailyNutriments[`energy`]}</span>
-            <span className={` ${fatScore.color} px-1 w-full text-black uhd:py-2`}>Matières grasses (g) : {dailyNutriments[`fat`]}</span>
-            <span className={` ${carbohydratesScore.color} px-1 w-full text-black uhd:py-2`}>Glucides (g) : {dailyNutriments[`carbohydrates`]}</span>
-            <span className={` ${sugarScore.color} px-1 w-full text-black uhd:py-2`}>Dont sucres (g) : {dailyNutriments[`sugars`]}</span>
-            <span className={` ${fiberScore.color} px-1 w-full text-black uhd:py-2`}>Fibres (g) : {dailyNutriments[`fiber`]}</span>
-            <span className={` ${proteinsScore.color} px-1 w-full text-black uhd:py-2`}>Protéines (g) : {dailyNutriments[`proteins`]}</span>
-            <span className={` ${saltScore.color} px-1 w-full text-black uhd:py-2`}>Sel (g) : {dailyNutriments[`salt`]}</span>
+    const goalForm = displayMode === "goal" && (
+        <div className="window-nutrition basicText flex flex-col justify-start items-center sticky top-5 left-5 p-2 w-3/4 max-h-[90%] overflow-auto">
+            <form onSubmit={() => getStats("coach")}>
+                <div className='w-full'>
+                    <label htmlFor="bej">Objectif calorique :</label><br/>
+                    <input 
+                        className='input'
+                        onChange={(e) => setBEJ(e.target.value)} 
+                        value={bej} 
+                        type="text" 
+                        id="bej" 
+                        autoComplete="off" 
+                        required
+                        placeholder="objectif journalier calorique" 
+                    />
+                </div>
+                <div className='w-full'>
+                    <label htmlFor="goal">Objectif :</label><br/>
+                    <select id='goal' onChange={(e) => setGoal(e.target.value)}>
+                        <option value="">--Choisissez une option--</option>
+                        <option value="maintain">Maintenir son poids</option>
+                        <option value="lose">Perdre du gras</option>
+                        <option value="gain">Gagner du muscle</option>
+                    </select>
+                </div>
+                <button className='btn-primary'>Confirmer</button>
+            </form>
         </div>
     )
-    */
 
-    const coachAdviceDisplay = energyScore !== null && fatScore !== null && carbohydratesScore !== null && sugarScore !== null && fiberScore !== null && proteinsScore !== null && saltScore !== null &&  displayAdvice && (
-        <Fragment>
-            <div className=" grid grid-rows-[8] w-[80%] my-4 border border-black rounded p-1">
+    const coachAdviceDisplay = energyScore !== null && fatScore !== null && carbohydratesScore !== null && sugarScore !== null && fiberScore !== null && proteinsScore !== null && saltScore !== null && displayMode === "coach" && (
+        <div className="window-nutrition text-micro md:text-base flex flex-col justify-start items-center sticky top-5 left-5 p-2 w-3/4 max-h-[90%] overflow-auto">
+            <div className=" grid grid-rows-[8] w-[100%] my-4 border border-black rounded p-1">
                 <div className=' grid grid-cols-6 row-start-1 row-span-1'>
                     <span className=' col-start-1 col-span-4 border-r border-black '>Valeurs nutritionnelles ({day})</span>
                     <span className=' flexCenter col-start-5 col-span-1 border-r border-black'>Besoins</span>
-                    <span className={` flexCenter col-start-6 col-span-1 `}>Pourcentage</span>
+                    <span className={` md:flexCenter col-start-6 col-span-1 hidden`}>Pourcentage</span>
+                    <span className={` md:hidden col-start-6 col-span-1 flexCenter`}>%</span>
                 </div>
                 <div className=' grid grid-cols-6 row-start-2 row-span-1'>
                     <span className={` col-start-1 col-span-4 px-1 w-full text-black uhd:py-2 border-r border-black`}>Energie (kcal) : {dailyNutriments[`energy`]}</span>
@@ -577,7 +605,7 @@ const NutrtitionalStats = ({day, eventsArray, displayStats}) => {
                     <span className={` ${saltScore.color} flex flex-row justify-end items-center col-start-6 col-span-1 `}>{saltScore.percentage}</span>
                 </div>
             </div>
-            <div className=' flexStart w-[80%]'>
+            <div className=' flexStart w-[100%]'>
                 <div className=' flexStart'>
                     <span>Energie :</span>
                     <span className={`${energyScore.color}`}>{energyScore.message}</span>
@@ -607,10 +635,11 @@ const NutrtitionalStats = ({day, eventsArray, displayStats}) => {
                     <span className={`${saltScore.color}`}>{saltScore.message}</span>
                 </div>
             </div>
-        </Fragment>
+            <div className='btn-primary' onClick={() => setDisplayMode("nutriments")} >Retour</div>
+        </div>
     )
     
-    const dailyNutrimentsDisplay = dailyNutriments !== null && displayOption === 'day' && !displayAdvice && (
+    const dailyNutrimentsDisplay = dailyNutriments !== null && displayOption === 'day' && displayMode === "nutriments" && (
         <div className="flexStart w-2/3 my-4 border border-black rounded p-1">
             <span>Valeurs nutritionnelles ({day}) :</span> 
             <span className=" bg-energy px-1 w-full text-black uhd:py-2">Energie (kcal) : {dailyNutriments["energy"]}</span>
@@ -623,7 +652,7 @@ const NutrtitionalStats = ({day, eventsArray, displayStats}) => {
         </div>
     )
 
-    const weeklyNutrimentsDisplay = weeklyNutriments !== null && displayOption === 'week' && !displayAdvice (
+    const weeklyNutrimentsDisplay = weeklyNutriments !== null && displayOption === 'week' && displayMode === "nutriments" && (
         <div className="flexStart w-2/3 my-4 border border-black rounded p-1">
             <span>Valeurs nutritionnelles semaine :</span> 
             <span className=" bg-energy px-1 w-full text-black uhd:py-2">Energie (kcal) : {weeklyNutriments["energy"]}</span>
@@ -636,26 +665,22 @@ const NutrtitionalStats = ({day, eventsArray, displayStats}) => {
         </div>
     )
 
-    const statsWindow = (
-        <div className="window-nutrition basicText flexCenter sticky top-5 left-5 p-2 w-3/4 min-h-[50vh] border border-black">
+    const statsWindow = displayMode === "nutriments" && (
+        <div className="window-nutrition basicText flexCenter sticky top-5 left-5 p-2 w-3/4 h-[50vh] border border-black">
             <span className='title'>{day}</span>
             {statsMenu}
             {dailyNutrimentsDisplay}
             {weeklyNutrimentsDisplay}
-            {coachAdviceDisplay}
             {loadingDisplay}
-            {
-                !displayAdvice ? 
-                    <div className='btn-primary' onClick={() => getStats()} >Avis du coach</div>
-                    :
-                    <div className='btn-primary' onClick={() => setDisplayAdvice(false)} >Retour</div>
-            }
+            <div className='btn-primary' onClick={() => getStats("goal")} >Avis du coach</div>
         </div>
     )
 
     return (
-        <div className='flex flex-row justify-center font-bold text-2xl items-center fixed top-[5vh] z-10 text-white w-full min-h-screen backdrop-blur-md bg-slate-900/50 motion-safe:animate-fall'>
+        <div className='flex flex-row justify-center overscroll-contain font-bold text-2xl items-center fixed top-[5vh] z-10 w-full h-screenMinusHeader backdrop-blur-md bg-slate-900/50 motion-safe:animate-fall'>
             {statsWindow}
+            {coachAdviceDisplay}
+            {goalForm}
             <div className='flexCenter fixed bottom-[10%] left-[45%] md:top-[5vh] md:left-[5vw] h-10 w-10 text-white rounded-full text-6xl cursor-pointer bg-slate-400'>
                 <RiCloseLine onClick={() => displayStats('')}></RiCloseLine>
             </div>

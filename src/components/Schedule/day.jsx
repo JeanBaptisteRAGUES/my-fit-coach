@@ -24,12 +24,9 @@ const Day = ({dayName, dayIndex, scheduleStart, scheduleEnd, hoursArray, eventsA
     )
 
     const parseTime = (time, step) => {
-        console.log("Time : " + time);
         let [timeH, timeM] = time.split(':');
         timeH = Math.round(timeH*(60/step));
         timeM = Math.round(timeM/step);
-        console.log("TimeH : " + timeH);
-        console.log("TimeM : " + timeM);
         return timeH + timeM;
     }
 

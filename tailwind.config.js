@@ -11,6 +11,11 @@ module.exports = {
       'uhd': '3840px'
     },
     extend: {
+      fontSize: {
+        'micro': ['0.50rem', {
+          lineHeight: '0.7rem'
+        }]
+      },
       height: {
         '1/10': '10vh',
         '1/20': '5vh',

@@ -68,7 +68,7 @@ const Schedule = () => {
     }
 
     const displayStatsWindow = displayStats !== '' && (
-        <NutrtitionalStats day={displayStats} eventsArray={eventsArray} displayStats={setDisplayStats} />
+        <NutrtitionalStats userID={userID} day={displayStats} eventsArray={eventsArray} displayStats={setDisplayStats} />
     )
 
 
