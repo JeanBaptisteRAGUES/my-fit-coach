@@ -40,7 +40,7 @@ const Header = () => {
     }
 
     const profileLinks = showMenu && (
-        <MenuLinks user={user} disconnect={disconnect}/>
+        <MenuLinks user={user} disconnect={disconnect} setShowMenu={setShowMenu} />
     )
 
     const disconnectedDisplay = user.userID === null && (
