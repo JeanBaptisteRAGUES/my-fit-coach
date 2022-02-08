@@ -4,7 +4,7 @@ import { FirebaseContext } from '../Firebase';
 import { RiCloseLine } from 'react-icons/ri';
 import './schedule.css';
 
-const EventForm = ({ userID, eventsArray, setEventsArray, setDisplayEventForm}) => {
+const EventForm = ({ userID, eventsArray, setEventsArray, setDisplayEventForm, initEvents}) => {
     const firebase = useContext(FirebaseContext);
     const [userMeals, setUserMeals] = useState([]);
     const [userSessions, setUserSessions] = useState([]);
@@ -97,7 +97,8 @@ const EventForm = ({ userID, eventsArray, setEventsArray, setDisplayEventForm}) 
     const addEvent = (newEvent) => {
         firebase.db.collection('events').add(newEvent)
         .then(() => {
-            setEventsArray([...eventsArray, newEvent]);
+            //setEventsArray([...eventsArray, newEvent]);
+            initEvents();
         })
     }  
 

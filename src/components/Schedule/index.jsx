@@ -16,10 +16,9 @@ const Schedule = () => {
     const [daysArray, setDaysArray] = useState(['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche']);
     const hoursArray = [];
     const caseSize = 20;
-    const scheduleStart = 6;
-    const scheduleEnd = 22;
+    const [scheduleStart, setScheduleStart] = useState(6);
+    const [scheduleEnd, setScheduleEnd] = useState(22);
     const [eventsArray, setEventsArray] = useState([]);
-    const [schedule, setSchedule] = useState([]);
     const [selectedEventMeal, setSelectedEventMeal] = useState([]);
     const [displayEventForm, setDisplayEventForm] = useState(false);
     const [displayStats, setDisplayStats] = useState('');
@@ -44,11 +43,23 @@ const Schedule = () => {
         firebase.userEvents(userID).get()
         .then(myEvents => {
             const events = [];
+            let newScheduleStart = scheduleStart;
+            let newScheduleEnd = scheduleEnd;
+
             myEvents.forEach(myEvent => {
                 const newEvent = myEvent.data();
                 newEvent.id = myEvent.id;
                 events.push(newEvent);
+                let newEventStart = (newEvent.start).split(':')[0];
+                let newEventEnd = Math.min(parseInt((newEvent.end).split(':')[0], 10) + 1, 24);
+                //newEventEnd += 1;
+
+                console.log("End : " + newEventEnd);
+                if(newEventStart < newScheduleStart) {newScheduleStart = newEventStart;}
+                if(newEventEnd > newScheduleEnd) newScheduleEnd = newEventEnd;
             })
+            setScheduleStart(newScheduleStart);
+            setScheduleEnd(newScheduleEnd);
             setEventsArray(events);
         })
         .catch(err => console.log("Erreur lors de la récupération des évènements de l'utilisateur : " + err));
@@ -92,7 +103,7 @@ const Schedule = () => {
 
     //{ userID, eventsArray, setEventsArray, setDisplayEventForm}
     const scheduleForm = displayEventForm && (
-        <EventForm userID={userID} eventsArray={eventsArray} setEventsArray={setEventsArray} setDisplayEventForm={setDisplayEventForm} />
+        <EventForm userID={userID} eventsArray={eventsArray} setEventsArray={setEventsArray} setDisplayEventForm={setDisplayEventForm} initEvents={initEvents} />
     )
 
    
