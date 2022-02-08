@@ -1,9 +1,30 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import ProfileNormal from './profile-normal';
+import ProfileUpdate from './profile-update';
 
 const Profile = () => {
+    const location = useLocation();
+    let navigate = useNavigate();
+    const {userID} = location.state !== null && location.state !== undefined ? location.state : {userID: null};
+    const [displayMode, setDisplayMode] = useState("normal");
+
+    useEffect(() => {
+        if(userID === null){navigate('/login'); return};
+    }, []);
+
+    const profileNormal = displayMode === "normal" && (
+        <ProfileNormal setDisplayMode={setDisplayMode} ></ProfileNormal>
+    )
+
+    const profileUpdate = displayMode === "update" && (
+        <ProfileUpdate setDisplayMode={setDisplayMode} ></ProfileUpdate>
+    )
+
     return (
-        <div className='flex flex-col justify-items-start items-center w-40 h-2/3 fixed top-10 z-10 bg-transparent'>
-            Bonjour
+        <div className='flexCenter'>
+            {profileNormal}
+            {profileUpdate}
         </div>
     )
 }

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useLayoutEffect, useState } from 'react';
+import React, { Fragment, useContext, useEffect, useLayoutEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { useLocation, useNavigate } from 'react-router-dom';
 import './nutrition.css';
@@ -7,7 +7,6 @@ import {FirebaseContext} from '../Firebase';
 import {HiShoppingCart} from 'react-icons/hi';
 import { RiCloseLine } from 'react-icons/ri';
 import MealDisplay from './meal-display';
-import { Fragment } from 'react/cjs/react.development';
 
 const Nutrition = () => {
     const firebase = useContext(FirebaseContext);
