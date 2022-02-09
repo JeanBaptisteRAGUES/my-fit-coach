@@ -550,9 +550,9 @@ const NutrtitionalStats = ({userID, day, eventsArray, displayStats}) => {
                     <label htmlFor="goal">Objectif :</label><br/>
                     <select id='goal' onChange={(e) => setGoal(e.target.value)}>
                         <option value="">--Choisissez une option--</option>
-                        <option value="maintain">Maintenir son poids</option>
-                        <option value="lose">Perdre du gras</option>
-                        <option value="gain">Gagner du muscle</option>
+                        {goal === "maintain" ? <option value="maintain" selected>Maintenir son poids</option> : <option value="maintain">Maintenir son poids</option>}
+                        {goal === "lose" ? <option value="lose" selected>Perdre du gras</option> : <option value="lose">Perdre du gras</option>}
+                        {goal === "gain" ? <option value="gain" selected>Gagner du muscle</option> : <option value="gain">Gagner du muscle</option>}
                     </select>
                 </div>
                 <button className='btn-primary'>Confirmer</button>

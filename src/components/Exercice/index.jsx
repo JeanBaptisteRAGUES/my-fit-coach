@@ -90,12 +90,12 @@ const Exercice = () => {
 
     const trainingsHistoryDisplay = showHistory && (
         trainingsHistory.length > 0 ?
-            <div className='window-sport basicText'>
+            <div className='window-sport basicText w-1/3'>
                 <span className='title'>Historique</span>
                 {
                     trainingsHistory.map((training, i) => {
                         return (
-                            <div className='flex flex-col justify-center items-start my-2 w-72' key={"training_" + i}>
+                            <div className='flex flex-col justify-center items-start my-2 w-[90%]' key={"training_" + i}>
                                 Entrainement du {training.date} :<br/>
                                 {
                                     Object.entries(returnOrderedTraining(training)).map(([key, value]) => {
@@ -111,7 +111,7 @@ const Exercice = () => {
                 <div className='btn-primary' onClick={() => setShowHistory(false)}>Fermer</div>
             </div>
         :
-            <div className='window-sport basicText'>
+            <div className='window-sport basicText w-1/3'>
                 <span className='title'>Historique</span>
                 <span className='my-5'>Vous n'avez encore enregistré aucun entraînement</span>
                 <button className='btn-primary' onClick={() => setShowHistory(false)}>Fermer</button>
