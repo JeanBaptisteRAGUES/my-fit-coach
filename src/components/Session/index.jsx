@@ -10,6 +10,9 @@ const Session = () => {
     const {userID, sessionID} = location.state !== null && location.state !== undefined ? location.state : {userID: null, sessionID: null};
     const [exercicesSession, setExercicesSession] = useState([]); //Seulement les exercices pour cet session en particulier
     const [sessionTitle, setSessionTitle] = useState("");
+    const [confirmDelete, setConfirmDelete] = useState(false);
+    const [confirmInput, setConfirmInput] = useState("");
+    const [errMsg, setErrMsg] = useState("");
 
     useEffect(() => {
         console.log("sessionID : " + sessionID);
@@ -34,6 +37,38 @@ const Session = () => {
         })
     )
 
+    const deleteSession = () => {
+        if(confirmInput === sessionTitle){
+            firebase.session(sessionID).delete()
+            .then(() => {
+                console.log(`Session (${sessionID}) correctement supprimée !`);
+                navigate('/session-menu', {state: {userID}});
+            })
+            .catch((err) => setErrMsg("Erreur lors de la suppression de la session : " + err));
+        }else{
+            setErrMsg("Vous n'avez pas correctement entré le titre de la session !");
+        }
+    }
+
+    const confirmDeleteWindow = confirmDelete && (
+        <div className="window-sport basicText md:w-1/2 w-2/3">
+            <span className='title my-5'>Supprimer Session</span>
+            <span className='basicText text-red-600'>{errMsg}</span>
+            <label htmlFor='delete-session'>Entrez le titre de la session pour confirmer</label>
+            <input className='input' id="delete-session" value={confirmInput} onChange={(e) => setConfirmInput(e.target.value)} placeholder={sessionTitle} ></input>
+            <div className='flex flex-row justify-around items-center'>
+                <div className='btn-primary' onClick={() => deleteSession()} >Supprimer</div>
+                <div className='btn-primary' onClick={() => setConfirmDelete(false)} >Annuler</div>
+            </div>
+        </div>
+    )
+
+    const deleteBtn = (
+        <div className='btn-primary' onClick={() => setConfirmDelete(true)}>
+            Supprimer
+        </div>
+    )
+
     const previousBtn = (
         <Link className='btn-primary' to="/session-menu" state={location.state}>
             Retour
@@ -46,7 +81,7 @@ const Session = () => {
         </Link>
     )
 
-    const sessionDisplay = (
+    const sessionDisplay = !confirmDelete && (
         <div className="window-sport basicText">
             <span className='font-bold mb-4 title' >{sessionTitle}</span>
             <div className='flexStart' >
@@ -54,6 +89,7 @@ const Session = () => {
                 {exericesDisplay}
             </div>
             <div className='btn-container-row'>
+                {deleteBtn}
                 {updateBtn}
                 {previousBtn}
             </div>
@@ -63,6 +99,7 @@ const Session = () => {
     return (
         <div className='container-sport'>
             {sessionDisplay}
+            {confirmDeleteWindow}
         </div>
     )
 }

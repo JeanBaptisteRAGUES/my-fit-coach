@@ -97,9 +97,10 @@ const EventForm = ({ userID, eventsArray, setEventsArray, setDisplayEventForm, i
     const addEvent = (newEvent) => {
         firebase.db.collection('events').add(newEvent)
         .then(() => {
-            //setEventsArray([...eventsArray, newEvent]);
+            setDisplayEventForm(false);
             initEvents();
         })
+        .catch(err => console.log("Erreur ajout évènement : " + err));
     }  
 
     const errorMsgDisplay = errorMsg !== "" && (

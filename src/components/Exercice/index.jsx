@@ -13,6 +13,9 @@ const Exercice = () => {
     const [showHistory, setShowHistory] = useState(false);
     const [trainingsHistory, setTrainingsHistory] = useState([]);
     const [lastTraining, setLastTraining] = useState(null);
+    const [confirmDelete, setConfirmDelete] = useState(false);
+    const [confirmInput, setConfirmInput] = useState("");
+    const [errMsg, setErrMsg] = useState("");
 
     console.log("userID : " + userID);
     console.log("exerciceID : " + exerciceID);
@@ -88,7 +91,7 @@ const Exercice = () => {
         return orderedTraining;
     }
 
-    const trainingsHistoryDisplay = showHistory && (
+    const trainingsHistoryDisplay = !confirmDelete && showHistory && (
         trainingsHistory.length > 0 ?
             <div className='window-sport basicText w-1/3'>
                 <span className='title'>Historique</span>
@@ -131,6 +134,38 @@ const Exercice = () => {
         </div>
     )
 
+    const deleteExercice = () => {
+        if(confirmInput === exerciceData.title){
+            firebase.exercice(exerciceID).delete()
+            .then(() => {
+                console.log(`Exercice (${exerciceID}) correctement supprimé !`);
+                navigate('/exercice-menu', {state: {userID}});
+            })
+            .catch((err) => setErrMsg("Erreur lors de la suppression de l'exercice : " + err));
+        }else{
+            setErrMsg("Vous n'avez pas correctement entré le titre de l'exercice !");
+        }
+    }
+
+    const confirmDeleteWindow = confirmDelete && (
+        <div className="window-sport basicText md:w-1/2 w-2/3">
+            <span className='title my-5'>Supprimer Exercice</span>
+            <span className='basicText text-red-600'>{errMsg}</span>
+            <label htmlFor='delete-exercice'>Entrez le titre de l'exercice pour confirmer</label>
+            <input className='input' id="delete-exercice" value={confirmInput} onChange={(e) => setConfirmInput(e.target.value)} placeholder={exerciceData.title} ></input>
+            <div className='flex flex-row justify-around items-center'>
+                <div className='btn-primary' onClick={() => deleteExercice()} >Supprimer</div>
+                <div className='btn-primary' onClick={() => setConfirmDelete(false)} >Annuler</div>
+            </div>
+        </div>
+    )
+
+    const deleteBtn = (
+        <div className='btn-primary' onClick={() => setConfirmDelete(true)}>
+            Supprimer
+        </div>
+    )
+
     const addTrainingBtn = (
         <Link className='btn-primary' to="/training-form" state={location.state}>
             Ajouter un entraînement
@@ -149,7 +184,7 @@ const Exercice = () => {
         </Link>
     )
 
-    const exerciceDisplay = exerciceData !== null && !showHistory && (
+    const exerciceDisplay = exerciceData !== null && !showHistory && !confirmDelete && (
         <div className='window-sport w-3/4 md:w-1/2 basicText'>
             <span className='font-bold title' >{exerciceData.title}</span>
             <div className='flex flex-col justify-center items-start w-full my-8 font-bold basicText' >
@@ -161,6 +196,7 @@ const Exercice = () => {
             </div>
             <div className='btn-primary' onClick={() => setShowHistory(true)} >Historique</div>
             <div className='btn-container-row'>
+                {deleteBtn}
                 {addTrainingBtn}
                 {updateBtn}
                 {previousBtn}
@@ -172,6 +208,7 @@ const Exercice = () => {
         <div className='container-sport'>
             {exerciceDisplay}
             {trainingsHistoryDisplay}
+            {confirmDeleteWindow}
         </div>
     )
 }

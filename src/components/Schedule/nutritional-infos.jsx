@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
-const NutritionalInfos = ({selectedEventMeal, setSelectedEventMeal, eventsArray, userID}) => {
+const NutritionalInfos = ({selectedEventMeal, setSelectedEventMeal, deleteEvent, userID}) => {
     const [VN, setVN] = useState(JSON.parse(selectedEventMeal[1]["nutriments"]));
     const foodstuffs = JSON.parse(selectedEventMeal[1]["foodstuffs"]);
     const mealTitle = selectedEventMeal[1]["title"];
@@ -38,7 +38,8 @@ const NutritionalInfos = ({selectedEventMeal, setSelectedEventMeal, eventsArray,
                 }
             </div>
             {mealVN}
-            <div className='flex flex-col justify-around items-center w-full h-1/10'>
+            <div className='flex flex-row justify-around items-center w-full h-1/10'>
+                <div className='btn-primary' onClick={() => deleteEvent(selectedEventMeal[0].id)}>Supprimer</div>
                 <Link className='btn-primary' to="/nutrition" state={{userID: userID, mealID: selectedEventMeal[0].refID}}>Modifier</Link>
                 <div className='btn-primary' onClick={() => setSelectedEventMeal([])}>Fermer</div>
             </div>

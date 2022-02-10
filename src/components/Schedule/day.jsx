@@ -1,7 +1,7 @@
 import React from 'react';
 import { BsFillFileBarGraphFill, BsFileBarGraph } from 'react-icons/bs';
 
-const Day = ({dayName, dayIndex, scheduleStart, scheduleEnd, hoursArray, eventsArray, displayEvent, displayStats, hidden}) => {
+const Day = ({dayName, dayIndex, scheduleStart, hoursArray, eventsArray, displayEvent, displayStats, hidden}) => {
 
     const shortTitle = (title, length) => {
         if(title.length > length) return (title.slice(0, length)).trim() + "..";
@@ -15,13 +15,6 @@ const Day = ({dayName, dayIndex, scheduleStart, scheduleEnd, hoursArray, eventsA
         return "bg-orange-500";
     }
 
-    const testEvent = (
-        <div 
-            className={`relative col-start-1 col-span-1 bg-sky-400 rounded border border-slate-100 opacity-80`}
-            style={{gridRow: `72 / span 24`}}
-        >
-        </div>
-    )
 
     const parseTime = (time, step) => {
         let [timeH, timeM] = time.split(':');

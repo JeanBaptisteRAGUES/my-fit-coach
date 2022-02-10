@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {FirebaseContext} from '../Firebase';
 import Day from './day';
 import NutritionalInfos from './nutritional-infos';
+import SessionDisplay from './session-display';
 import EventForm from './event-form';
 import NutrtitionalStats from './nutritional-stats';
 import { RiAddCircleFill } from 'react-icons/ri';
@@ -20,6 +21,7 @@ const Schedule = () => {
     const [scheduleEnd, setScheduleEnd] = useState(22);
     const [eventsArray, setEventsArray] = useState([]);
     const [selectedEventMeal, setSelectedEventMeal] = useState([]);
+    const [selectedEventSession, setSelectedEventSession] = useState([]);
     const [displayEventForm, setDisplayEventForm] = useState(false);
     const [displayStats, setDisplayStats] = useState('');
 
@@ -52,9 +54,6 @@ const Schedule = () => {
                 events.push(newEvent);
                 let newEventStart = (newEvent.start).split(':')[0];
                 let newEventEnd = Math.min(parseInt((newEvent.end).split(':')[0], 10) + 1, 24);
-                //newEventEnd += 1;
-
-                console.log("End : " + newEventEnd);
                 if(newEventStart < newScheduleStart) {newScheduleStart = newEventStart;}
                 if(newEventEnd > newScheduleEnd) newScheduleEnd = newEventEnd;
             })
@@ -76,8 +75,22 @@ const Schedule = () => {
             console.log(meal);
             setSelectedEventMeal([event, meal]);
         }else{
-            navigate('/session', {state: {userID: userID, sessionID: event.refID}});
+            //navigate('/session', {state: {userID: userID, sessionID: event.refID}});
+            let session = await firebase.session(event.refID).get();
+            session = session.data();
+            setSelectedEventSession([event, session]);
         }
+    }
+
+    const deleteEvent = (eventID) => {
+        firebase.event(eventID).delete()
+        .then(() => {
+            console.log(`Évènement (${eventID}) correctement supprimé !`);
+            setSelectedEventMeal([]);
+            setSelectedEventSession([]);
+            initEvents();
+        })
+        .catch((err) => console.log(`Erreur lors de la suppression de l'évènement (id: ${eventID}) : ${err}` ));
     }
 
     const displayStatsWindow = displayStats !== '' && (
@@ -86,9 +99,13 @@ const Schedule = () => {
 
 
     const displayEventMeal = selectedEventMeal.length > 0 && (
-        <NutritionalInfos selectedEventMeal={selectedEventMeal} setSelectedEventMeal={setSelectedEventMeal} eventsArray={eventsArray} userID={userID} />
+        <NutritionalInfos selectedEventMeal={selectedEventMeal} setSelectedEventMeal={setSelectedEventMeal} deleteEvent={deleteEvent} userID={userID} />
     )
     
+    const displayEventSession = selectedEventSession.length > 0 && (
+        <SessionDisplay selectedEventSession={selectedEventSession} setSelectedEventSession={setSelectedEventSession} deleteEvent={deleteEvent} userID={userID} />
+    )
+
     const eventFormBtnMobile = !displayEventForm && (
         <div className=' flexCenter w-full h-fit md:hidden'>
             <RiAddCircleFill className=' flexCenter cursor-pointer my-2 h-10 w-10 bg-white rounded-full font-extrabold text-sky-500' onClick={() => setDisplayEventForm(true)} />
@@ -146,7 +163,6 @@ const Schedule = () => {
                             hoursArray={hoursArray} 
                             eventsArray={eventsArray}
                             scheduleStart={scheduleStart}
-                            scheduleEnd={scheduleEnd} 
                             displayEvent={displayEvent}
                             displayStats={setDisplayStats}
                             hidden={false}
@@ -157,8 +173,7 @@ const Schedule = () => {
                             dayIndex={i}
                             hoursArray={hoursArray} 
                             eventsArray={eventsArray}
-                            scheduleStart={scheduleStart}
-                            scheduleEnd={scheduleEnd} 
+                            scheduleStart={scheduleStart} 
                             displayEvent={displayEvent}
                             displayStats={setDisplayStats}
                             hidden={true}
@@ -192,6 +207,7 @@ const Schedule = () => {
                 </div>
             </div>
             {displayEventMeal}
+            {displayEventSession}
             {scheduleForm}
             {eventFormBtnMobile}
             {eventFormBtnDesktop}

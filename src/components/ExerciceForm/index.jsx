@@ -10,7 +10,7 @@ const ExerciceForm = () => {
     const {userID} = location.state !== null && location.state !== undefined ? location.state : {userID: null};
     const [newParam, setNewParam] = useState("");
     const [paramsList, setParamsList] = useState([["Commentaire", "textarea"]]); //[name, type]
-    const [exerciceTitle, setExerciceTitle] = useState("Nouveau exercice");
+    const [exerciceTitle, setExerciceTitle] = useState("Titre");
     const [exerciceDescription, setExerciceDescription] = useState("");
 
     useEffect(() => {
