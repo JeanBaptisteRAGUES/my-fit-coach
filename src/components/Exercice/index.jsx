@@ -135,10 +135,23 @@ const Exercice = () => {
     )
 
     const deleteExercice = () => {
+        console.log("Exercice ID : " + exerciceID);
+        
         if(confirmInput === exerciceData.title){
             firebase.exercice(exerciceID).delete()
-            .then(() => {
+            .then(async () => {
                 console.log(`Exercice (${exerciceID}) correctement supprimé !`);
+
+                firebase.exerciceTrainings(exerciceID).get()
+                .then(trainings => {
+                    trainings.forEach(training => {
+                        firebase.training(training.id).delete()
+                        .then(() => console.log(`Entrainement (${training.id}) de l'exercice (${exerciceID}) supprimé !`))
+                        .catch((err) => setErrMsg("Erreur lors de la suppression de l'entrainement : " + err));
+                    })
+                })
+                .catch(err => setErrMsg("Erreur lors de la récupération des exercices : " + err));
+
                 navigate('/exercice-menu', {state: {userID}});
             })
             .catch((err) => setErrMsg("Erreur lors de la suppression de l'exercice : " + err));

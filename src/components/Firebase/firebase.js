@@ -50,6 +50,8 @@ class Firebase {
 
     training = (tid) => this.db.doc(`trainings/${tid}`);
 
+    exerciceTrainings = (eid) => this.db.collection('trainings').where("exerciceID", "==", eid);
+
     usersCollection = () => this.db.collection('users');
 
     userExercices = (uid) => this.db.collection('exercices').where("userID", "==", uid);
