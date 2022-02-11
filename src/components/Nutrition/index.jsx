@@ -33,14 +33,30 @@ const Nutrition = () => {
     });
     //let mealID = useParams()["mealID"];
     const [showMenu, setShowMenu] = useState(false);
+    const [userMeals, setUserMeals] = useState([]);
+    const [selectedMealID, setSelectedMealID] = useState("");
 
     useEffect(() => {
         if(userID === null){navigate('/login'); return};
+        firebase.userMeals(userID).get()
+        .then(uMealsDocs => {
+            let newUserMeals = [];
+            uMealsDocs.forEach(uMealDoc => {
+                let uMeal = {
+                    id: uMealDoc.id,
+                    title: uMealDoc.data().title
+                };
+                newUserMeals.push(uMeal);
+            })
+            setUserMeals(newUserMeals);
+        })
+        .catch(err => console.log("Erreur lors de la récupération des repas de l'utilisateur : " + err));
     }, []);
 
     const getMealData = async (mealID) => {
         const myMeal = await firebase.meal(mealID).get();
         const myMealData = myMeal.data();
+        console.log(myMealData);
         const myMealTitle = myMealData["title"];
         const myMealFoodstuffs = JSON.parse(myMealData["foodstuffs"]);
 
@@ -138,8 +154,19 @@ const Nutrition = () => {
         : 
             <button className='btn-primary'>Créer</button>
 
+    const mealsSelect = userMeals.length > 0 && (
+        <select className='input' name="Sélection repas" id="mealsSelect" onChange={(e) => setSelectedMealID(e.target.value)} >
+            <option value="">Sélectionnez un repas</option>
+            {
+                userMeals.map(userMeal => (
+                    <option key={userMeal.id} value={userMeal.id} >{userMeal.title}</option>
+                ))
+            }
+        </select>
+    )
+
     const mealForm = meal[0] === '' && (
-        <div className="window-nutrition md:flexCenter basicText gap-4 md:col-start-1 md:col-span-2 md:row-start-2 md:row-span-1 h-full mx-2 hidden">
+        <div className="window-nutrition md:flexCenter basicText gap-4 md:col-start-1 md:col-span-2 md:row-start-2 md:row-span-2 h-[100%] mx-2 hidden">
             <form onSubmit={createMeal} className="flexCenter">
                 <div className="inputBox">
                     <label className='' htmlFor="title">Titre :</label><br/>
@@ -147,6 +174,10 @@ const Nutrition = () => {
                 </div>
                 {formAddMealBtn}
             </form>
+            <div className='flex flex-row justify-center items-center gap-2'>
+                {mealsSelect}
+                <div className='btn-primary' onClick={() => getMealData(selectedMealID)} >Charger</div>
+            </div>
         </div>
     )
 
@@ -182,6 +213,17 @@ const Nutrition = () => {
         })
     }
 
+    const mealDelete = () => {
+        firebase.meal(meal[1]).delete()
+        .then(() => {
+            console.log(`Repas (${meal[1]}) correctement supprimé !`);
+            setMeal(["", ""]);
+            setMealTitle("");
+            setFoodstuffs([]);
+        })
+        .catch((err) => console.log("Erreur lors de la suppression du repas : " + err));
+    }
+
     const mealVN = (
         <div className="flexStart w-2/3 my-4 border border-black rounded p-1">
             <span>Valeurs nutritionnelles totales :</span> 
@@ -205,6 +247,11 @@ const Nutrition = () => {
         : 
             <button className="btn-primary" onClick={() => mealModify()}>Modifier</button>
 
+    const mealDeleteBtn = foodstuffs.length === 0 ?
+        <button className="btn-primary opacity-50">Supprimer</button> 
+    : 
+        <button className="btn-primary" onClick={() => mealDelete()}>Supprimer</button>
+
     const deleteFood = (id) => {
         const newFoodstuffs = foodstuffs.filter(food => food[0] !== id);
         setFoodstuffs(newFoodstuffs);
@@ -227,7 +274,10 @@ const Nutrition = () => {
                 }
             </div>
             {mealVN}
-            {mealID === null || mealID === undefined ? mealRegisterBtn : mealModifyBtn }
+            <div className='flex flex-row justify-around items-center w-full'>
+                {meal[1] === "" ? mealRegisterBtn : mealModifyBtn }
+                {(meal[1] !== "" || meal[1] !== null) ? mealDeleteBtn : null}
+            </div>
         </div>
     )
 
