@@ -44,13 +44,16 @@ const Profile = () => {
         <ProfileUpdate user={user} setDisplayMode={setDisplayMode} ></ProfileUpdate>
     )
 
+    /**
+     * <div className=' w-[50%] h-[50%] absolute top-[30%] left-[20%] z-10 bg-white'>
+            <LineChart chartData={testData} />
+        </div>
+     */
+
     return (
         <div className='flexCenter h-screenMinusHeader relative'>
             {profileNormal}
             {profileUpdate}
-            <div className=' w-[50%] h-[50%] absolute top-[30%] left-[20%] z-10 bg-white'>
-                <LineChart chartData={testData} />
-            </div>
         </div>
     )
 }

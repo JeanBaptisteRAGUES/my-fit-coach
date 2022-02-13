@@ -1,5 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { FirebaseContext } from '../Firebase';
+import moment from 'moment';
 
 const ProfileUpdate = ({user, setDisplayMode}) => {
     const firebase = useContext(FirebaseContext);
@@ -17,7 +18,12 @@ const ProfileUpdate = ({user, setDisplayMode}) => {
 
       const updateUser = (e) => {
         e.preventDefault();
+        const formatedDate = moment().format('YYYY-MM-DD');
         const oldEmail = user.email;
+        const oldWeight = user.weight;
+        let newWeightHistory = JSON.parse(user.weightHistory);
+        if(weight !== oldWeight) newWeightHistory.push([weight, formatedDate]);
+        newWeightHistory = JSON.stringify(newWeightHistory);
 
         firebase.user(user.id).update({
             username,
@@ -26,10 +32,12 @@ const ProfileUpdate = ({user, setDisplayMode}) => {
             birth,
             height,
             weight,
+            weightHistory: newWeightHistory,
             nap,
             goal
         })
         .then(() => {
+            console.log("Profil correctement mis à jour !");
             if(email !== oldEmail){
                 firebase.auth.currentUser.updateEmail(email)
                 .then(() => {
@@ -93,7 +101,7 @@ const ProfileUpdate = ({user, setDisplayMode}) => {
                 </div>
                 <div>
                     <label htmlFor='weight' >Poids :</label>
-                    <input className='input' onChange={(e) => setWeight(e.target.value)} value={weight} type="text" id="weight" name="weight" />
+                    <input className='input' onChange={(e) => setWeight(e.target.value)} value={weight} type="number" step={0.1} id="weight" name="weight" />
                 </div>
                 <div>
                     <label htmlFor='nap' >Niveau d'activité physique :</label><br/>
