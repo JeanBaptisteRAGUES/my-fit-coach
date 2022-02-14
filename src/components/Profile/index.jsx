@@ -4,7 +4,7 @@ import ProfileNormal from './profile-normal';
 import ProfileUpdate from './profile-update';
 import { FirebaseContext } from '../Firebase';
 import moment from 'moment';
-import LineChart from './line-chart';
+
 
 const Profile = () => {
     const firebase = useContext(FirebaseContext);
@@ -13,15 +13,7 @@ const Profile = () => {
     const {userID} = location.state !== null && location.state !== undefined ? location.state : {userID: null};
     const [displayMode, setDisplayMode] = useState("normal");
     const [user, setUser] = useState(null);
-    const [testData, setTestData] = useState({
-        labels: [2016, 2017, 2018, 2019, 2020, 2021, 2022],
-        datasets: [{
-            label: "Poids",
-            data: [75, 77, 79, 80, 81, 80, 85],
-            backgroundColor: "rgb(150, 150, 100)",
-            borderColor: "rgb(150, 150, 100)"
-        }]
-    });
+    
 
     useEffect(() => {
         if(userID === null){navigate('/login'); return};
