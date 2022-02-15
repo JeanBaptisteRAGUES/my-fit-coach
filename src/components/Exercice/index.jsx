@@ -93,12 +93,13 @@ const Exercice = () => {
 
     const trainingsHistoryDisplay = !confirmDelete && showHistory && (
         trainingsHistory.length > 0 ?
-            <div className='window-sport basicText w-1/3'>
+            <div className='window-sport basicText md:w-1/2 w-[90%]'>
                 <span className='title'>Historique</span>
                 {
                     trainingsHistory.map((training, i) => {
+                        console.log(trainingsHistory);
                         return (
-                            <div className='flex flex-col justify-center items-start my-2 w-[90%]' key={"training_" + i}>
+                            <div className='flex flex-col justify-center items-start my-2 w-[95%]' key={"training_" + i}>
                                 Entrainement du {training.date} :<br/>
                                 {
                                     Object.entries(returnOrderedTraining(training)).map(([key, value]) => {
@@ -106,7 +107,7 @@ const Exercice = () => {
                                         return <div key={key}>{key} : {value}</div>
                                     })
                                 }
-                                <div key="Commentaire">Commentaire : {lastTraining["Commentaire"]}</div>
+                                <div key="Commentaire">Commentaire : {training.Commentaire}</div>
                             </div>
                         )
                     })
@@ -218,7 +219,7 @@ const Exercice = () => {
     )
 
     return (
-        <div className='container-sport'>
+        <div className='container-sport-raw h-screenMinusHeader flex flex-col justify-start items-center p-2'>
             {exerciceDisplay}
             {trainingsHistoryDisplay}
             {confirmDeleteWindow}

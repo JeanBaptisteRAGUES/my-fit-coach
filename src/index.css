@@ -32,8 +32,16 @@
         @apply text-center min-w-max w-fit rounded px-1 cursor-pointer basicText bg-white/30 hover:bg-white/50
     }
 
+    .container-sport-raw {
+        @apply h-screen bg-sport overflow-x-hidden
+    }
+
     .container-sport {
         @apply h-screen flex flex-col items-center justify-center bg-sport overflow-x-hidden
+    }
+
+    .window-sport-raw {
+        @apply bg-gradient-to-r from-cyan-100 to-blue-100 rounded px-8 pt-6 pb-2 mb-4 shadow-md shadow-gray-700 h-max
     }
 
     .window-sport {

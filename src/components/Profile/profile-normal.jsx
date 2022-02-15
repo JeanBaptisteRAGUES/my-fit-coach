@@ -6,6 +6,8 @@ const ProfileNormal = ({user, setDisplayMode}) => {
   const [displayChart, setDisplayChart] = useState(true);
   const [weightData, setWeightData] = useState(null);
   const [weightsInterpolation, setWeightsInterpolation] = useState(false);
+  const [chartMinDate, setChartMinDate] = useState("");
+  const [chartMaxDate, setChartMaxDate] = useState("");
 
   const getActivityLevel = (nap) => {
     switch (nap) {
@@ -37,17 +39,31 @@ const ProfileNormal = ({user, setDisplayMode}) => {
   }
 
   useEffect(() => {
-    getWeightData(user);
-  }, [weightsInterpolation])
+    console.log("date");
+    let newMinDate = chartMinDate;
+    let newMaxDate = chartMaxDate;
+    if(newMinDate === "") {
+      newMinDate = getMinDate(user);
+      setChartMinDate(newMinDate);
+    }
+    if(newMaxDate === "") {
+      newMaxDate = getMaxDate(user);
+      setChartMaxDate(newMaxDate);
+    }
+    console.log(newMinDate + " - " + newMaxDate);
+    getWeightData(user, newMinDate, newMaxDate);
+  }, [weightsInterpolation, chartMinDate, chartMaxDate])
 
-  const getWeightData = (user) => {
-    var startDate = moment(getMinDate(user));
-    var endDate = moment(getMaxDate(user));
+  const getWeightData = (user, minDate, maxDate) => {
+    console.log(minDate + " - " + maxDate);
+    var startDate = moment(minDate);
+    var endDate = moment(maxDate);
+    console.log("ok_1");
 
     var dateList = getDaysBetweenDates(startDate, endDate, 1);
-    console.log(dateList);
-
+    console.log("ok_2");
     let weightHistory = fillWeight(JSON.parse(user.weightHistory), dateList);
+    console.log("ok_3");
 
     const newWeightData = {
       labels: dateList,
@@ -83,25 +99,40 @@ const ProfileNormal = ({user, setDisplayMode}) => {
     return dates;
   };
 
+  const searchLastWeight = (date, weightHistory) => {
+    let index = 0;
+    let weight = 0;
+
+    while(moment(date).isAfter(weightHistory[index][1])){
+      weight = weightHistory[index][0];
+      index++;
+    }
+
+    return [weight, index];
+  }
+
   
 
   const fillWeight = (weightHistory, dateList) => {
     let iDate = 0;
-    let iWeight = 0;
-    let weight = weightHistory[0][0];
+    //let iWeight = 0;
+    //let weight = weightHistory[0][0];
+    let [weight, iWeight] = searchLastWeight(dateList[0], weightHistory);
     let weights = [];
-
     console.log(weightHistory);
+    console.log(dateList);
 
     while(iDate < dateList.length){
-      while(dateList[iDate] !== weightHistory[iWeight][1]){
+      while(dateList[iDate] !== weightHistory[iWeight][1] && iDate < dateList.length){
         weights.push(weight);
         iDate++;
+        console.log(iDate);
       }
       weight = weightHistory[iWeight][0];
       weights.push(weight);
       iWeight++;
       iDate++;
+      console.log(iDate);
     }
     return weights;
   }
@@ -132,11 +163,6 @@ const ProfileNormal = ({user, setDisplayMode}) => {
       for(let i = 1; i< diffIndex; i++){
         interpolatedArray.push(Math.round((parseFloat(value) + i*increment) * 10)/10);
       }
-  
-      console.log("Diff Value : " + diffValue);
-      console.log("Diff Index : " + diffIndex);
-      console.log("Increment : " + increment);
-      console.log(interpolatedArray);
       oldIndex = newIndex;
       value = myArray[newIndex];
     }
@@ -150,8 +176,18 @@ const ProfileNormal = ({user, setDisplayMode}) => {
   const lineChart = displayChart && weightData !== null && (
     <div className='window-sport w-[70%] h-fit absolute top-[20%] left-[10%] z-10 '>
       <div className='flex flex-row justify-around items-center m-2 gap-2'>
-        <label htmlFor='interpolation'>Interpolation </label>
-        <input id="interpolation" type="checkbox" name="interpolation" value={weightsInterpolation} onChange={() => setWeightsInterpolation(!weightsInterpolation)} />
+        <div className='flex flex-row justify-around items-center m-2 gap-2'>
+          <label htmlFor='chartMin'>Début </label>
+          <input className='input' id="chartMin" type="date" name="chart starting date" value={chartMinDate} onChange={(e) => setChartMinDate(e.target.value)} min={getMinDate(user)} max={chartMaxDate} />
+        </div>
+        <div className='flex flex-row justify-around items-center m-2 gap-2'>
+          <label htmlFor='chartMax'>Fin </label>
+          <input className='input' id="chartMax" type="date" name="chart ending date" value={chartMaxDate} onChange={(e) => setChartMaxDate(e.target.value)} min={chartMinDate} max={getMaxDate(user)} />
+        </div>
+        <div className='flex flex-row justify-around items-center m-2 gap-2'>
+          <label htmlFor='interpolation'>Interpolation </label>
+          <input id="interpolation" type="checkbox" name="interpolation" value={weightsInterpolation} onChange={() => setWeightsInterpolation(!weightsInterpolation)} />
+        </div>
       </div>
       <div className=' w-[90%] h-fit bg-white'>
           <LineChart chartData={weightData} />
@@ -162,7 +198,6 @@ const ProfileNormal = ({user, setDisplayMode}) => {
   return (
     <div className='flex flex-col justify-start items-center bg-slate-300 h-screenMinusHeader w-full overflow-auto'>
       <div className='window-sport flex flex-col justify-start items-start gap-5 my-5'>
-        <input className='input' id="testDate" type="date" name="testDate" min={getMinDate(user)} max={getMaxDate(user)} />
         <span className='title text-center w-full'>{user.username}</span>
         <div>
           <label htmlFor='username' >Pseudo :</label>
