@@ -66,7 +66,7 @@ const Exercice = () => {
             //Utiliser orderBy("date") et limit(1) dans la requête demanderait de créer des index sur le firestore
             //Or ici, les 'key' d'un entrainement sont variables -> impossible ou très compliqué
             results.forEach(result => {
-                if(last === null || last.date < result.data().date){
+                if(last === null || moment(last.date).isBefore(result.data().date)){
                     last = result.data();
                 }
             })
@@ -162,12 +162,14 @@ const Exercice = () => {
     }
 
     const confirmDeleteWindow = confirmDelete && (
-        <div className="window-sport basicText md:w-1/2 w-2/3">
+        <div className="window-sport basicText md:w-1/2 w-[90%]">
             <span className='title my-5'>Supprimer Exercice</span>
             <span className='basicText text-red-600'>{errMsg}</span>
-            <label htmlFor='delete-exercice'>Entrez le titre de l'exercice pour confirmer</label>
-            <input className='input' id="delete-exercice" value={confirmInput} onChange={(e) => setConfirmInput(e.target.value)} placeholder={exerciceData.title} ></input>
-            <div className='flex flex-row justify-around items-center'>
+            <div className='flex flex-col justify-center items-start w-full'>
+                <label htmlFor='delete-exercice'>Entrez le titre de l'exercice pour confirmer :</label>
+                <input className='input' id="delete-exercice" value={confirmInput} onChange={(e) => setConfirmInput(e.target.value)} placeholder={exerciceData.title} ></input>
+            </div>
+            <div className='flex flex-row justify-around items-center w-full'>
                 <div className='btn-primary' onClick={() => deleteExercice()} >Supprimer</div>
                 <div className='btn-primary' onClick={() => setConfirmDelete(false)} >Annuler</div>
             </div>
@@ -209,7 +211,7 @@ const Exercice = () => {
                 {lastTrainingDisplay}
             </div>
             <div className='btn-primary' onClick={() => setShowHistory(true)} >Historique</div>
-            <div className='btn-container-row'>
+            <div className=' btn-container-col md:btn-container-row'>
                 {deleteBtn}
                 {addTrainingBtn}
                 {updateBtn}

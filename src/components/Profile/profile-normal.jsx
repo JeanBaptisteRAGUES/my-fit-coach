@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import moment from 'moment';
 import LineChart from './line-chart';
+import ChartWindow from './chart-window';
 
 const ProfileNormal = ({user, setDisplayMode}) => {
-  const [displayChart, setDisplayChart] = useState(true);
+  const [displayChart, setDisplayChart] = useState(false);
   const [weightData, setWeightData] = useState(null);
   const [weightsInterpolation, setWeightsInterpolation] = useState(false);
   const [chartMinDate, setChartMinDate] = useState("");
@@ -174,25 +175,7 @@ const ProfileNormal = ({user, setDisplayMode}) => {
   
 
   const lineChart = displayChart && weightData !== null && (
-    <div className='window-sport w-[70%] h-fit absolute top-[20%] left-[10%] z-10 '>
-      <div className='flex flex-row justify-around items-center m-2 gap-2'>
-        <div className='flex flex-row justify-around items-center m-2 gap-2'>
-          <label htmlFor='chartMin'>Début </label>
-          <input className='input' id="chartMin" type="date" name="chart starting date" value={chartMinDate} onChange={(e) => setChartMinDate(e.target.value)} min={getMinDate(user)} max={chartMaxDate} />
-        </div>
-        <div className='flex flex-row justify-around items-center m-2 gap-2'>
-          <label htmlFor='chartMax'>Fin </label>
-          <input className='input' id="chartMax" type="date" name="chart ending date" value={chartMaxDate} onChange={(e) => setChartMaxDate(e.target.value)} min={chartMinDate} max={getMaxDate(user)} />
-        </div>
-        <div className='flex flex-row justify-around items-center m-2 gap-2'>
-          <label htmlFor='interpolation'>Interpolation </label>
-          <input id="interpolation" type="checkbox" name="interpolation" value={weightsInterpolation} onChange={() => setWeightsInterpolation(!weightsInterpolation)} />
-        </div>
-      </div>
-      <div className=' w-[90%] h-fit bg-white'>
-          <LineChart chartData={weightData} />
-      </div>
-    </div>
+    <ChartWindow user={user} weightData={weightData} chartMinDate={chartMinDate} chartMaxDate={chartMaxDate} weightsInterpolation={weightsInterpolation} setChartMinDate={setChartMinDate} setChartMaxDate={setChartMaxDate} setWeightsInterpolation={setWeightsInterpolation} getMinDate={getMinDate} getMaxDate={getMaxDate} setDisplayChart={setDisplayChart} />
   )
 
   return (
@@ -230,6 +213,9 @@ const ProfileNormal = ({user, setDisplayMode}) => {
         <div>
           <label htmlFor='goal' >Objectif :</label>
           <input className='input' value={getGoal(user.goal)} type="text" id="goal" name="goal" readOnly />
+        </div>
+        <div className='flexCenter w-full'>
+          <div className='btn-primary' onClick={() => setDisplayChart(true)}>Historique des poids</div>
         </div>
         <div className='flexCenter w-full'>
           <button className='btn-primary' onClick={() => setDisplayMode("update")}>Modifier</button>

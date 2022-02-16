@@ -15,9 +15,9 @@ const MenuLinks = ({user, disconnect, setShowMenu}) => {
             {user !== null ? <li><Link className='font-bold' to='/profile' onClick={() => setShowMenu(false)} state={user}>Mon compte</Link></li> : <Link to='/signup'>S'inscrire</Link>}
             {user === null ? <li><Link to='/login' onClick={() => setShowMenu(false)}>Se connecter</Link></li> : null}
             <li><Link to='/' onClick={() => setShowMenu(false)}>Accueil</Link></li>
-            {user !== null ? <li><Link to='/schedule' onClick={() => setShowMenu(false)}>Emploi du temps</Link></li> : <Link to='/login' onClick={() => setShowMenu(false)}>Emploi du temps</Link>}
-            {user !== null ? <li><Link to='/workout' onClick={() => setShowMenu(false)} >Sport</Link></li> : <Link to='/login' onClick={() => setShowMenu(false)}>Sport</Link>}
-            {user !== null ? <li><Link to='/nutrition/new' onClick={() => setShowMenu(false)} state={{userID: user.userID}}>Nutrition</Link></li> : <Link to='/login' onClick={() => setShowMenu(false)}>Nutrition</Link>}
+            {user !== null ? <li><Link to='/schedule' state={{userID: user.userID}} onClick={() => setShowMenu(false)}>Emploi du temps</Link></li> : <Link to='/login' onClick={() => setShowMenu(false)}>Emploi du temps</Link>}
+            {user !== null ? <li><Link to='/workout' state={{userID: user.userID}} onClick={() => setShowMenu(false)} >Sport</Link></li> : <Link to='/login' onClick={() => setShowMenu(false)}>Sport</Link>}
+            {user !== null ? <li><Link to='/nutrition' state={{userID: user.userID, mealID: null}} onClick={() => setShowMenu(false)} state={{userID: user.userID}}>Nutrition</Link></li> : <Link to='/login' onClick={() => setShowMenu(false)}>Nutrition</Link>}
             {user !== null ? <li><span className='cursor-pointer' onClick={() => disconnect()}>Déconnexion</span></li> : null}
         </ul>
     )

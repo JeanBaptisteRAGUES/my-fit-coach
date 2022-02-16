@@ -5,8 +5,10 @@ import './nutrition.css';
 import axios from 'axios';
 import {FirebaseContext} from '../Firebase';
 import {HiShoppingCart} from 'react-icons/hi';
+import { BsGear, BsGearFill } from 'react-icons/bs';
 import { RiCloseLine } from 'react-icons/ri';
 import MealDisplay from './meal-display';
+import MealForm from './meal-form';
 
 const Nutrition = () => {
     const firebase = useContext(FirebaseContext);
@@ -33,6 +35,7 @@ const Nutrition = () => {
     });
     //let mealID = useParams()["mealID"];
     const [showMenu, setShowMenu] = useState(false);
+    const [showMenu2, setShowMenu2] = useState(false);
     const [userMeals, setUserMeals] = useState([]);
     const [selectedMealID, setSelectedMealID] = useState("");
 
@@ -281,7 +284,7 @@ const Nutrition = () => {
         </div>
     )
 
-    const burgerMenu = (
+    const burgerMenu =  mealTitle !== "" && (
         <div className='flexStart fixed top-header z-50 m-1 w-full text-white col-start-1 col-span-6 md:hidden'>
             {
                 showMenu ? 
@@ -294,10 +297,20 @@ const Nutrition = () => {
         </div>
     )
 
+    const burgerMenu2 = mealTitle === "" && !showMenu2 && (
+        <div className='flexStart fixed top-header z-50 m-1 w-full text-white col-start-1 col-span-6 md:hidden'>
+            <BsGear className='flexCenter rounded p-1 cursor-pointer h-1/3 w-1/6 bg-slate-600' onClick={() => setShowMenu2(true)} />
+        </div>
+    )
+
     //{meal, mealID, foodstuffs, VN, deleteFood, mealRegister, mealModify}
 
     const mealDisplayMobile = showMenu && (
         <MealDisplay meal={meal} mealTitle={mealTitle} mealID={mealID} foodstuffs={foodstuffs} VN={VN} deleteFood={deleteFood} mealRegister={mealRegister} mealModify={mealModify} ></MealDisplay>
+    )
+
+    const mealFormMobile = showMenu2 && (
+        <MealForm userMeals={userMeals} selectedMealID={selectedMealID} mealTitle={mealTitle} setSelectedMealID={setSelectedMealID} createMeal={createMeal} setMealTitle={setMealTitle} getMealData={getMealData} setShowMenu2={setShowMenu2} />
     )
 
     /*
@@ -395,6 +408,7 @@ const Nutrition = () => {
                 {mealDisplay}
                 {selectQuantity}
                 {burgerMenu}
+                {burgerMenu2}
                 <div className="window-nutrition flexCenter basicText gap-4 col-start-2 col-span-4 md:col-start-3 md:col-span-2 row-start-2">
                     <h1>Food</h1>
                     <form className='flex flex-row justify-evenly items-center w-full'>
@@ -415,6 +429,7 @@ const Nutrition = () => {
                 </div>
             </div>
             {mealDisplayMobile}
+            {mealFormMobile}
         </Fragment>
     )
 }

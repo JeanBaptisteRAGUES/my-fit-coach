@@ -60,6 +60,10 @@
         @apply flexCenter backdrop-blur-sm bg-white/30 rounded px-8 pt-6 pb-2 mb-4
     }
 
+    .btn-container-col {
+        @apply flex flex-col justify-center w-full items-center gap-2 mt-8
+    }
+
     .btn-container-row {
         @apply flex flex-row justify-around w-full items-center mt-8
     }

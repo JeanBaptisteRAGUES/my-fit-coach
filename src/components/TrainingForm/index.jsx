@@ -1,6 +1,6 @@
 import moment from 'moment';
 import React, { useContext, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react/cjs/react.development';
 import { FirebaseContext } from '../Firebase';
 import './training.css';
@@ -87,6 +87,7 @@ const TrainingForm = () => {
             <div className='window-sport text-gray-700' >
                 <span className='font-bold text-xl' >{title}</span>
                 {displayTrainingForm}
+                <Link className='btn-primary' to="/exercice" state={{userID, exerciceID}} >Retour</Link>
             </div>
         </div>
     )
