@@ -47,7 +47,7 @@ const Login = (props) => {
 
     return (
         <div className='flex flex-col justify-center items-center h-screen bg-slate-300 bg-landing-main bg-cover w-full'>
-            <div className='window-sport-start w-1/3 text-gray-700'>
+            <div className='window-sport-start w-[90%] md:w-1/3 text-gray-700'>
                 {error !== '' && <div className="text-red-600">{error.message}</div>}
                 <div className="text-bold self-center text-xl mb-4">Connexion</div>
                 <form onSubmit={handleSubmit} className="w-full">

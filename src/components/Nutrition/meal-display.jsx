@@ -1,8 +1,8 @@
 import React, { useContext } from 'react'
 import { Link } from 'react-router-dom';
-import { useEffect } from 'react/cjs/react.development';
 const MealDisplay = ({meal, mealTitle, mealID, foodstuffs, VN, deleteFood, mealRegister, mealModify}) => {
 
+    console.log(`meal (${JSON.stringify(meal)}) / mealTitle (${mealTitle}) / mealID (${mealID})`);
     console.log(VN);
 
     const mealRegisterBtn = foodstuffs.length === 0 ?
@@ -28,10 +28,11 @@ const MealDisplay = ({meal, mealTitle, mealID, foodstuffs, VN, deleteFood, mealR
         </div>
     )
 
+    
     const mealDisplay = meal[0] !== '' && (
         <div className="window-nutrition basicText flexCenter sticky top-5 left-5 p-2 w-3/4">
             <span className='title mb-4'>{mealTitle}</span>
-            <div className='flexStart mx-4'>
+            <div className='flexCenter'>
                 <p className='underline'>Aliments :<br/></p>
                 {
                     foodstuffs.map(food => {
@@ -45,7 +46,7 @@ const MealDisplay = ({meal, mealTitle, mealID, foodstuffs, VN, deleteFood, mealR
                 }
             </div>
             {mealVN}
-            {mealID[1] === "" ? mealRegisterBtn : mealModifyBtn }
+            {meal[1] === "" ? mealRegisterBtn : mealModifyBtn }
         </div>
     )
 

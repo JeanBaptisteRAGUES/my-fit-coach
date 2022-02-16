@@ -14,7 +14,7 @@ const Nutrition = () => {
     const firebase = useContext(FirebaseContext);
     const location = useLocation();
     let navigate = useNavigate();
-    const {userID, mealID} = location.state !== null && location.state !== undefined ? location.state : {userID: null, mealID: null};
+    const {userID, mealID} = (location.state !== null && location.state !== undefined) ? location.state : {userID: null, mealID: null};
     const [foodInfo, setFoodInfo] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [maxPages, setMaxPages] = useState(1);
@@ -40,7 +40,11 @@ const Nutrition = () => {
     const [selectedMealID, setSelectedMealID] = useState("");
 
     useEffect(() => {
+        console.log("test 1");
+        console.log("userID : " + userID);
+        console.log(location.state);
         if(userID === null){navigate('/login'); return};
+        console.log("test 2");
         firebase.userMeals(userID).get()
         .then(uMealsDocs => {
             let newUserMeals = [];
@@ -119,7 +123,8 @@ const Nutrition = () => {
         }
     }
 
-    const createMeal = () => {
+    const createMeal = (e) => {
+        e.preventDefault();
         setMeal([mealTitle, ""]);
     }
 
@@ -279,12 +284,12 @@ const Nutrition = () => {
             {mealVN}
             <div className='flex flex-row justify-around items-center w-full'>
                 {meal[1] === "" ? mealRegisterBtn : mealModifyBtn }
-                {(meal[1] !== "" || meal[1] !== null) ? mealDeleteBtn : null}
+                {(meal[1] !== "") ? mealDeleteBtn : null}
             </div>
         </div>
     )
 
-    const burgerMenu =  mealTitle !== "" && (
+    const burgerMenu =  meal[0] !== "" && (
         <div className='flexStart fixed top-header z-50 m-1 w-full text-white col-start-1 col-span-6 md:hidden'>
             {
                 showMenu ? 
@@ -297,20 +302,19 @@ const Nutrition = () => {
         </div>
     )
 
-    const burgerMenu2 = mealTitle === "" && !showMenu2 && (
+    const burgerMenu2 = meal[0] === "" && !showMenu2 && (
         <div className='flexStart fixed top-header z-50 m-1 w-full text-white col-start-1 col-span-6 md:hidden'>
             <BsGear className='flexCenter rounded p-1 cursor-pointer h-1/3 w-1/6 bg-slate-600' onClick={() => setShowMenu2(true)} />
         </div>
     )
 
-    //{meal, mealID, foodstuffs, VN, deleteFood, mealRegister, mealModify}
-
+    //meal, mealTitle, mealID, foodstuffs, VN, deleteFood, mealRegister, mealModify
     const mealDisplayMobile = showMenu && (
         <MealDisplay meal={meal} mealTitle={mealTitle} mealID={mealID} foodstuffs={foodstuffs} VN={VN} deleteFood={deleteFood} mealRegister={mealRegister} mealModify={mealModify} ></MealDisplay>
     )
 
     const mealFormMobile = showMenu2 && (
-        <MealForm userMeals={userMeals} selectedMealID={selectedMealID} mealTitle={mealTitle} setSelectedMealID={setSelectedMealID} createMeal={createMeal} setMealTitle={setMealTitle} getMealData={getMealData} setShowMenu2={setShowMenu2} />
+        <MealForm userMeals={userMeals} selectedMealID={selectedMealID} mealTitle={mealTitle} setSelectedMealID={setSelectedMealID} createMeal={createMeal} setMealTitle={setMealTitle} getMealData={getMealData} setShowMenu2={setShowMenu2} state={{userID: userID}} />
     )
 
     /*

@@ -23,7 +23,7 @@ const MealForm = ({userMeals, selectedMealID, mealTitle, setSelectedMealID, crea
 
     const formDisplay = (
         <div className="window-nutrition flexCenter basicText gap-4 h-[100%] mx-2">
-            <form onSubmit={createMeal} className="flexCenter">
+            <form onSubmit={(e) => createMeal(e)} className="flexCenter">
                 <div className="inputBox">
                     <label className='' htmlFor="title">Titre :</label><br/>
                     <input className='input' onChange={(e) => setMealTitle(e.target.value)} value={mealTitle} type="text" id="title" autoComplete="off" required placeholder="Repas 1"/>
