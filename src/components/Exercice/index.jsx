@@ -55,6 +55,10 @@ const Exercice = () => {
         setExerciceData(exerciceQuery.data());
     }
 
+    const format = (date) => {
+        return moment(date, 'MMMM Do YYYY hh:mm a').format('YYYY-MM-DD');
+    }
+
     const getLastTraining = () => {
         let last = null;
 
@@ -65,8 +69,10 @@ const Exercice = () => {
             //Parmis les résultats, on récupère le plus récent
             //Utiliser orderBy("date") et limit(1) dans la requête demanderait de créer des index sur le firestore
             //Or ici, les 'key' d'un entrainement sont variables -> impossible ou très compliqué
+            //console.log(moment((results[0].data().date)).isBefore(results[1].data().date));
+            console.log("test");
             results.forEach(result => {
-                if(last === null || moment(last.date).isBefore(result.data().date)){
+                if(last === null || moment(format(last.date)).isBefore(format(result.data().date))){
                     last = result.data();
                 }
             })
