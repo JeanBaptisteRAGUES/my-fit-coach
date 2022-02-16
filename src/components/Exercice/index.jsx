@@ -17,9 +17,6 @@ const Exercice = () => {
     const [confirmInput, setConfirmInput] = useState("");
     const [errMsg, setErrMsg] = useState("");
 
-    console.log("userID : " + userID);
-    console.log("exerciceID : " + exerciceID);
-
 
     useEffect(() => {
         if(userID === null) {navigate('/login'); return};
@@ -39,7 +36,8 @@ const Exercice = () => {
             })
         })
         .then(() => {
-            //console.log(newTrainingsHistory);
+            console.log(newTrainingsHistory);
+            newTrainingsHistory.sort(compareTrainings);
             setTrainingsHistory(newTrainingsHistory);
         })
 
@@ -51,12 +49,17 @@ const Exercice = () => {
 
     const getExerciceData = async () => {
         let exerciceQuery = await firebase.exercice(exerciceID).get();
-        console.log(exerciceQuery.data());
         setExerciceData(exerciceQuery.data());
     }
 
     const format = (date) => {
         return moment(date, 'MMMM Do YYYY hh:mm a').format('YYYY-MM-DD');
+    }
+
+    const compareTrainings = (training1, training2) => {
+        if(moment(format(training1.date)).isBefore(format(training2.date))) return 1;
+        if(moment(format(training1.date)).isAfter(format(training2.date))) return -1;
+        return 0;
     }
 
     const getLastTraining = () => {
@@ -70,7 +73,6 @@ const Exercice = () => {
             //Utiliser orderBy("date") et limit(1) dans la requête demanderait de créer des index sur le firestore
             //Or ici, les 'key' d'un entrainement sont variables -> impossible ou très compliqué
             //console.log(moment((results[0].data().date)).isBefore(results[1].data().date));
-            console.log("test");
             results.forEach(result => {
                 if(last === null || moment(format(last.date)).isBefore(format(result.data().date))){
                     last = result.data();
