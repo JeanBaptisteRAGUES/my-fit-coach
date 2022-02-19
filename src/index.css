@@ -23,9 +23,13 @@
         @apply md:text-base md:text-slate-200 text-xs uhd:text-5xl text-red-600
     }
 
+    .btnText {
+        @apply md:text-base md:text-slate-700 text-sm uhd:text-5xl text-red-800
+    }
+
 
     .btn-primary {
-        @apply text-center min-w-max shadow border rounded px-1 bg-gray-100 hover:bg-gray-50 hover:border-white w-fit cursor-pointer basicText
+        @apply text-center min-w-max shadow border rounded px-1 bg-gray-100 hover:bg-gray-50 hover:border-white w-fit cursor-pointer btnText
     }
 
     .btn-glass {

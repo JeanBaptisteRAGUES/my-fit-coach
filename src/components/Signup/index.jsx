@@ -51,7 +51,7 @@ const Signup = () => {
     const errorMsg = error !== '' && <div className="text-red-600">{error.message}</div>;
 
     const formPseudo = (
-        <div className="w-2/3">
+        <div className="w-[90%] md:w-2/3">
             <label htmlFor="username">Pseudo :</label><br/>
             <input 
                 className='input'
@@ -67,7 +67,7 @@ const Signup = () => {
     )
 
     const formEmail = (
-        <div className="w-2/3">
+        <div className="w-[90%] md:w-2/3">
             <label htmlFor="email">Email :</label><br/>
             <input 
                 className='input'
@@ -84,7 +84,7 @@ const Signup = () => {
 
     //remplacer par date de naissance
     const formBirth = (
-        <div className="w-2/3">
+        <div className="w-[90%] md:w-2/3">
             <label htmlFor="birth">Date de naissance :</label><br/>
             <input 
                 className='input'
@@ -99,7 +99,7 @@ const Signup = () => {
     )
 
     const formHeight = (
-        <div className="w-2/3">
+        <div className="w-[90%] md:w-2/3">
             <label htmlFor="height">Taille (en cm) :</label><br/>
             <input 
                 className='input'
@@ -115,7 +115,7 @@ const Signup = () => {
     )
 
     const formWeight = (
-        <div className="w-2/3">
+        <div className="w-[90%] md:w-2/3">
             <label htmlFor="weight">Poids (en kg) :</label><br/>
             <input 
                 className='input'
@@ -131,7 +131,7 @@ const Signup = () => {
     )
 
     const formGender = (
-        <div className="w-2/3">
+        <div className="w-[90%] md:w-2/3">
             <label htmlFor="gender">Sexe :</label><br/>
             <select className='input' id="gender" name="gender" onChange={(e) => setGender(e.target.value)} value={gender}>
                 <option value="">Précisez votre sexe</option>
@@ -142,7 +142,7 @@ const Signup = () => {
     )
 
     const formGoal = (
-        <div className='w-2/3'>
+        <div className='w-[90%] md:w-2/3'>
             <label htmlFor="goal">Objectif :</label><br/>
             <select id='goal' onChange={(e) => setGoal(e.target.value)}>
                 <option value="">--Choisissez une option--</option>
@@ -154,7 +154,7 @@ const Signup = () => {
     )
 
     const formNAP = (
-        <div className='w-2/3'>
+        <div className='w-[90%] md:w-2/3'>
             <label htmlFor="nap">Niveau d'activité physique :</label><br/>
             <select id='nap' onChange={(e) => setNap(e.target.value)}>
                 <option value="">--Choisissez une option--</option>
@@ -167,7 +167,7 @@ const Signup = () => {
     )
 
     const formPassword = (
-        <div className="min-w-2/3">
+        <div className="w-[90%] md:w-2/3">
             <label htmlFor="password">Mot de passe :</label><br/>
             <input 
                 className='input'
@@ -183,7 +183,7 @@ const Signup = () => {
     )
 
     const formPasswordConfirm = (
-        <div className="min-w-2/3">
+        <div className="w-[90%] md:w-2/3">
             <label htmlFor="confirmPassword">Confirmez le mot de passe :</label><br/>
             <input 
                 className='input'
@@ -203,7 +203,7 @@ const Signup = () => {
     ? <button disabled className="btn-primary opacity-50">Inscription</button> : <button className="btn-primary">Inscription</button>
 
     const signupForm = (
-        <form onSubmit={handleSubmit} className="w-full">
+        <form onSubmit={handleSubmit} className=" flex flex-col justify-start items-start gap-2 w-full">
             {formPseudo}
             {formEmail}
             {formBirth}
@@ -214,17 +214,17 @@ const Signup = () => {
             {formNAP}
             {formPassword}
             {formPasswordConfirm}
-            <div className='flex flex-col justify-center items-center my-2'>
+            <div className='flex flex-col justify-center items-center w-full my-2'>
                 {formSignupBtn}
             </div>
         </form>
     )
 
     return (
-        <div className='flex flex-col justify-center items-center h-screen bg-slate-300 bg-landing-main bg-cover w-full'>
+        <div className='flex flex-col justify-start items-center h-screenMinusHeader bg-slate-300 bg-landing-main bg-cover w-full overflow-auto'>
             <div className="window-sport-start w-[90%] md:w-1/3 text-gray-700 mt-8">
                 {errorMsg}
-                <div className="text-bold self-center text-xl mb-4">Inscription</div>
+                <div className="title mb-4 w-full text-center">Inscription</div>
                 {signupForm}
                 <Link className="underline self-center" to="/login">Déjà inscrit ? Connectez vous</Link>
             </div>
