@@ -62,9 +62,9 @@ const ExerciceForm = () => {
     )
 
     return (
-        <div className='container-sport'>
-            <div className='window-sport-start text-gray-700'>
-                <input className='font-bold w-max self-center text-center bg-transparent text-xl' onChange={(e) => setExerciceTitle(e.target.value)} value={exerciceTitle} type="text" id="exerciceTitle" autoComplete="off" required placeholder="Nom exercice"/>
+        <div className='container-sport-raw flex flex-col justify-start items-center py-5'>
+            <div className='window-sport-start w-[90%] md:w-1/2 text-gray-700'>
+                <input className='font-bold w-full self-center text-center bg-transparent text-xl' onChange={(e) => setExerciceTitle(e.target.value)} value={exerciceTitle} type="text" id="exerciceTitle" autoComplete="off" required placeholder="Nom exercice"/>
                 <form className='my-4' onSubmit={addParameter}>
                     <label htmlFor="newParameter">Nouveau paramètre :</label><br/>
                     <div className='flex flex-row justify-center items-center' >
@@ -88,7 +88,7 @@ const ExerciceForm = () => {
                         ))
                     }
                 </div>
-                <div className='my-4'>
+                <div className='my-4 w-full'>
                     <label htmlFor="description">Description : </label>
                     <textarea className='input' onChange={(e) => setExerciceDescription(e.target.value)} value={exerciceDescription} id="description" rows="4" cols="50">
 

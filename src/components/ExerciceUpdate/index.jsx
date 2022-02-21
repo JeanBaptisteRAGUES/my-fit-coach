@@ -65,8 +65,8 @@ const ExerciceUpdate = () => {
     )
 
     return (
-        <div className='container-sport'>
-            <div className='window-sport-start text-gray-700 w-[95%] md:w-fit'>
+        <div className='container-sport-raw flex flex-col justify-start items-center py-5'>
+            <div className='window-sport-start text-gray-700 md:w-1/2 w-[90%]'>
                 <input className='font-bold w-max self-center text-center bg-transparent text-xl' onChange={(e) => setExerciceTitle(e.target.value)} value={exerciceTitle} type="text" id="exerciceTitle" autoComplete="off" required placeholder="Nom exercice"/>
                 <form className='my-4' onSubmit={addParameter}>
                     <label htmlFor="newParameter">Nouveau paramètre :</label><br/>

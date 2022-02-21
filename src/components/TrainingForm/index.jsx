@@ -83,8 +83,8 @@ const TrainingForm = () => {
     if(parameters.length === 0) setFormParameters(exerciceID);
 
     return (
-        <div className='container-sport'>
-            <div className='window-sport text-gray-700' >
+        <div className='container-sport-raw flex flex-col justify-start items-center py-5'>
+            <div className='window-sport w-[90%] md:w-1/2 text-gray-700' >
                 <span className='font-bold text-xl' >{title}</span>
                 {displayTrainingForm}
                 <Link className='btn-primary' to="/exercice" state={{userID, exerciceID}} >Retour</Link>

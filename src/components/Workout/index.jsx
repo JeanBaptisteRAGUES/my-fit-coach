@@ -8,6 +8,7 @@ import TrainingForm from '../TrainingForm';
 import SessionMenu from '../SessionMenu';
 import SessionForm from '../SessionForm';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import ReactTooltip from 'react-tooltip';
 
 const Workout = () => {
     const firebase = useContext(FirebaseContext);
@@ -59,12 +60,25 @@ const Workout = () => {
         </div>
     )
 
+    const exerciceDescription = (
+        "Ici vous pourrez enregistrer vos exercices personnalisés en choisissant vous même les paramètres. Vous pourrez ensuite à la fin de vos séances enregistrer vos performances pour ensuite pouvoir accéder à l'historique de vos entrainements pour chaque exercice et voir vos progrès !"
+    )
+
+    const sessionDescription = (
+        "Une session peut contenir un ou plusieurs exercices et peut être placée comme un évènement dans votre emploi du temps."
+    )
+
     return (
         <div className="container-sport">
-            <div className='window-sport title'>
-                <h1>Workout</h1>
-                <Link to="/session-menu" state={{userID: user.uid}}>Sessions</Link>
-                <Link to="/exercice-menu" state={{userID: user.uid}}>Exercices</Link>
+            <div className='window-sport w-[90%] md:w-1/3 gap-2'>
+                <div className='flexStart w-full'>
+                    <Link data-tip={exerciceDescription} className='title text-center w-full underline' to="/exercice-menu" state={{userID: user.uid}}>Exercices</Link>
+                    <span className='basicText'>{exerciceDescription}</span>
+                </div>
+                <div className='flexStart w-full'>
+                    <Link data-tip={sessionDescription} className='title text-center w-full underline' to="/session-menu" state={{userID: user.uid}}>Sessions</Link>
+                    <span className=' basicText'>{sessionDescription}</span>
+                </div>
             </div>
         </div>
     )

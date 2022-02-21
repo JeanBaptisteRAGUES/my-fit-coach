@@ -51,12 +51,12 @@ const Session = () => {
     }
 
     const confirmDeleteWindow = confirmDelete && (
-        <div className="window-sport basicText md:w-1/2 w-2/3">
+        <div className="window-sport basicText md:w-1/2 w-[90%]">
             <span className='title my-5'>Supprimer Session</span>
             <span className='basicText text-red-600'>{errMsg}</span>
             <label htmlFor='delete-session'>Entrez le titre de la session pour confirmer</label>
             <input className='input' id="delete-session" value={confirmInput} onChange={(e) => setConfirmInput(e.target.value)} placeholder={sessionTitle} ></input>
-            <div className='flex flex-row justify-around items-center'>
+            <div className='btn-container-row'>
                 <div className='btn-primary' onClick={() => deleteSession()} >Supprimer</div>
                 <div className='btn-primary' onClick={() => setConfirmDelete(false)} >Annuler</div>
             </div>
@@ -82,7 +82,7 @@ const Session = () => {
     )
 
     const sessionDisplay = !confirmDelete && (
-        <div className="window-sport basicText">
+        <div className="window-sport basicText w-[90%] md:w-1/2">
             <span className='font-bold mb-4 title' >{sessionTitle}</span>
             <div className='flexStart' >
                 <span className='underline'>Exercice(s) :</span>
@@ -97,7 +97,7 @@ const Session = () => {
     )
 
     return (
-        <div className='container-sport'>
+        <div className='container-sport-raw flex flex-col justify-start items-center py-5 h-screenMinusHeader'>
             {sessionDisplay}
             {confirmDeleteWindow}
         </div>

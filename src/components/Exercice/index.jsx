@@ -177,7 +177,7 @@ const Exercice = () => {
                 <label htmlFor='delete-exercice'>Entrez le titre de l'exercice pour confirmer :</label>
                 <input className='input' id="delete-exercice" value={confirmInput} onChange={(e) => setConfirmInput(e.target.value)} placeholder={exerciceData.title} ></input>
             </div>
-            <div className='flex flex-row justify-around items-center w-full'>
+            <div className='btn-container-row'>
                 <div className='btn-primary' onClick={() => deleteExercice()} >Supprimer</div>
                 <div className='btn-primary' onClick={() => setConfirmDelete(false)} >Annuler</div>
             </div>
@@ -209,7 +209,7 @@ const Exercice = () => {
     )
 
     const exerciceDisplay = exerciceData !== null && !showHistory && !confirmDelete && (
-        <div className='window-sport w-3/4 md:w-1/2 basicText'>
+        <div className='window-sport md:w-1/2 w-[90%] basicText'>
             <span className='font-bold title' >{exerciceData.title}</span>
             <div className='flex flex-col justify-center items-start w-full my-8 font-bold basicText' >
                 Description :<br/>
@@ -229,7 +229,7 @@ const Exercice = () => {
     )
 
     return (
-        <div className='container-sport-raw h-screenMinusHeader flex flex-col justify-start items-center p-2'>
+        <div className='container-sport-raw h-screenMinusHeader flex flex-col justify-start items-center p-5'>
             {exerciceDisplay}
             {trainingsHistoryDisplay}
             {confirmDeleteWindow}

@@ -108,7 +108,7 @@ const SessionUpdate = () => {
             <div className='btn-primary'>Enregistrer</div>
 
     const sessionForm = (
-        <div className="window-sport-start basicText">
+        <div className="window-sport-start basicText w-[90%] md:1/2">
             <span className='mb-2 underline' >Formulaire nouvelle session :</span>
             <label htmlFor='titre'>Titre :</label>
             <input className='input' type="text" placeholder="titre" onChange={(e) => setSessionTitle(e.target.value)} value={sessionTitle}></input>
@@ -125,7 +125,7 @@ const SessionUpdate = () => {
     )
 
     return (
-        <div className='container-sport' >
+        <div className='container-sport-raw flex flex-col justify-start items-center py-5' >
             {sessionForm}
         </div>
     )
