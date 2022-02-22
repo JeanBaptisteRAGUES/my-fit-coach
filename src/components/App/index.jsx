@@ -18,6 +18,7 @@ import SessionUpdate from '../SessionUpdate';
 import TrainingForm from '../TrainingForm';
 import TestComponent from '../TestComponent';
 import Header from '../Header';
+import Footer from '../Footer';
 import Profile from '../Profile';
 
 const App = () => {
@@ -44,6 +45,7 @@ const App = () => {
                 <Route exact path="/test" element={<TestComponent/>} />
                 <Route path="*" element={<ErrorPage/>} />
             </Routes>
+            <Footer/>
         </Router>
     )
 }

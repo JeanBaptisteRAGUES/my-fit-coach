@@ -78,10 +78,11 @@ const SessionForm = () => {
     )
 
     const saveSession = () => {
+        let newExercicesSession = exercicesSession.map(exercice => exercice[0]);
         firebase.db.collection('sessions').add({
             userID: userID,
             title: sessionTitle,
-            exercices: JSON.stringify(exercicesSession)
+            exercices: JSON.stringify(newExercicesSession)
         })
         .then((res) => {
             const resID = res.id;

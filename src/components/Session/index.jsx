@@ -14,24 +14,43 @@ const Session = () => {
     const [confirmInput, setConfirmInput] = useState("");
     const [errMsg, setErrMsg] = useState("");
 
-    useEffect(() => {
-        console.log("sessionID : " + sessionID);
+    useEffect(async () => {
         if(userID === null) {navigate('/login'); return};
         if(sessionID === null){navigate('/session-menu'); return};
-        firebase.db.collection('sessions').doc(sessionID).get()
-        .then(mySession => {
+        let newExerciceList = [];
+        firebase.session(sessionID).get()
+        .then(async (mySession) => {
             let mySessionData = mySession.data();
+            let exercicesSession = JSON.parse(mySessionData.exercices);
+            let newExercicesSession = [];
+
+            for await (let exercice of exercicesSession) {
+                let exRaw = await firebase.exercice(exercice).get();
+                if(exRaw.data() === undefined){
+                    console.log(`L'exercice (${exercice}) n'existe plus`);
+                }else{
+                    newExerciceList.push(exercice);
+                    newExercicesSession.push({id: exercice, title: exRaw.data().title});
+                }
+            }
             setSessionTitle(mySessionData.title);
-            setExercicesSession(JSON.parse(mySessionData.exercices));
+            setExercicesSession(newExercicesSession);
         })
+        .then(() => {
+            firebase.session(sessionID).update({
+                exercices: JSON.stringify(newExerciceList)
+            })
+            .catch(err => console.log("Erreur mise à jour de la liste des exercices de la session : " + err));
+        })
+        .catch(err => console.log("Erreur de la récupération de la session : " + err));
 
     }, [])
 
     const exericesDisplay = exercicesSession.length > 0 && (
         exercicesSession.map(exercice => {
             return (
-                <div key={exercice[0]}>
-                    <Link className='basicText cursor-pointer' to="/exercice" state={{userID: userID, exerciceID: exercice[0]}} >{exercice[1]}</Link>
+                <div key={exercice.id}>
+                    <Link className='basicText cursor-pointer' to="/exercice" state={{userID: userID, exerciceID: exercice.id}} >{exercice.title}</Link>
                 </div>
             )
         })

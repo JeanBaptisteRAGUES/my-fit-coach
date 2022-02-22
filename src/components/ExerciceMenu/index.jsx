@@ -84,7 +84,7 @@ const ExerciceMenu = () => {
 
     return (
         <div className='container-sport'>
-            <div className='window-sport-start md:w-1/2 w-[90%]'>
+            <div className='window-sport md:w-1/3 w-[90%]'>
                 {exercicesSelect}
                 <div className='btn-container-row'>
                     {loadExerciceFormBtn}
