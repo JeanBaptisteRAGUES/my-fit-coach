@@ -56,6 +56,7 @@ const ProfileUpdate = ({user, setDisplayMode}) => {
                     setErrorMsg("Mot de passe différent de la confirmation du mot de passe");
                 }
             }
+            setDisplayMode('normal');
         })
         .catch((err) => setErrorMsg("Erreur mise à jour profil utilisateur : " + err))
       }
@@ -123,7 +124,7 @@ const ProfileUpdate = ({user, setDisplayMode}) => {
                     </select>
                 </div>
                 <div className='flexCenter w-full'>
-                    <button className='btn-primary' onClick={() => setDisplayMode("update")}>Enregistrer</button>
+                    <button className='btn-primary'>Enregistrer</button>
                 </div>
             </form>
             {errorMsgDisplay}
