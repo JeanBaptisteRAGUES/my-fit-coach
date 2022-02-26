@@ -414,7 +414,7 @@ const Nutrition = () => {
                 {burgerMenu}
                 {burgerMenu2}
                 <div className="window-nutrition flexCenter basicText gap-4 col-start-2 col-span-4 md:col-start-3 md:col-span-2 row-start-2">
-                    <h1>Food</h1>
+                    <span className='basicText'>Entrez le nom d'un aliment et la marque (optionnel)</span>
                     <form className='flex flex-row justify-evenly items-center w-full'>
                         <input className='input w-1/3' type="text" placeholder="aliment" onChange={(e) => updateFoodName(e)}/>
                         <input className='input w-1/3' type="text" placeholder="marque" onChange={(e) => setCurrentBrand(e.target.value)}/>

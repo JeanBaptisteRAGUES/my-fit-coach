@@ -70,14 +70,14 @@ const Workout = () => {
 
     return (
         <div className="container-sport">
-            <div className='window-sport w-[90%] md:w-1/3 gap-2'>
-                <div className='flexStart w-full'>
+            <div className='window-sport-raw flex flex-col justify-start items-center w-[90%] md:w-1/3 gap-2'>
+                <div className='group flexStart w-full'>
                     <Link data-tip={exerciceDescription} className='title text-center w-full underline' to="/exercice-menu" state={{userID: user.uid}}>Exercices</Link>
-                    <span className='basicText'>{exerciceDescription}</span>
+                    <span className=' group-hover:opacity-100 opacity-50 basicText'>{exerciceDescription}</span>
                 </div>
-                <div className='flexStart w-full'>
+                <div className='group flexStart w-full'>
                     <Link data-tip={sessionDescription} className='title text-center w-full underline' to="/session-menu" state={{userID: user.uid}}>Sessions</Link>
-                    <span className=' basicText'>{sessionDescription}</span>
+                    <span className=' group-hover:opacity-100 opacity-50 basicText'>{sessionDescription}</span>
                 </div>
             </div>
         </div>
