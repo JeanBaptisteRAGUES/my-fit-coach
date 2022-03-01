@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react'
 import { useInView } from 'react-intersection-observer';
 import { Link } from 'react-router-dom';
 import {FirebaseContext} from '../Firebase';
+import './landing.css';
 
 const Landing = () => {
     const firebase = useContext(FirebaseContext);
@@ -68,7 +69,8 @@ const Landing = () => {
             La page <Link to='/workout' state={{userID: user.id}} className='text-blue-500'>Sport</Link> vous permettra de paramétrer vos entraînements physiques et de les
             enregistrer pour traquer l'amélioration de vos progrès<br/>
             Rendez vous dans votre <Link to='/schedule' state={{userID: user.userID}} className='text-green-500'>Emploi du temps</Link> pour créer votre routine de la semaine grace à
-            vos repas et séances sportives précédemment enregistrées
+            vos repas et séances sportives précédemment enregistrées<br/>
+            <Link to='/' className='neon-btn'>Commencer</Link>
         </p>
     )
 

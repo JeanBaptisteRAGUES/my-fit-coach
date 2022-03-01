@@ -48,14 +48,17 @@ module.exports = {
         'landing-nutrition': "linear-gradient(to left top, rgba(0,0,0,0.5), rgba(0,0,0,0.1)), linear-gradient(to right bottom, rgba(0,0,0,0.5), rgba(0,0,0,0.1)), url('/src/images/test07.jpg')",
         'landing-sport': "url('/src/images/wallpaper05.jpg')"
       },
+      colors: {
+        'neon': 'hsl(317 100% 54%)'
+      },
       backgroundColor: {
         'energy': 'rgb(50, 205, 50)',
         'fat': 'rgb(255, 255, 0)',
         'carbohydrates': 'rgb(255, 165, 0)',
         'fiber': 'rgb(245, 245, 245)',
         'protein': 'rgb(255, 0, 0)',
-        'salt': 'rgb(135, 206, 250)'
-
+        'salt': 'rgb(135, 206, 250)',
+        'neon': 'hsl(323 21% 16%)'
       },
       transisionProperty: {
         'height': 'height'
