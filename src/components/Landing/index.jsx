@@ -70,7 +70,6 @@ const Landing = () => {
             enregistrer pour traquer l'amélioration de vos progrès<br/>
             Rendez vous dans votre <Link to='/schedule' state={{userID: user.userID}} className='text-green-500'>Emploi du temps</Link> pour créer votre routine de la semaine grace à
             vos repas et séances sportives précédemment enregistrées<br/>
-            <Link to='/' className='neon-btn'>Commencer</Link>
         </p>
     )
 
@@ -83,7 +82,7 @@ const Landing = () => {
             Vous pourrez suivre vos entrainements sportifs, les valeurs nutritionnelles de vos repas, l'évolution de votre poids
             et bien d'autres fonctionnalités encore grace à cette application complète.
             N'hésitez plus, le coach n'attend plus que vous !
-            <Link to='/signup' className='title py-1 text-sky-500 font-bold bg-white rounded w-full'>Je commence !</Link>
+            <Link to='/signup' className='neon-btn'>Commencer</Link>
         </div>
     )
 
@@ -93,7 +92,7 @@ const Landing = () => {
             les valeurs nutritionnelles pour vous !<br/>
             Vous pourrez ensuite recevoir des conseils nutrition afin de déterminer si vous manquez de certains nutriments
             ou si au contraire vous en consommez trop, et celà en fonction des vos objectifs personnels !
-            <Link to='/nutrition' state={{userID: user.userID, mealID: null}} className='title py-1 text-sky-500 font-bold bg-white rounded w-full'>Espace Nutrition</Link>
+            <Link to='/nutrition' state={{userID: user.userID, mealID: null}} className='neon-btn'>Nutrition</Link>
         </p>
     )
 
@@ -103,7 +102,7 @@ const Landing = () => {
             les valeurs nutritionnelles pour vous !<br/>
             Vous pourrez ensuite recevoir des conseils nutrition afin de déterminer si vous manquez de certains nutriments
             ou si au contraire vous en consommez trop, et celà en fonction des vos objectifs personnels !
-            <Link to='/login' className='title py-1 text-sky-500 font-bold bg-white rounded w-full'>Se connecter</Link>
+            <Link to='/login' className='neon-btn'>Se connecter</Link>
         </p>
     )
 
@@ -112,7 +111,7 @@ const Landing = () => {
             C'est ici que vous pourrez enregistrer vos sessions de sport. Vous pourrez suivre votre évolution pour
             chaque exercice grace à l'historique qui contient tous les entrainements que vous avez enregistrés. 
             Créez ensuite votre propre programme personnalisé grace à l'emploi du temps pour ne jamais manquer une session !
-            <Link to='/workout' state={{userID: user.userID}} className='title py-1 text-sky-500 font-bold bg-white rounded w-full'>Partie Sport</Link>
+            <Link to='/workout' state={{userID: user.userID}} className='neon-btn'>Sport</Link>
         </p>
     )
 
@@ -121,7 +120,7 @@ const Landing = () => {
             Connectez-vous pour pouvoir enregistrer vos sessions de sport. Vous pourrez suivre votre évolution pour
             chaque exercice grace à l'historique qui contient tous les entrainements que vous avez enregistrés. 
             Créez ensuite votre propre programme personnalisé grace à l'emploi du temps pour ne jamais manquer une session !
-            <Link to='/login' className='title py-1 text-sky-500 font-bold bg-white rounded w-full'>Se connecter</Link>
+            <Link to='/login' className='neon-btn'>Se connecter</Link>
         </p>
     )
 
