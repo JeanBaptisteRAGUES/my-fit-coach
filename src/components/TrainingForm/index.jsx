@@ -1,7 +1,6 @@
 import moment from 'moment';
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { useEffect } from 'react/cjs/react.development';
 import { FirebaseContext } from '../Firebase';
 import './training.css';
 

@@ -3,12 +3,12 @@ import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
 
 const config = {
-    apiKey: "AIzaSyBC8bmwG6ZtFlmNW2aPCA26UzsPSgjrtQ8",
-    authDomain: "my-fit-coach.firebaseapp.com",
-    projectId: "my-fit-coach",
-    storageBucket: "my-fit-coach.appspot.com",
-    messagingSenderId: "492341611900",
-    appId: "1:492341611900:web:9553b8d2bae73dc49ce8f9"
+    apiKey: process.env.REACT_APP_FIREBASE_API_KEY ,
+    authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
+    projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
+    storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
+    messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
+    appId: process.env.REACT_APP_FIREBASE_APP_ID
 };
 
 class Firebase {

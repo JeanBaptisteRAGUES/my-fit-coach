@@ -21,6 +21,31 @@ import Header from '../Header';
 import Footer from '../Footer';
 import Profile from '../Profile';
 
+/*
+<Header/>
+<Routes>
+    <Route exact path="/" element={<Landing/>} />
+    <Route exact path="/signup" element={<Signup/>} />
+    <Route exact path="/login" element={<Login/>} />
+    <Route exact path="/profile" element={<Profile/>} />
+    <Route exact path="/schedule" element={<Schedule/>} />
+    <Route exact path="/workout" element={<Workout/>} />
+    <Route exact path="/nutrition" element={<Nutrition/>} />
+    <Route exact path="/exercice-menu" element={<ExerciceMenu/>} />
+    <Route exact path="/exercice" element={<Exercice/>} />
+    <Route exact path="/exercice-form" element={<ExerciceForm/>} />
+    <Route exact path="/exercice-update" element={<ExerciceUpdate/>} />
+    <Route exact path="/session-menu" element={<SessionMenu/>} />
+    <Route exact path="/session" element={<Session/>} />
+    <Route exact path="/session-form" element={<SessionForm/>} />
+    <Route exact path="/session-update" element={<SessionUpdate/>} />
+    <Route exact path="/training-form" element={<TrainingForm/>} />
+    <Route exact path="/test" element={<TestComponent/>} />
+    <Route path="*" element={<ErrorPage/>} />
+</Routes>
+<Footer/>
+*/
+
 const App = () => {
     return (
         <Router>
