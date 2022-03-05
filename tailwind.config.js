@@ -1,3 +1,5 @@
+
+
 module.exports = {
   content: [
     "./src/**/*.{js,jsx,ts,tsx}",
@@ -11,6 +13,10 @@ module.exports = {
       'uhd': '3840px'
     },
     extend: {
+      fontFamily: {
+        Ultra: ['Ultra', 'serif'],
+        PaytoneOne: ['Paytone One', 'sans-serif']
+      },
       fontSize: {
         'micro': ['0.50rem', {
           lineHeight: '0.7rem'

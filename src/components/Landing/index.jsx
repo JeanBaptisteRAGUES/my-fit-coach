@@ -125,8 +125,8 @@ const Landing = () => {
     )
 
     return (
-        <div className='flex flex-col justify-center items-center'>
-            <div className='flex flex-col justify-center items-center h-screenMinusHeader bg-slate-300 bg-landing-main bg-cover w-full'>
+        <div className='flex flex-col justify-center items-center relative'>
+            <div className='flex flex-col justify-center items-center h-screenMinusHeader bg-slate-300 bg-landing-main bg-cover w-full bg-[center_right_40rem] md:bg-left'>
                 <div ref={refLanding} className={"flex flex-col justify-center items-center text-center h-2/3 w-2/3 bg-transparent font-bold basicText-dimmed leading-loose " + landingAnimation}>
                     {landingTextConnected}
                     {landingTextDisconnected}

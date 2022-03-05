@@ -59,7 +59,7 @@ const Header = () => {
     return (
         <Fragment>
             <div className='flex flex-row justify-around items-center sticky top-0 z-50 bg-slate-600 h-header w-full'>
-                <div className='basicText-white font-bold' >My Fit Coach</div>
+                <div className='basicText-white font-PaytoneOne' >My Fit Coach</div>
                 <ul className='md:flex flex-row justify-around items-center basicText-white hidden'>
                     <li className='m-2' ><Link to='/'>Accueil</Link></li>
                     <li className='m-2' ><Link to='/schedule' state={{userID: user.userID}}>Emploi du temps</Link></li>

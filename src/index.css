@@ -1,3 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Ultra&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Paytone+One&family=Ultra&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -85,14 +88,14 @@
     }
 
     .title {
-        @apply md:text-3xl text-lg text-slate-700 uhd:text-8xl
+        @apply md:text-3xl text-lg text-slate-700 uhd:text-8xl font-PaytoneOne
     }
 
     .title-dimmed {
-        @apply md:text-3xl text-lg text-slate-200
+        @apply md:text-3xl text-lg text-slate-200 font-PaytoneOne
     }
 
     .title-white {
-        @apply md:text-3xl text-lg text-white
+        @apply md:text-3xl text-lg text-white font-PaytoneOne
     }
 }

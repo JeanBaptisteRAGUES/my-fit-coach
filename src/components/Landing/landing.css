@@ -66,6 +66,30 @@
     opacity: 1;
 }
 
+@media all and (min-width: 3000px){
+    .neon-btn {
+        margin-top: 1em;
+        font-size: 5rem;
+        display: inline-block;
+        cursor: pointer;
+        text-decoration: none;
+        color: var(--clr-neon_2);
+        border: var(--clr-neon_2) 0.125em solid;
+        padding: 0.25em 1em;
+        border-radius: 0.25em;
+    
+        text-shadow: 
+        0 0 0.125 hsl(0 0% 100% / 0.3),
+        0 0 0.45 currentColor;
+    
+        box-shadow: 
+        inset 0 0 0.5em 0 var(--clr-neon_2),
+        0 0 0.5em 0 var(--clr-neon_2);
+    
+        position: relative;
+    }
+}
+
 @-webkit-keyframes glow { from {opacity: 0;} to {opacity: 1;} }
         @keyframes glow { from {opacity: 0;} to {opacity: 1;} }
 
