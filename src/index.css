@@ -48,7 +48,7 @@
     }
 
     .window-sport-raw {
-        @apply bg-gradient-to-r from-cyan-100 to-blue-100 rounded px-8 pt-6 pb-2 mb-4 shadow-md shadow-gray-700 h-max
+        @apply bg-gradient-to-r from-cyan-100 to-blue-100 rounded shadow-md shadow-gray-700 h-max p-2
     }
 
     .window-sport {
