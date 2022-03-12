@@ -530,8 +530,8 @@ const NutrtitionalStats = ({userID, day, eventsArray, displayStats}) => {
     )
 
     const goalForm = displayMode === "goal" && (
-        <div className="window-nutrition basicText flex flex-col justify-start items-center sticky top-5 left-5 p-2 w-3/4 max-h-[90%] overflow-auto">
-            <form onSubmit={() => getStats("coach")}>
+        <div className="window-nutrition basicText flex flex-col justify-start items-center sticky top-5 left-5 p-2 w-fit max-h-[90%] overflow-auto">
+            <form className='flex flex-col justify-start items-center gap-5' onSubmit={() => getStats("coach")}>
                 <div className='w-full'>
                     <label htmlFor="bej">Objectif calorique :</label><br/>
                     <input 

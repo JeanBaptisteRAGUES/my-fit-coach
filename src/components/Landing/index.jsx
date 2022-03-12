@@ -63,7 +63,7 @@ const Landing = () => {
 
     const landingTextConnected = user.userID !== null && (
         <p>
-            Bienvenue sur My Fit Coach, l'endroit où vous pourrez gérer vos entraînement ainsi que vos repas sur la semaine !<br/>
+            Bienvenue sur My Fit Coach, l'endroit où vous pourrez gérer vos entraînements ainsi que vos repas sur la semaine !<br/>
             Rendez vous dans l'onglet <Link to='/nutrition' state={{userID: user.userID, mealID: null}} className='text-orange-500'>Nutrition</Link> pour créer vos repas et calculer leurs
             valeurs nutritionnelles<br/>
             La page <Link to='/workout' state={{userID: user.id}} className='text-blue-500'>Sport</Link> vous permettra de paramétrer vos entraînements physiques et de les
@@ -75,9 +75,9 @@ const Landing = () => {
 
     const landingTextDisconnected = user.userID === null && (
         <div className='flex flex-col justify-around items-center flex-1 w-full rounded'>
-            Bienvenue sur My Fit Coach, l'endroit où vous pourrez gérer vos entraînement ainsi que vos repas sur la semaine !<br/>
+            Bienvenue sur My Fit Coach, l'endroit où vous pourrez gérer vos entraînements ainsi que vos repas sur la semaine !<br/>
             Vous voulez perdre du poids ou au contraire gagner du muscle ?<br/>
-            Quelque soit votre objectif, My-Fit-Coach sera là pour vous accompagner en vous fournissant tous les outils nécessaire
+            Quelque soit votre objectif, My-Fit-Coach sera là pour vous accompagner en vous fournissant tous les outils nécessaires
             pour y parvenir !<br/>
             Vous pourrez suivre vos entrainements sportifs, les valeurs nutritionnelles de vos repas, l'évolution de votre poids
             et bien d'autres fonctionnalités encore grace à cette application complète.
