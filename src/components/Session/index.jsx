@@ -101,7 +101,7 @@ const Session = () => {
     )
 
     const sessionDisplay = !confirmDelete && (
-        <div className="window-sport basicText w-[90%] md:w-1/2">
+        <div className="window-sport basicText w-[90%] md:w-1/3">
             <span className='font-bold mb-4 title' >{sessionTitle}</span>
             <div className='flexStart' >
                 <span className='underline'>Exercice(s) :</span>

@@ -37,7 +37,10 @@ const SessionForm = () => {
     }, [exercicesSession])
 
     const addExercice = () => {
-        let newExercicesSessionList = [...exercicesSession, JSON.parse(selectedExercice)];
+        console.log(exercicesSession);
+        console.log(JSON.parse(selectedExercice));
+        const newExerciceArray = JSON.parse(selectedExercice);
+        let newExercicesSessionList = [...exercicesSession, { id: newExerciceArray[0], title: newExerciceArray[1] }];
         setExercicesSession(newExercicesSessionList);
     }
 
@@ -61,7 +64,7 @@ const SessionForm = () => {
     )
 
     const deleteExercice = (idExercice) => {
-        let newExercicesSessionList = exercicesSession.filter(exSession => exSession[0] !== idExercice);
+        let newExercicesSessionList = exercicesSession.filter(exSession => exSession.id !== idExercice);
         console.log(newExercicesSessionList);
         setExercicesSession(newExercicesSessionList);
     }
@@ -69,16 +72,16 @@ const SessionForm = () => {
     const exericesDisplay = exercicesSession.length > 0 && (
         exercicesSession.map(exercice => {
             return (
-                <div key={exercice[0]} className='flex flex-row items-center justify-center'>
-                    {exercice[1]}
-                    <div onClick={() => deleteExercice(exercice[0])} className="btn-delete">X</div>
+                <div key={exercice.id} className='flex flex-row items-center justify-center'>
+                    {exercice.title}
+                    <div onClick={() => deleteExercice(exercice.id)} className="btn-delete">X</div>
                 </div>
             )
         })
     )
 
     const saveSession = () => {
-        let newExercicesSession = exercicesSession.map(exercice => exercice[0]);
+        let newExercicesSession = exercicesSession.map(exercice => exercice.id);
         firebase.db.collection('sessions').add({
             userID: userID,
             title: sessionTitle,
@@ -103,7 +106,7 @@ const SessionForm = () => {
             <div className='btn-primary opacity-50' disabled>Enregistrer</div>
 
     const sessionForm = (
-        <div className="window-sport-start basicText w-[90%] md:1/2">
+        <div className="window-sport-start basicText w-[90%] md:w-1/3">
             <span className='mb-2 underline' >Formulaire nouvelle session :</span>
             <label htmlFor='titre'>Titre :</label>
             <input className='input' type="text" placeholder="titre" onChange={(e) => setSessionTitle(e.target.value)} value={sessionTitle}></input>

@@ -13,6 +13,7 @@ const SessionUpdate = () => {
     const [exercicesSession, setExercicesSession] = useState([]); //Seulement les exercices pour cet session en particulier
     const [sessionTitle, setSessionTitle] = useState("");
 
+    /*
     useEffect(() => {
         if(userID === null){navigate('/login'); return};
         if(sessionID === null){navigate('/session-menu'); return};
@@ -39,13 +40,64 @@ const SessionUpdate = () => {
         })
 
     }, [])
+    */
+
+    useEffect(async () => {
+        if(userID === null) {navigate('/login'); return};
+        if(sessionID === null){navigate('/session-menu'); return};
+        let newExerciceList = [];
+        firebase.session(sessionID).get()
+        .then(async (mySession) => {
+            let mySessionData = mySession.data();
+            let exercicesSession = JSON.parse(mySessionData.exercices);
+            let newExercicesSession = [];
+
+            for await (let exercice of exercicesSession) {
+                let exRaw = await firebase.exercice(exercice).get();
+                if(exRaw.data() === undefined){
+                    console.log(`L'exercice (${exercice}) n'existe plus`);
+                }else{
+                    newExerciceList.push(exercice);
+                    newExercicesSession.push({id: exercice, title: exRaw.data().title});
+                }
+            }
+            setSessionTitle(mySessionData.title);
+            setExercicesSession(newExercicesSession);
+        })
+        .then(() => {
+            firebase.session(sessionID).update({
+                exercices: JSON.stringify(newExerciceList)
+            })
+            .catch(err => console.log("Erreur mise à jour de la liste des exercices de la session : " + err));
+        })
+        .then(() => {
+            let userExercicesList = [];
+
+            firebase.db.collection('exercices').where("userID", "==", userID).get()
+            .then((results) => {
+                results.forEach(result => {
+                    let exerciceData = result.data();
+                    exerciceData["id"] = result.id;
+                    userExercicesList.push(exerciceData);
+                })
+            })
+            .then(() => {
+                setExercicesList(userExercicesList);
+            })
+        })
+        .catch(err => console.log("Erreur de la récupération de la session : " + err));
+
+    }, [])
 
     useEffect(() => {
         console.log(JSON.stringify(exercicesSession));
     }, [exercicesSession])
 
     const addExercice = () => {
-        let newExercicesSessionList = [...exercicesSession, JSON.parse(selectedExercice)];
+        console.log(exercicesSession);
+        console.log(JSON.parse(selectedExercice));
+        const newExerciceArray = JSON.parse(selectedExercice);
+        let newExercicesSessionList = [...exercicesSession, { id: newExerciceArray[0], title: newExerciceArray[1] }];
         setExercicesSession(newExercicesSessionList);
     }
 
@@ -69,26 +121,26 @@ const SessionUpdate = () => {
     )
 
     const deleteExercice = (idExercice) => {
-        let newExercicesSessionList = exercicesSession.filter(exSession => exSession[0] !== idExercice);
+        let newExercicesSessionList = exercicesSession.filter(exSession => exSession.id !== idExercice);
         console.log(newExercicesSessionList);
         setExercicesSession(newExercicesSessionList);
     }
 
     const exericesDisplay = exercicesSession.length > 0 && (
-        exercicesSession.map(exercice => {
-            return (
-                <div key={exercice[0]} className='flex flex-row items-center justify-center'>
-                    {exercice[1]}
-                    <button onClick={() => deleteExercice(exercice[0])} className="btn-delete">X</button>
-                </div>
-            )
-        })
+        exercicesSession.map(exercice => (
+            <div key={exercice.id} className='flex flex-row items-center justify-center'>
+                {exercice.title}
+                <button onClick={() => deleteExercice(exercice.id)} className="btn-delete">X</button>
+            </div>
+        ))
     )
 
     const updateSession = () => {
+        console.log(exercicesSession);
+        let newExercicesSession = exercicesSession.map(exo => exo.id);
         firebase.db.collection('sessions').doc(sessionID).update({
             title: sessionTitle,
-            exercices: JSON.stringify(exercicesSession)
+            exercices: JSON.stringify(newExercicesSession)
         })
         .then(() => {
             navigate('/session', {state: location.state});
@@ -108,8 +160,8 @@ const SessionUpdate = () => {
             <div className='btn-primary'>Enregistrer</div>
 
     const sessionForm = (
-        <div className="window-sport-start basicText w-[90%] md:1/2">
-            <span className='mb-2 underline' >Formulaire nouvelle session :</span>
+        <div className="window-sport-start basicText w-[90%] md:w-1/3">
+            <span className='mb-2 underline' >Formulaire modifications session :</span>
             <label htmlFor='titre'>Titre :</label>
             <input className='input' type="text" placeholder="titre" onChange={(e) => setSessionTitle(e.target.value)} value={sessionTitle}></input>
             {exerciceSelect}

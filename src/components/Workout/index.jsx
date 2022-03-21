@@ -70,14 +70,14 @@ const Workout = () => {
 
     return (
         <div className="container-sport-raw flex flex-col md:flex-row justify-center items-center gap-20">
-            <div className='window-sport-raw flex flex-col justify-start items-center w-[80%] md:w-1/4 h-[35vh] md:h-[40vh]'>
+            <div className='window-sport-raw flex flex-col justify-start items-center w-[80%] md:w-1/4 h-[35vh] md:min-h-[45vh]'>
                 <div className='group flex flex-col justify-between items-center w-full h-full'>
                     <span className='title text-center w-full underline'>Exercices</span>
                     <span className=' group-hover:opacity-100 md:opacity-50 basicText'>{exerciceDescription}</span>
                     <Link data-tip={exerciceDescription} className='btn-primary group-hover:opacity-100 md:opacity-50' to="/exercice-menu" state={{userID: user.uid}}>Commencer</Link>
                 </div>
             </div>
-            <div className='window-sport-raw flex flex-col justify-start items-center w-[80%] md:w-1/4 h-[35vh] md:h-[40vh]'>
+            <div className='window-sport-raw flex flex-col justify-start items-center w-[80%] md:w-1/4 h-[35vh] md:min-h-[45vh]'>
                 <div className='group flex flex-col justify-between items-center w-full h-full'>
                     <span className='title text-center w-full underline'>Sessions</span>
                     <span className=' group-hover:opacity-100 md:opacity-50 basicText'>{sessionDescription}</span>
