@@ -92,12 +92,12 @@ Vous pouvez isoler une période en particulier en choisissant une date de début
 Le bouton "interpolation" vous permets de lisser la courbe en calculant les valeurs intermédiaires entre deux mesures.<br/>
 
 ## Technologies utilisées :
--React
--Firebase / Cloud Firestore / Firebase Authentication
--Tailwind CSS
--Axios
--chart.js
--react tooltip
--react toastify
--react icons
--moment
+-React<br/>
+-Firebase / Cloud Firestore / Firebase Authentication<br/>
+-Tailwind CSS<br/>
+-Axios<br/>
+-chart.js<br/>
+-react tooltip<br/>
+-react toastify<br/>
+-react icons<br/>
+-moment<br/>
