@@ -6,16 +6,16 @@ dont il pourra programmer ses repas ainsi que ses séances de sport. Il pourra s
 de sport et calculer les valeurs nutritionnelles de ses repas. My-Fit-Coach permet à l'utilisateur de calculer
 ses besoins caloriques et nutritionnels et vérifie si les repas de l'utilisateur sont en adéquation avec ses
 objectifs.<br/>
-Déploiement : Firebase
-Base de données : Cloud Firestore
-API infos nutritionnelles : https://fr.openfoodfacts.org/data
+Déploiement : Firebase<br/>
+Base de données : Cloud Firestore<br/>
+API infos nutritionnelles : https://fr.openfoodfacts.org/data<br/>
 
 ## Lien du site : 
 https://my-fit-coach.web.app/
 
 ## Utilisation :
 ### Inscription/Connexion :
-Vous pouvez vous inscrire en cliquant sur "S'inscrire" dans le menu en haut à droite, ou alors en cliqaunt sur le bouton "Commencer" de la page d'accueil.
+Vous pouvez vous inscrire en cliquant sur "S'inscrire" dans le menu en haut à droite, ou alors en cliqaunt sur le bouton "Commencer" de la page d'accueil.<br/>
 Il vous sera demandé un nom d'utilisateur, un mail, un mot de passe ainsi que des informations complémentaires qui serviront plus tard pour pouvoir calculer
 vos besoins nutritionnels.<br/>
 Il n'est pas nécessaire d'entrer une adresse mail réelle du moment que la syntaxe est correcte, exemple : test@test.fr<br/>
