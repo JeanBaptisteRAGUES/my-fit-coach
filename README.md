@@ -21,13 +21,13 @@ vos besoins nutritionnels.<br/>
 Il n'est pas nécessaire d'entrer une adresse mail réelle du moment que la syntaxe est correcte, exemple : test@test.fr<br/>
 Vous pouvez aussi vous connecter avec le compte test prévu à cet effet :<br/>
 -Email : test01@test.com <br/>
--Mot de passe : 123456 <br/<
+-Mot de passe : 123456 <br/>
 
 ### Créer un repas :
 Créer un repas vous permettras d'enregistrer un repas, de calculer ses valeurs nutritionnelles et de l'ajouter à votre emploi du temps pour ensuite pouvoir
 calculer automatiquement vos valeurs nutritionnelles sur la journée ou sur la semaine.<br/>
 Pour celà, rendez vous dans "Nutrition" depuis le menu.<br/>
-Une page s'affiche avec deux panneaux.<br/<
+Une page s'affiche avec deux panneaux.<br/>
 Indiquez sur le panneau de gauche le titre que vous voulez donner à votre repas et cliquez sur "créer".<br/>
 
 ### Ajouter un ou des aliment(s) à un repas :
