@@ -5,7 +5,7 @@ import LineChart from './line-chart';
 const ChartWindow = ({user, weightData, chartMinDate, chartMaxDate, weightsInterpolation, setChartMinDate, setChartMaxDate, setWeightsInterpolation, getMinDate, getMaxDate, setDisplayChart}) => {
   return (
     <div className='flex flex-row justify-center font-bold text-2xl items-center fixed top-0 z-10 text-white w-full min-h-screen backdrop-blur-md bg-slate-900/50 motion-safe:animate-fall'>
-        <div className='window-sport w-full md:w-[70%] h-fit absolute left-0 top-[20%] md:left-[10%] z-10 '>
+        <div className='window-sport w-full md:w-[70%] h-fit absolute left-0 top-[20%] md:left-[15%] z-10 '>
             <div className='flex flex-col md:flex-row justify-around items-center m-2 gap-2 uhd:gap-5 basicText'>
                 <div className='flex flex-row justify-around items-center m-2 gap-2'>
                     <label htmlFor='chartMin'>Début </label>
